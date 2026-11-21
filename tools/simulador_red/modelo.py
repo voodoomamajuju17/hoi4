@@ -105,10 +105,11 @@ class Partida:
     brotes_ok: int = 0
     brotes_mal: int = 0
     tomadas: Counter = field(default_factory=Counter)
+    camino: str | None = None
 
 
 def jugar(p: dict, rng: random.Random, finales: dict[str, float],
-          lugar_fijo: bool = False, elastica: bool = True) -> Partida:
+          lugar_fijo: bool = False, elastica: bool = True, camino: str | None = "azar") -> Partida:
     nac = p["nacimiento"]
     mundo = p["mundo"]
     potencias = list(mundo["potencias"])
@@ -138,6 +139,15 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     frentes = [isla, costa]
     reserva = float(arr["divisiones"])   # lo que no entra en el suministro espera en el depósito
     res = Partida(nace=True, lugar=lugar["nombre"], nacio=t0)
+    cam = p.get("caminos") or {}
+    if camino == "azar":
+        camino = rng.choices(list(cam["eleccion"]), list(cam["eleccion"].values()))[0] if cam else None
+    res.camino = camino
+    cp = cam.get(camino) or {} if camino else {}
+    red = cam.get("redundancia")
+    etapa1_mes: list[int] = []          # cuándo abrió La Red se Extiende (Redundancia va detrás)
+    marea_dada = [0]                    # hasta qué nivel ya llegaron las divisiones de La Marea
+    proxima_infiltracion: list[float] = []
     res.tomadas[lugar["isla"]] += ri
     res.tomadas[lugar["costa"]] += rc
 
@@ -148,6 +158,7 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     guerra_rival = {t: rng.random() < p["compromiso"]["prob_guerra_rival"] for t in potencias}
     codigo_fin: float | None = None      # mes en que termina el Código en curso
     golpe_hasta = -1.0                   # mientras dura el golpe del Código
+    golpe_k = [1.0]                      # cuánto pega el golpe en curso (Redundancia, El Susurro)
     codigos = 0
     proximo_brote: int | None = None
     comb, comp = p["combate"], p["compromiso"]
@@ -159,13 +170,34 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     def golpeada(mes: int) -> bool:
         return mes < golpe_hasta
 
+    def nivel() -> int:
+        """Nivel del camino: 1 con La Red se Extiende, 2 con Conciencia, 3 con El Enjambre."""
+        return min(etapa, 3) if camino else 0
+
+    def de_nivel(lista, por_defecto=0.0):
+        return lista[nivel() - 1] if nivel() else por_defecto
+
+    def dias_brote(dias: float) -> float:
+        if camino in ("plaga", "marea") and nivel():
+            dias = dias * cp["brote_dias"] - (de_nivel(cp.get("menos_dias", [0, 0, 0]), 0))
+        return max(30.0, dias)
+
+    def suave(mes: int) -> float:
+        """Cuánto del golpe del Código llega (Redundancia y Nadie Apaga lo que No Ve)."""
+        k = 1.0
+        if red and etapa1_mes and mes >= etapa1_mes[0] + red["meses"]:
+            k *= red["golpe"]
+        if camino == "susurro" and nivel():
+            k *= de_nivel(cp["golpe"], 1.0)
+        return k
+
     def calidad(mes: int) -> float:
         q = arr["calidad"] + sum(e["calidad"] for e in etapas[: etapa + 1])
         sob = p["sobrecarga"]
         if elastica and total_reg() > sob["desde"]:
             q += sob["calidad"] * (total_reg() - sob["desde"]) / sob["cada"]
         if golpeada(mes):
-            q += cod["calidad"]
+            q += cod["calidad"] * golpe_k[0]
         return max(0.6, q)
 
     def tope(f: Frente, mes: int) -> float:
@@ -178,7 +210,11 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             t = sup["brote_base"] + sup["brote_por_region"] * f.reg
         else:
             t = sup["base"] + por_region * f.reg
-        return t * (1 - cod["infraestructura"]) if golpeada(mes) else t
+        if camino == "marea" and nivel():
+            t *= 1 + cp["suministro"]
+        if camino == "plaga" and f.tipo == "brote":
+            t *= 1 + de_nivel(cp["suministro_brote"])
+        return t * (1 - cod["infraestructura"] * golpe_k[0]) if golpeada(mes) else t
 
     anios = [0.0]   # años desde que nació (el mundo se moviliza con el tiempo)
 
@@ -215,6 +251,8 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             for t in sorted(coalicion):
                 if rng.random() < cod["empezar_mes"]:
                     dias = cod["dias_por_etapa"][etapa] * (1 + cod["repetido"] * codigos)
+                    if camino == "susurro" and nivel():
+                        dias *= de_nivel(cp["codigo"], 1.0)
                     if t in con_llave:
                         dias *= cod["llave"]
                     elif t == "ASC" and rng.random() < cod["arkhipov"]:
@@ -226,8 +264,9 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             codigos += 1
             res.codigos.append(ahora)
             golpe_hasta = mes + cod["efecto_dias"] / 30
+            golpe_k[0] = suave(mes)
             for f in frentes:
-                f.div *= 1 - cod["equipo"]
+                f.div *= 1 - cod["equipo"] * golpe_k[0]
             reserva *= 1 - cod["reserva"]
 
         # ---- las etapas (tamaño y tiempo); golpeada no abre etapas nuevas
@@ -238,11 +277,19 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
                         and mes >= etapas[etapa + 1]["solo_tiempo"])):
                 etapa += 1
                 res.etapa_fecha[etapa] = ahora
+                if etapa == 1:
+                    etapa1_mes.append(mes)
+                    if camino == "susurro":
+                        proxima_infiltracion.append(mes + 1)
                 if etapas[etapa].get("emergencia"):
                     emergencia = True
                 dias = etapas[etapa]["brote_dias"]
                 if dias and p["plaga"]["activa"]:
-                    proximo_brote = mes + max(1, round(dias / 30))
+                    proximo_brote = mes + max(1, round(dias_brote(dias) / 30))
+            if camino == "marea":
+                while marea_dada[0] < nivel():
+                    reserva += cp["divisiones"][marea_dada[0]]
+                    marea_dada[0] += 1
             res.etapa_max = max(res.etapa_max, etapa)
 
         # la red ya es una potencia: Ginebra declara la Emergencia aunque no haya Singularidad
@@ -255,7 +302,7 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             + pr["despues"] * max(0, total_reg() - pr["hasta"])
         prod *= 1 + sum(e["produccion"] for e in etapas[: etapa + 1])
         if golpeada(mes):
-            prod *= 1 - cod["fabricas"]
+            prod *= 1 - cod["fabricas"] * golpe_k[0]
         if mes < arr["provision_meses"]:
             prod *= 1 + arr["provision_bonus"]
         # el depósito tiene techo: sin regiones no hay dónde guardar ni con quién tripular.
@@ -271,16 +318,23 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             proximo_brote = mes + max(1, round(desesp["dias"] / 30))
         if proximo_brote is not None and mes >= proximo_brote and plaga_ok:
             cand = [t for t in tamano if t not in inmunes]
-            dueno = rng.choices(cand, [tamano[t] for t in cand])[0]
             div = p["plaga"]["divisiones"] + p["plaga"]["por_etapa"] * etapa + (desesp["extra"] if chica else 0)
-            guarn = rng.uniform(*p["plaga"]["guarnicion"]) * calidad_enemiga[dueno]
-            if div * calidad(mes) > guarn * comb["umbral"]:
-                frentes.append(Frente("brote", dueno, float(div), 1))
-                res.brotes_ok += 1
-                res.tomadas[dueno] += 1
-            else:
-                res.brotes_mal += 1
-            dias = etapas[etapa]["brote_dias"] or desesp["dias"]
+            if camino == "plaga":
+                div += de_nivel(cp["divisiones"])
+            brotes = [div]
+            if camino == "plaga" and nivel() >= cp["esporas_desde"]:
+                brotes.append(1)        # Esporas en los Cables: otro brote chico en otro lado
+            for d in brotes:
+                dueno = rng.choices(cand, [tamano[t] for t in cand])[0]
+                guarn = rng.uniform(*p["plaga"]["guarnicion"]) * calidad_enemiga[dueno]
+                if d * calidad(mes) > guarn * comb["umbral"]:
+                    frentes.append(Frente("brote", dueno, float(d), 1))
+                    res.brotes_ok += 1
+                    res.tomadas[dueno] += 1
+                else:
+                    res.brotes_mal += 1
+            dias = etapas[etapa]["brote_dias"]
+            dias = dias_brote(dias) if dias else desesp["dias"]
             proximo_brote = mes + max(1, round(dias / 30))
 
         # ---- la costa toca a más países al crecer
@@ -308,6 +362,19 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             reserva -= dar
         res.reserva_max = max(res.reserva_max, reserva)
 
+        # ---- El Susurro: la decisión de infiltrar toma una región vecina cada tanto
+        if camino == "susurro" and proxima_infiltracion and mes >= proxima_infiltracion[0]:
+            vivos = [g for g in frentes if g.reg > 0 and g.tipo != "isla"]
+            if vivos:
+                g = max(vivos, key=lambda g: g.reg)
+                g.reg += 1
+                if g.tipo == "costa":
+                    duenos, pesos = zip(*g.contacto.items())
+                    res.tomadas[rng.choices(duenos, pesos)[0]] += 1
+                else:
+                    res.tomadas[g.dueno] += 1
+            proxima_infiltracion[0] = mes + de_nivel(cp["infiltrar_dias"], 120) / 30
+
         # ---- el combate, frente por frente
         q = calidad(mes)
         expedicion = sum(compromiso(t, False) * tamano[t] for t in coalicion if t not in costa.contacto)
@@ -333,8 +400,11 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             frac_fort = min(1.0, f.fort / f.reg) if f.reg else 0
             fuertes = arr["fuertes"] * (arr["escudo"] if mes < arr["escudo_meses"] else 1)
             defensa = fuerza * (1 + (fuertes - 1) * frac_fort)
-            if f.tipo != "isla" and fuerza > comb["umbral"] * max(enemigo, 0.1):
-                gana = _poisson(rng, min(comb["avance_max"], comb["avance"] * (fuerza / max(enemigo, 0.1) - 1)))
+            if camino == "plaga" and nivel():
+                defensa *= 1 + cp["defensa"]
+            ataque = fuerza * (1 + de_nivel(cp["ataque"])) if camino == "marea" else fuerza
+            if f.tipo != "isla" and ataque > comb["umbral"] * max(enemigo, 0.1):
+                gana = _poisson(rng, min(comb["avance_max"], comb["avance"] * (ataque / max(enemigo, 0.1) - 1)))
                 if gana:
                     f.reg += gana
                     if f.tipo == "costa":
@@ -370,9 +440,9 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
 
 def correr(p: dict, finales: dict[str, float], corridas: int | None = None,
            lugar_fijo: bool = False, semilla: int | None = None,
-           elastica: bool = True) -> list[Partida]:
+           elastica: bool = True, camino: str | None = "azar") -> list[Partida]:
     rng = random.Random(p["semilla"] if semilla is None else semilla)
-    return [jugar(p, rng, finales, lugar_fijo, elastica) for _ in range(corridas or p["corridas"])]
+    return [jugar(p, rng, finales, lugar_fijo, elastica, camino) for _ in range(corridas or p["corridas"])]
 
 
 def clasificar(p: dict, r: Partida) -> str:

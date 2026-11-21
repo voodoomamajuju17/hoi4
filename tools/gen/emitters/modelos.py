@@ -46,7 +46,9 @@ ESCALA = {
 # (0,4 a 1,7 m de alto y 2,7 a 4,8 de ancho). A 3,2x como humanos, los montañeros pasaban de 15 de ancho
 # contra 6,4 a 8,3 de las otras naciones; van por el ancho del grupo, como un vehículo.
 ESCALA_PAIS = {
-    "ZRD": {"infantry": ("ancho", 8.0), "marine": ("ancho", 7.5), "mountaineers": ("ancho", 8.0)},
+    # el Porteador (motorizada) es un cangrejo más ancho que largo: por el ancho, como los demás de largo
+    "ZRD": {"infantry": ("ancho", 8.0), "marine": ("ancho", 7.5), "mountaineers": ("ancho", 8.0),
+            "motorized": ("ancho", 4.6)},
 }
 
 

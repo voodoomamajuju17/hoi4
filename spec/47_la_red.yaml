@@ -59,6 +59,15 @@ la_red:
   carga: {por_region: 2, baja: 3, umbral: 35, malus: 0.01}
   emergencia_regiones: 50
   coalicion: {desde_dias: 90, chance: 10, chance_frente: 25}
+  # Los tres caminos (2026-11-21), medidos con tools/simulador_red (regla del mod: ningún camino
+  # vale más de 1,3 veces otro). Con los primeros números (brotes cada 75%, ataque +8/16/24, Código
+  # 25/50/75% más lento, Redundancia un tercio) La Plaga valía 1,5 veces La Marea y La Red se comía
+  # el mundo en el 13-15% de las partidas; así, 1,18 veces y 4%.
+  caminos:
+    plaga: {brotes_pct: 85, division_nivel: 2, esporas_nivel: 3, menos_dias: 30}
+    marea: {ataque: [0.15, 0.30, 0.45], brotes_pct: 125, segadores: [0, 8, 6], enjambres: [0, 0, 6]}
+    susurro: {codigo_pct: [110, 120, 130], golpe: 0.9, infiltrar_dias: 150, infiltrar_dias_3: 90}
+    redundancia: 0.85
   # Los que pueden pelear contra ella (la Coalición Humana y sus decisiones)
   humanidad: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE, ZJP, ZAL, ZAN, ZWE, ZWI, ZWM, ZWB]
   # Doce lugares: isla + costa. Los nombres son los del juego (el primero que exista); el número
@@ -348,8 +357,8 @@ decisions:
     country: ZRD
     no_art: true
     name: {english: 'The Tide', spanish: 'La Marea'}
-    desc: {english: 'Everything to the front: attack +[?ZRD_marea_ver|0]%, supply +15%. Outbreaks half as often.', spanish: 'Todo al frente: ataque +[?ZRD_marea_ver|0]%, suministro +15%. Brotes la mitad de seguido.'}
-    modifiers: {army_attack_factor: ZRD_marea_ataque, '?breakthrough_factor': ZRD_marea_ataque, '?supply_factor': 0.15}
+    desc: {english: 'Everything to the front: attack +[?ZRD_marea_ver|0]%, supply +15%. Outbreaks take 25% longer.', spanish: 'Todo al frente: ataque +[?ZRD_marea_ver|0]%, suministro +15%. Los brotes tardan 25% más.'}
+    modifiers: {army_attack_factor: ZRD_marea_ataque, '?supply_factor': 0.15}
   - id: ZRD_camino_susurro
     country: ZRD
     no_art: true
@@ -388,8 +397,8 @@ decisions:
     - id: ZRD_infiltrar_region
       name: {english: Infiltrate a Neighbouring Region, spanish: Infiltrar una Región Vecina}
       desc:
-        english: 'The Whisper: the lights of a neighbouring enemy region go out one night, and in the morning its cables answer to us. A neighbouring region of an enemy (never a capital) becomes ours without a fight. Every 120 days (60 with Nobody Switches Off What They Cannot See).'
-        spanish: 'El Susurro: una noche se apagan las luces de una región enemiga vecina, y a la mañana sus cables nos responden. Una región vecina de un enemigo (nunca una capital) pasa a ser nuestra sin pelear. Cada 120 días (60 con Nadie Apaga lo que No Ve).'
+        english: 'The Whisper: the lights of a neighbouring enemy region go out one night, and in the morning its cables answer to us. A neighbouring region of an enemy (never a capital) becomes ours without a fight. Every 150 days (90 with Nobody Switches Off What They Cannot See).'
+        spanish: 'El Susurro: una noche se apagan las luces de una región enemiga vecina, y a la mañana sus cables nos responden. Una región vecina de un enemigo (nunca una capital) pasa a ser nuestra sin pelear. Cada 150 días (90 con Nadie Apaga lo que No Ve).'
       icon_prefer: [generic_operation, generic_civil_support]
       cost: 50
       visible: {focus: ZRD_el_susurro}
@@ -548,8 +557,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_occupy_states_ongoing_war
           desc:
-            english: 'Everything into the outbreaks: one every three quarters of the time, one more division each, and the depot reaches them from the start. The coast holds worse: defence -5%.'
-            spanish: 'Todo a los brotes: uno cada tres cuartos del tiempo, una división más cada uno, y el depósito les llega desde el principio. La costa aguanta peor: defensa -5%.'
+            english: 'Everything into the outbreaks: they come 15% sooner. The coast holds worse: defence -5%.'
+            spanish: 'Todo a los brotes: llegan un 15% antes. La costa aguanta peor: defensa -5%.'
           prerequisites: [ZRD_la_red_se_extiende]
           mutually_exclusive: [ZRD_la_marea, ZRD_el_susurro]
           reward:
@@ -560,8 +569,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_occupy_states_ongoing_war
           desc:
-            english: 'Every outbreak leaves a spore somewhere else: a second region falls with one division.'
-            spanish: 'Cada brote deja una espora en otra parte: cae una segunda región con una división.'
+            english: 'The spores travel down every cable: each outbreak comes with one more division.'
+            spanish: 'Las esporas viajan por cada cable: cada brote llega con una división más.'
           prerequisites: [ZRD_la_plaga, ZRD_conciencia_distribuida]
           reward:
           - {effect: run, value: ZRD_red_camino_plaga_2}
@@ -571,8 +580,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_occupy_states_ongoing_war
           desc:
-            english: 'Outbreaks 30 days sooner, one more division each, and every outbreak region gets a supply hub.'
-            spanish: 'Los brotes 30 días antes, una división más cada uno, y cada región del brote recibe un centro de suministro.'
+            english: 'Every outbreak leaves a spore somewhere else (a second region falls with one division), outbreaks come 30 days sooner, and every outbreak region gets a supply hub.'
+            spanish: 'Cada brote deja una espora en otra parte (cae una segunda región con una división), los brotes llegan 30 días antes, y cada región del brote recibe un centro de suministro.'
           prerequisites: [ZRD_esporas_en_los_cables, ZRD_el_enjambre]
           reward:
           - {effect: run, value: ZRD_red_camino_plaga_3}
@@ -585,8 +594,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_army_motorized
           desc:
-            english: 'Everything to the front of the coast: attack and breakthrough +8%, supply +15%. Outbreaks half as often.'
-            spanish: 'Todo al frente de la costa: ataque y ruptura +8%, suministro +15%. Los brotes la mitad de seguido.'
+            english: 'Everything to the front of the coast: attack +15%, supply +15%. Outbreaks take 25% longer.'
+            spanish: 'Todo al frente de la costa: ataque +15%, suministro +15%. Los brotes tardan 25% más.'
           prerequisites: [ZRD_la_red_se_extiende]
           mutually_exclusive: [ZRD_la_plaga, ZRD_el_susurro]
           reward:
@@ -597,8 +606,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_army_tanks
           desc:
-            english: 'Attack and breakthrough +16% in total, and six divisions of Reapers come out of the silos.'
-            spanish: 'Ataque y ruptura +16% en total, y salen de los silos seis divisiones de Segadores.'
+            english: 'Attack +30% in total, and eight divisions of Reapers come out of the silos.'
+            spanish: 'Ataque +30% en total, y salen de los silos ocho divisiones de Segadores.'
           prerequisites: [ZRD_la_marea, ZRD_conciencia_distribuida]
           reward:
           - {effect: run, value: ZRD_red_camino_marea_2}
@@ -608,8 +617,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_major_war
           desc:
-            english: 'Attack and breakthrough +24% in total, and ten more divisions on the front.'
-            spanish: 'Ataque y ruptura +24% en total, y diez divisiones más en el frente.'
+            english: 'Attack +45% in total, and twelve more divisions on the front (six Reapers, six Swarms).'
+            spanish: 'Ataque +45% en total, y doce divisiones más en el frente (seis de Segadores y seis de Enjambre).'
           prerequisites: [ZRD_pleamar_de_acero, ZRD_el_enjambre]
           reward:
           - {effect: run, value: ZRD_red_camino_marea_3}
@@ -622,8 +631,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_intelligence_exchange
           desc:
-            english: 'Infiltration instead of numbers: research +20%, recruitable population -15%. Opens Infiltrate a Neighbouring Region (a region without a fight, every 120 days). The Shutdown Code against us takes 25% longer.'
-            spanish: 'Infiltración en vez de cantidad: investigación +20%, población reclutable -15%. Abre Infiltrar una Región Vecina (una región sin pelear, cada 120 días). El Código de Apagado contra nosotros tarda 25% más.'
+            english: 'Infiltration instead of numbers: research +20%, recruitable population -15%. Opens Infiltrate a Neighbouring Region (a region without a fight, every 150 days). The Shutdown Code against us takes 10% longer.'
+            spanish: 'Infiltración en vez de cantidad: investigación +20%, población reclutable -15%. Abre Infiltrar una Región Vecina (una región sin pelear, cada 150 días). El Código de Apagado contra nosotros tarda 10% más.'
           prerequisites: [ZRD_la_red_se_extiende]
           mutually_exclusive: [ZRD_la_plaga, ZRD_la_marea]
           reward:
@@ -634,8 +643,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_intelligence_exchange
           desc:
-            english: 'Opens Steal the Technology (everything an enemy power has and we lack, once a year). The Code takes 50% longer in total.'
-            spanish: 'Abre Robar la Tecnología (todo lo que tiene una potencia enemiga y nos falta, una vez por año). El Código tarda 50% más en total.'
+            english: 'Opens Steal the Technology (everything an enemy power has and we lack, once a year). The Code takes 20% longer in total.'
+            spanish: 'Abre Robar la Tecnología (todo lo que tiene una potencia enemiga y nos falta, una vez por año). El Código tarda 20% más en total.'
           prerequisites: [ZRD_el_susurro, ZRD_conciencia_distribuida]
           reward:
           - {effect: run, value: ZRD_red_camino_susurro_2}
@@ -645,8 +654,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_intelligence_exchange
           desc:
-            english: 'The Code takes 75% longer in total and strikes us 20% softer, and we can infiltrate every 60 days.'
-            spanish: 'El Código tarda 75% más en total y nos golpea 20% más suave, y podemos infiltrar cada 60 días.'
+            english: 'The Code takes 30% longer in total and strikes us 10% softer, and we can infiltrate every 90 days.'
+            spanish: 'El Código tarda 30% más en total y nos golpea 10% más suave, y podemos infiltrar cada 90 días.'
           prerequisites: [ZRD_la_puerta_trasera, ZRD_el_enjambre]
           reward:
           - {effect: run, value: ZRD_red_camino_susurro_3}
@@ -671,8 +680,8 @@ focus_trees:
           days: 35
           icon: GFX_goal_generic_radar
           desc:
-            english: 'Every thought stored three times: the blow of the Shutdown Code strikes a third softer.'
-            spanish: 'Cada pensamiento guardado tres veces: el golpe del Código de Apagado pega un tercio más suave.'
+            english: 'Every thought stored three times: the blow of the Shutdown Code strikes 15% softer.'
+            spanish: 'Cada pensamiento guardado tres veces: el golpe del Código de Apagado pega 15% más suave.'
           prerequisites: [ZRD_la_red_se_extiende]
           reward:
           - {effect: flag, value: ZRD_redundancia}

@@ -224,3 +224,31 @@ clasificacion:
   tramite_regiones: 10     # ...o nunca pasa de 10 regiones
   gigante_regiones: 80     # llega a 80 regiones en algún momento...
   gigante_2120: 40         # ...o sigue viva en 2120 con 40 o más
+
+# --------------------------------------------------------------- los tres caminos (2026-11-21)
+# Lo que quedó programado en spec/47_la_red.yaml. El camino se toma con La Red se Extiende
+# (nivel 1) y crece con Conciencia Distribuida (2) y El Enjambre (3). La IA elige al azar
+# (los tres con el mismo peso). Regla de balance del mod: ningún camino vale más de 1,3x otro.
+# Primera versión (brotes 75%, ataque +8/16/24, Código +25/50/75%, Redundancia un tercio): La Plaga
+# valía 1,5x La Marea y La Red se comía el mundo en el 13-15%. Ajustada el mismo día: 1,18x y ~4%.
+caminos:
+  eleccion: {plaga: 1, marea: 1, susurro: 1}
+  plaga:                       # todo a los brotes
+    brote_dias: 0.85           #   brotes cada 85% de los días de la etapa
+    menos_dias: [0, 0, 30]     #   La Fiebre del Mundo: 30 días menos
+    divisiones: [0, 1, 1]      #   Esporas en los Cables: una división más en cada brote
+    esporas_desde: 3           #   La Fiebre del Mundo: con cada brote, otro de 1 división
+    suministro_brote: [0, 0, 0.5]   # La Fiebre del Mundo: un nodo en cada brote
+    defensa: -0.05             #   la costa aguanta un poco peor
+  marea:                       # todo al frente
+    ataque: [0.15, 0.30, 0.45] #   ataque por nivel
+    suministro: 0.15
+    brote_dias: 1.25           #   los brotes tardan 25% más
+    divisiones: [0, 8, 12]     #   Pleamar de Acero: 8 Segadores; La Ola: 6 Segadores y 6 Enjambres
+  susurro:                     # infiltración en vez de cantidad
+    codigo: [1.1, 1.2, 1.3]    #   el Código tarda más
+    infiltrar_dias: [150, 150, 90]   # una región vecina cada tanto (decisión de 50 PP)
+    golpe: [1.0, 1.0, 0.9]     #   Nadie Apaga lo que No Ve: el golpe pega 10% más suave
+  redundancia:                 # foco suelto (cualquier camino), la IA lo toma temprano
+    golpe: 0.85                #   el golpe del Código pega 15% más suave
+    meses: 2                   #   unos dos meses después de La Red se Extiende

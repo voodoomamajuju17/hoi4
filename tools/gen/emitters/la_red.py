@@ -369,48 +369,67 @@ ZRD_red_proximo_brote = {{
         efectos.append(f"ZRD_red_{nombre} = {{\n\tcustom_effect_tooltip = {tt(f'ZRD_red_tt_{nombre}', en, es)}\n"
                        f"\thidden_effect = {{\n{cuerpo}\t\tforce_update_dynamic_modifier = yes\n\t}}\n}}\n")
 
-    camino("camino_plaga_1", "Outbreaks every three quarters of the time, one more division each. Coast defence -5%.",
-           "Los brotes cada tres cuartos del tiempo, una división más cada uno. Defensa de la costa -5%.",
+    # 2026-11-21: los números salen de la_red.caminos (medidos con tools/simulador_red)
+    cam = cfg["caminos"]
+    pl, ma, su = cam["plaga"], cam["marea"], cam["susurro"]
+    antes = 100 - pl["brotes_pct"]
+    camino("camino_plaga_1", f"Outbreaks come {antes}% sooner. Coast defence -5%.",
+           f"Los brotes llegan un {antes}% antes. Defensa de la costa -5%.",
            "\t\tadd_dynamic_modifier = { modifier = ZRD_camino_plaga }\n"
-           "\t\tset_variable = { var = ZRD_brote_pct value = 75 }\n"
-           "\t\tadd_to_variable = { var = ZRD_brote_extra value = 1 }\n")
-    camino("camino_plaga_2", "Every outbreak also takes a second region with one division.",
-           "Cada brote toma además una segunda región con una división.",
-           "\t\tset_country_flag = ZRD_esporas\n")
-    camino("camino_plaga_3", "Outbreaks 30 days sooner, one more division each, and a supply hub in every outbreak region.",
-           "Los brotes 30 días antes, una división más cada uno, y un centro de suministro en cada región del brote.",
-           "\t\tset_country_flag = ZRD_fiebre\n"
-           "\t\tset_variable = { var = ZRD_brote_menos value = 30 }\n"
-           "\t\tadd_to_variable = { var = ZRD_brote_extra value = 1 }\n")
-    camino("camino_marea_1", "Attack and breakthrough +8%, supply +15%. Outbreaks half as often.",
-           "Ataque y ruptura +8%, suministro +15%. Los brotes la mitad de seguido.",
-           "\t\tset_variable = { var = ZRD_marea_ataque value = 0.08 }\n"
-           "\t\tset_variable = { var = ZRD_marea_ver value = 8 }\n"
-           "\t\tadd_dynamic_modifier = { modifier = ZRD_camino_marea }\n"
-           "\t\tset_variable = { var = ZRD_brote_pct value = 200 }\n")
-    camino("camino_marea_2", "Attack and breakthrough +16% in total. Six divisions of Reapers.",
-           "Ataque y ruptura +16% en total. Seis divisiones de Segadores.",
-           "\t\tset_variable = { var = ZRD_marea_ataque value = 0.16 }\n"
-           "\t\tset_variable = { var = ZRD_marea_ver value = 16 }\n"
-           "\t\tZRD_red_plantillas = yes\n"
-           "\t\tcapital_scope = {\n" + _unidades("Segadores", 6, xp, "\t\t\t") + "\t\t}\n")
-    camino("camino_marea_3", "Attack and breakthrough +24% in total. Ten more divisions.",
-           "Ataque y ruptura +24% en total. Diez divisiones más.",
-           "\t\tset_variable = { var = ZRD_marea_ataque value = 0.24 }\n"
-           "\t\tset_variable = { var = ZRD_marea_ver value = 24 }\n"
-           "\t\tZRD_red_plantillas = yes\n"
-           "\t\tcapital_scope = {\n" + _unidades("Segadores", 4, xp, "\t\t\t") + _unidades("Enjambre", 6, xp, "\t\t\t") + "\t\t}\n")
-    camino("camino_susurro_1", "Research +20%, recruitable population -15%. The Shutdown Code takes 25% longer.",
-           "Investigación +20%, población reclutable -15%. El Código de Apagado tarda 25% más.",
-           "\t\tadd_dynamic_modifier = { modifier = ZRD_camino_susurro }\n"
-           "\t\tset_variable = { var = ZRD_codigo_pct value = 125 }\n")
-    camino("camino_susurro_2", "The Shutdown Code takes 50% longer in total.",
-           "El Código de Apagado tarda 50% más en total.",
-           "\t\tset_variable = { var = ZRD_codigo_pct value = 150 }\n")
-    camino("camino_susurro_3", "The Shutdown Code takes 75% longer and strikes 20% softer. Infiltrate every 60 days.",
-           "El Código de Apagado tarda 75% más y golpea 20% más suave. Infiltrar cada 60 días.",
-           "\t\tset_variable = { var = ZRD_codigo_pct value = 175 }\n"
-           "\t\tset_country_flag = ZRD_nadie_apaga\n")
+           f"\t\tset_variable = {{ var = ZRD_brote_pct value = {pl['brotes_pct']} }}\n")
+    niveles_plaga = {2: [], 3: []}
+    niveles_plaga[pl["division_nivel"]].append(("Every outbreak comes with one more division.",
+                                                "Cada brote llega con una división más.",
+                                                "\t\tadd_to_variable = { var = ZRD_brote_extra value = 1 }\n"))
+    niveles_plaga[pl["esporas_nivel"]].append(("Every outbreak also takes a second region with one division.",
+                                               "Cada brote toma además una segunda región con una división.",
+                                               "\t\tset_country_flag = ZRD_esporas\n"))
+    niveles_plaga[3].append((f"Outbreaks {pl['menos_dias']} days sooner and a supply hub in every outbreak region.",
+                             f"Los brotes {pl['menos_dias']} días antes y un centro de suministro en cada región del brote.",
+                             "\t\tset_country_flag = ZRD_fiebre\n"
+                             f"\t\tset_variable = {{ var = ZRD_brote_menos value = {pl['menos_dias']} }}\n"))
+    for n in (2, 3):
+        camino(f"camino_plaga_{n}", " ".join(x[0] for x in niveles_plaga[n]), " ".join(x[1] for x in niveles_plaga[n]),
+               "".join(x[2] for x in niveles_plaga[n]))
+    nombres_div = {"Segadores": ("Reapers", "Segadores"), "Enjambre": ("Swarms", "Enjambre")}
+    for n in (1, 2, 3):
+        a = ma["ataque"][n - 1]
+        pct = round(a * 100)
+        seg, enj = ma["segadores"][n - 1], ma["enjambres"][n - 1]
+        divs_en = " and ".join(f"{k} divisions of {nombres_div[t][0]}" for t, k in (("Segadores", seg), ("Enjambre", enj)) if k)
+        divs_es = " y ".join(f"{k} divisiones de {nombres_div[t][1]}" for t, k in (("Segadores", seg), ("Enjambre", enj)) if k)
+        en = f"Attack +{pct}%" + (" in total" if n > 1 else "") + "."
+        es = f"Ataque +{pct}%" + (" en total" if n > 1 else "") + "."
+        cuerpo = (f"\t\tset_variable = {{ var = ZRD_marea_ataque value = {a} }}\n"
+                  f"\t\tset_variable = {{ var = ZRD_marea_ver value = {pct} }}\n")
+        if n == 1:
+            tarda = ma["brotes_pct"] - 100
+            en += f" Supply +15%. Outbreaks take {tarda}% longer."
+            es += f" Suministro +15%. Los brotes tardan {tarda}% más."
+            cuerpo += ("\t\tadd_dynamic_modifier = { modifier = ZRD_camino_marea }\n"
+                       f"\t\tset_variable = {{ var = ZRD_brote_pct value = {ma['brotes_pct']} }}\n")
+        if seg or enj:
+            en += f" {divs_en[0].upper() + divs_en[1:]}."
+            es += f" {divs_es[0].upper() + divs_es[1:]}."
+            cuerpo += ("\t\tZRD_red_plantillas = yes\n\t\tcapital_scope = {\n"
+                       + (_unidades("Segadores", seg, xp, "\t\t\t") if seg else "")
+                       + (_unidades("Enjambre", enj, xp, "\t\t\t") if enj else "") + "\t\t}\n")
+        camino(f"camino_marea_{n}", en, es, cuerpo)
+    for n in (1, 2, 3):
+        pct = su["codigo_pct"][n - 1]
+        en = f"The Shutdown Code takes {pct - 100}% longer" + (" in total" if n > 1 else "") + "."
+        es = f"El Código de Apagado tarda {pct - 100}% más" + (" en total" if n > 1 else "") + "."
+        cuerpo = f"\t\tset_variable = {{ var = ZRD_codigo_pct value = {pct} }}\n"
+        if n == 1:
+            en = "Research +20%, recruitable population -15%. " + en
+            es = "Investigación +20%, población reclutable -15%. " + es
+            cuerpo = "\t\tadd_dynamic_modifier = { modifier = ZRD_camino_susurro }\n" + cuerpo
+        if n == 3:
+            suave = round((1 - su["golpe"]) * 100)
+            en += f" It strikes {suave}% softer. Infiltrate every {su['infiltrar_dias_3']} days."
+            es += f" Golpea {suave}% más suave. Infiltrar cada {su['infiltrar_dias_3']} días."
+            cuerpo += "\t\tset_country_flag = ZRD_nadie_apaga\n"
+        camino(f"camino_susurro_{n}", en, es, cuerpo)
 
     efectos.append(f"""ZRD_red_infiltrar = {{
 \tcustom_effect_tooltip = {tt('ZRD_red_tt_infiltrar', 'A neighbouring region of an enemy becomes ours.', 'Una región vecina de un enemigo pasa a ser nuestra.')}
@@ -424,8 +443,8 @@ ZRD_red_proximo_brote = {{
 \t\t\t}}
 \t\t\tZRD = {{ transfer_state = PREV }}
 \t\t}}
-\t\tif = {{ limit = {{ has_country_flag = ZRD_nadie_apaga }} set_country_flag = {{ flag = ZRD_infiltro value = 1 days = 60 }} }}
-\t\telse = {{ set_country_flag = {{ flag = ZRD_infiltro value = 1 days = 120 }} }}
+\t\tif = {{ limit = {{ has_country_flag = ZRD_nadie_apaga }} set_country_flag = {{ flag = ZRD_infiltro value = 1 days = {su['infiltrar_dias_3']} }} }}
+\t\telse = {{ set_country_flag = {{ flag = ZRD_infiltro value = 1 days = {su['infiltrar_dias']} }} }}
 \t}}
 }}
 ZRD_red_robar_tecnologia = {{
@@ -490,8 +509,8 @@ ZRD_red_golpe = {{
 \tset_variable = {{ var = ZRD_golpe_suministro value = {g['suministro']} }}
 \tset_variable = {{ var = ZRD_golpe_organizacion value = {g['organizacion']} }}
 \tset_temp_variable = {{ var = zrd_k value = 1 }}
-\tif = {{ limit = {{ has_country_flag = ZRD_redundancia }} multiply_temp_variable = {{ var = zrd_k value = 0.67 }} }}
-\tif = {{ limit = {{ has_country_flag = ZRD_nadie_apaga }} multiply_temp_variable = {{ var = zrd_k value = 0.8 }} }}
+\tif = {{ limit = {{ has_country_flag = ZRD_redundancia }} multiply_temp_variable = {{ var = zrd_k value = {float(cam['redundancia'])} }} }}
+\tif = {{ limit = {{ has_country_flag = ZRD_nadie_apaga }} multiply_temp_variable = {{ var = zrd_k value = {float(su['golpe'])} }} }}
 \tmultiply_variable = {{ var = ZRD_golpe_ataque value = zrd_k }}
 \tmultiply_variable = {{ var = ZRD_golpe_fabricas value = zrd_k }}
 \tmultiply_variable = {{ var = ZRD_golpe_suministro value = zrd_k }}
