@@ -16,6 +16,15 @@
 
 Nadie gobierna las Tierras Sin Ley. El "líder" es el nombre que les dan las meganaciones a los cientos de caudillos que se reparten cada valle.
 
+## Las Leyendas
+
+Las Tierras Sin Ley nunca tuvieron héroes: tuvieron al que seguía en pie. Estos dos siguen en pie.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Prefecto Ozyman** | Mariscal: La Muralla del Estoico | Llega con el foco La Milicia de los Ciudadanos (la República Última). | Cultivaba maíz en Nebraska hasta que la Unión dejó de comprarlo. Entonces levantó una muralla alrededor de su pueblo, después alrededor del siguiente, y nunca perdió uno. Les cita a Epicteto a sus soldados y a Marco Aurelio a sus enemigos, y su nombre es la broma de una maestra que a los doce años le dijo "rey de reyes": mirad sus obras y desesperad. |
+| **Khavier Svoboda** | General: El Capitán | Llega con el foco Voluntarios por Convicción (Liberculto). | Nadie sabe de dónde salió: apareció en Kiev con una capa, predicando el Evangelio del Contrato desde el techo de un tranvía. Al año los ciberpredicadores le decían el Capitán, y las milicias lo siguieron a cada pelea que eligió. Nunca perdió una discusión y nunca dejó que nadie terminara una. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |
@@ -33,6 +42,19 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Gran Ofensiva.** Noventa días en que las Tierras Sin Ley pegan como una gran potencia.
 - **Contra el Mundo.** Un año en que la frontera cree que le puede ganar a todos.
 - **La Frontera Triunfante.** Las tierras que nadie quería ahora son las más productivas del mundo.
+- **El Estado que Nadie Esperaba.** En paz con todos, por ahora. Justificarnos una guerra tarda el doble.
+- **Contratos de Palabra.** Un apretón de manos delante del pueblo.
+- **La Moneda de Cada Pueblo.** Grano, balas y horas de trabajo.
+- **De Todos y de Nadie.** La tierra la trabajan todos.
+- **Las Asambleas de la Llanura.** Cada silo su asamblea.
+- **Soportar y Abstenerse.** Nada es nuestro salvo la voluntad.
+- **Los Silos de la República.** Que nos sitien.
+- **La Última República.** La última en pie.
+- **Los Ciberpredicadores.** El Evangelio del Contrato en todas las frecuencias.
+- **Voluntarios por Convicción.** Todos quieren pelear.
+- **Drones de la Fe.** Bendecidos y pagados.
+- **Ataque Preventivo por la Libertad.** La libertad no puede esperar.
+- **Liberculto Triunfante.** De a una conquista por vez.
 
 ## El árbol de focos nacionales
 
@@ -64,9 +86,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-2 eventos propios. Algunos títulos:
+3 eventos propios. Algunos títulos:
 
-*La Unión Quiere la Frontera de Vuelta* · *La Federación Mira al Oeste*
+*La Unión Quiere la Frontera de Vuelta* · *La Federación Mira al Oeste* · *El Estado que Nadie Esperaba*
 
 ## Frases
 

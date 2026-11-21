@@ -39,6 +39,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Selva Resiste V.** Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
 - **La Selva Resiste VI.** Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
 - **La Selva Inviolable.** Nadie que entró a la selva volvió para contarlo. Nadie quiere volver a probar.
+- **La Selva se Cerró.** Nadie le puede justificar una guerra a la selva, y la selva no quiere guerra con nadie. Para siempre.
 
 ## El árbol de focos nacionales
 

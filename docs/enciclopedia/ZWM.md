@@ -55,6 +55,10 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Leva de la Tormenta** — Cabalgan todas las tribus. Disponible después de cuatro años de sobrevivir.
 - **El Califato de las Arenas** — Los emires coronaron a un solo soberano del desierto. La arena misma pelea por él. Disponible después de cinco años de sobrevivir.
 
+### El Puente de Persia
+
+- **El Puente de Persia** — Seleuco gobernó de Babilonia al Indo, y los reyes de la India le pagaron con elefantes de guerra. Los señores del Indostán también sobrevivieron. Si tendemos la mano primero, el imperio es nuestro para nombrarlo.
+
 ## Aventuras
 
 Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/aventuras.md).

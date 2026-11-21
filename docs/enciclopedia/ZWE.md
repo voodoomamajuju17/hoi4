@@ -40,6 +40,14 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Estepa Aguanta V.** Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
 - **La Estepa Aguanta VI.** Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
 - **La Horda Eterna.** Cinco años de guerra forjaron a las bandas en una sola horda. Ya no defiende la estepa: sale de ella.
+- **La Paranoia Atómica.** Todos son enemigos hasta que se demuestre lo contrario. Nunca se demuestra.
+- **Todos son Espías.** Denunciá a tu vecino.
+- **La Leva Atómica.** Sé muchos.
+- **Fábricas Bajo Tierra.** Lejos de la vista, lejos de las bombas.
+- **El Culto del Átomo.** La estepa tiene un dios nuevo, y brilla.
+- **Ciudades Refugio.** Una ciudad debajo de cada ciudad.
+- **La Doctrina del Primer Golpe.** El que golpea segundo no golpea nunca.
+- **La Horda Atómica.** La estepa marcha hacia el oeste bajo un hongo atómico.
 
 ## El árbol de focos nacionales
 
@@ -71,9 +79,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-8 eventos propios. Algunos títulos:
+9 eventos propios. Algunos títulos:
 
-*Saqueo de los Señores de la Guerra de Eurasia* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó la Gran Capital* · *Eurasia Propone una Unión* · *Otro Señor se Suma* · *Un Señor se Niega*
+*Saqueo de los Señores de la Guerra de Eurasia* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó la Gran Capital* · *Eurasia Propone una Unión* · *Otro Señor se Suma* · *Un Señor se Niega* · *El Atamán Baja al Búnker*
 
 ## Frases
 
