@@ -3577,6 +3577,28 @@ def test_anarquias_finales() -> None:
               "has_country_flag = ZWE_atomica" in ai and "has_country_flag = ZWE_primer_golpe" in ai)
 
 
+def test_normales_modelos() -> None:
+    """2026-11-21 (cuadrado blanco sobre la infantería de los Emiratos y Eurasia): ninguna normal ni tangente de
+    largo cero en los modelos que arma el mod (el sombreado da NaN y el resplandor lo vuelve un cuadrado)."""
+    section("modelos 3D: sin normales en cero")
+    import glob
+    import math
+    import os
+    from tools.gen import modelo3d, pdxbin
+    for nombre in ("ZWM_infanteria", "ZWE_infanteria"):
+        d = REPO_ROOT / "assets" / "modelos" / nombre / "gfx" / "models" / "units" / nombre
+        anims = {os.path.basename(a): open(a, "rb").read() for a in glob.glob(str(d / "*.anim"))}
+        datos, _, info = modelo3d.arreglar_carpeta((d / f"{nombre}.mesh").read_bytes(), anims)
+        malos = 0
+        for n_ in pdxbin.leer(datos).todos():
+            if n_.nombre == "mesh":
+                n, ta = n_.get("n"), n_.get("ta") or []
+                malos += sum(1 for v in range(len(n) // 3) if math.sqrt(sum(x * x for x in n[3 * v:3 * v + 3])) < 1e-6)
+                malos += sum(1 for v in range(len(ta) // 4) if math.sqrt(sum(x * x for x in ta[4 * v:4 * v + 3])) < 1e-6)
+        check(f"{nombre}: el armado arregla las normales en cero ({info['normales']}) y no queda ninguna",
+              info["normales"] > 0 and malos == 0, malos)
+
+
 def test_historietas() -> None:
     """2026-11-18 (la Historieta): la introducción de cada nación en una página de 8 viñetas."""
     section("historieta: la introduccion de cada nacion en 8 viñetas")
@@ -6756,6 +6778,7 @@ def main() -> int:
         test_arboles,
         test_historietas,
         test_anarquias_finales,
+        test_normales_modelos,
     ):
         test()
 

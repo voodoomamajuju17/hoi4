@@ -382,6 +382,64 @@ def girar(m: Malla, anims: list[Anim]) -> None:
         _girar_anim(a)
 
 
+def arreglar_normales(m: Malla) -> int:
+    """2026-11-21 (el cuadrado blanco sobre la infantería de los Emiratos y de Eurasia): normales y tangentes de
+    largo cero (tiras finitas exportadas sin cara) hacen que el sombreado dé NaN, y el resplandor de la pantalla
+    lo agranda en un cuadrado blanco. Cada normal rota toma la de sus caras (o la de la cara más grande que la
+    usa); cada tangente rota, una perpendicular a esa normal. Las demás se dejan a largo 1. Devuelve cuántos
+    vértices arregló."""
+    arreglados = 0
+    for forma, _piel in m.formas():
+        p, n, tri = forma.get("p"), forma.get("n"), forma.get("tri")
+        if not p or not n or not tri:
+            continue
+        p, n = list(p), list(n)
+        ta = list(forma.get("ta") or [])
+        V = len(p) // 3
+        largo = lambda v: math.sqrt(n[3 * v] ** 2 + n[3 * v + 1] ** 2 + n[3 * v + 2] ** 2)
+        rotos = {v for v in range(V) if not (largo(v) > 1e-6) or any(math.isnan(x) for x in n[3 * v:3 * v + 3])}
+        if ta:
+            rotos |= {v for v in range(V) if not (math.sqrt(sum(x * x for x in ta[4 * v:4 * v + 3])) > 1e-6)}
+        if not rotos:
+            continue
+        acum = {v: [0.0, 0.0, 0.0] for v in rotos}
+        for k in range(0, len(tri), 3):
+            ids = tri[k:k + 3]
+            if not any(i in acum for i in ids):
+                continue
+            a, b, c = (p[3 * i:3 * i + 3] for i in ids)
+            ab = [b[i] - a[i] for i in range(3)]
+            ac = [c[i] - a[i] for i in range(3)]
+            cr = [ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0]]
+            for i in ids:
+                if i in acum:
+                    acum[i] = [acum[i][j] + cr[j] for j in range(3)]
+        for v in rotos:
+            if largo(v) > 1e-6 and not any(math.isnan(x) for x in n[3 * v:3 * v + 3]):
+                nv = [n[3 * v + j] / largo(v) for j in range(3)]
+            else:
+                s_ = acum[v]
+                L = math.sqrt(sum(x * x for x in s_))
+                nv = [x / L for x in s_] if L > 1e-12 else [0.0, 1.0, 0.0]
+                n[3 * v:3 * v + 3] = nv
+            if ta:
+                t = ta[4 * v:4 * v + 3]
+                if not (math.sqrt(sum(x * x for x in t)) > 1e-6):
+                    # perpendicular a la normal (la que menos se le parece de los ejes)
+                    eje = min(([1.0, 0, 0], [0, 1.0, 0], [0, 0, 1.0]), key=lambda e: abs(sum(e[j] * nv[j] for j in range(3))))
+                    d = sum(eje[j] * nv[j] for j in range(3))
+                    t = [eje[j] - d * nv[j] for j in range(3)]
+                    L = math.sqrt(sum(x * x for x in t)) or 1.0
+                    ta[4 * v:4 * v + 3] = [x / L for x in t]
+                    if not ta[4 * v + 3]:
+                        ta[4 * v + 3] = 1.0
+            arreglados += 1
+        forma.put("n", n, "f")
+        if ta:
+            forma.put("ta", ta, "f")
+    return arreglados
+
+
 def arreglar_carpeta(malla: bytes, anims: dict[str, bytes], maximo: int = MAX_HUESOS,
                      girar_180: bool = True) -> tuple[bytes, dict[str, bytes], dict]:
     """Malla y animaciones de una carpeta, arregladas. Devuelve también un resumen."""
@@ -391,8 +449,9 @@ def arreglar_carpeta(malla: bytes, anims: dict[str, bytes], maximo: int = MAX_HU
     quitados = m.recortar(list(a.values()), maximo)
     signos = sum(x.arreglar_signos() for x in a.values())
     sombra = m.sombreado_avanzado()
+    normales = arreglar_normales(m)
     if girar_180:
         girar(m, list(a.values()))
     return m.bytes(), {k: v.bytes() for k, v in a.items()}, {
         "huesos": (antes, m.huesos()), "quitados": quitados, "signos": signos, "sombreado": sombra,
-        "medida": m.medida(), "girado": girar_180}
+        "medida": m.medida(), "girado": girar_180, "normales": normales}
