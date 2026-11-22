@@ -1,0 +1,160 @@
+# 4 pedidos - loading_screen - medios gráficos del 2100 (2026-11-22)
+
+Para el generador de imágenes:
+- Cada bloque ASSET_REQUEST es UNA imagen. Pedir una imagen por vez, pegando el bloque entero JUNTO con la sección "REGLAS COMUNES" de abajo.
+- Devolverla con el nombre EXACTO de `filename`.
+- Proporción 4:3 horizontal (1920x1440 o más grande con la misma proporción). PNG.
+- Esta tanda SÍ lleva texto: solo las palabras exactas que pide cada bloque (cortas, en mayúsculas o como se indica). Todo el resto del texto impreso tiene que quedar fuera de foco o demasiado chico para leerse.
+- Zona libre: el 15% inferior del cuadro queda tranquilo (mesa, pared, suelo, sombra), porque ahí el juego dibuja la barra de carga.
+- La idea: mostrar cómo es el mundo de 2100 a través de lo que la gente imprime y pega (una revista, un afiche, un diario, un aviso), no con una foto directa de la guerra. Cada imagen es una FOTO REAL de un objeto impreso real, en el lugar donde está, con su propia cámara y su propia luz.
+- Si sale "con cara de IA" (letras inventadas, todo brillante, papel perfecto, objeto flotando de frente en el medio), pedir que la rehaga siguiendo las reglas comunes, punto por punto.
+- Van a assets/menu/loading/ y el juego las reparte entre sus pantallas de carga.
+
+====================================================================
+REGLAS COMUNES (pegarlas junto con cada bloque)
+====================================================================
+
+what this image is:
+- A real documentary photograph, taken by a person with a real camera, of a real PRINTED object (magazine, poster, newspaper, notice) that exists in a real place in the year 2100. The printed object was designed by a human graphic designer of that world, printed on a real press, and then handled, carried, pasted, rained on, folded. We see the object AND a slice of the place around it.
+- It is NOT a flat digital mock-up, NOT a vector poster, NOT a "poster design" rendered straight on, NOT concept art.
+
+anti-AI look (follow every point):
+1. The object is never perfectly frontal and centred. It is seen at an angle (stated in each request), cut by at least one edge of the frame, with real perspective distortion of the lens. Something partly covers it (a hand, another paper, a shadow, a strap, rain drops).
+2. Paper is physical: visible paper fibres, slight waviness, curled corners, fold creases with ink cracked along the folds, a tear, tape or glue marks, dirt and fingerprints, sun-fading on the side that faced the light. Nothing is pristine.
+3. Printing is physical: when the camera is close, the printed photographs show halftone dots (offset CMYK rosette) or the coarse dot of cheap newsprint; colours are slightly misregistered (one plate shifted by half a millimetre, leaving a thin coloured fringe); flat spot colours are uneven where the ink was thin; black ink is a deep grey, never pure digital black. No gradients, no glows, no lens flares, no 3D or metallic lettering, no drop shadows printed on the paper: only what a real press of the year 2100 could put on paper, which is flat ink.
+4. Typography: only the exact words given in quotes in each request may be readable, spelled exactly as written, in the typeface style described (real-world classes: condensed grotesque, didone serif, slab serif, monospaced, stencil). Letters have even, correct spacing and a consistent typeface. ALL other text (columns of body copy, small print, captions, prices) is either out of focus from the depth of field, or too small to resolve, or hidden; never invented gibberish words in focus.
+5. The printed photographs ON the object look like real press photographs of the year 2100: natural light, real people with pores and asymmetric faces, slightly unflattering moments, a bit of motion blur; never glossy portraits with glowing rim light. The design layout has the restraint of real editorial design: a grid, two or three ink colours, lots of plain paper.
+6. The light on the scene is the real ambient light of the place (stated in each request): no added cinematic glow, no teal-and-orange grade, no vignette, no HDR. Exposure is honest: a window can blow out to white, a corner can go black.
+7. The camera is real: stated lens and aperture with genuine depth of field (the background is truly soft), mild chromatic aberration at the edges, fine grain or sensor noise matching the ISO, a slight tilt of the horizon from a handheld shot.
+8. The surroundings are ordinary and specific, full of small, unglamorous objects. Nobody poses, nobody looks into the lens.
+9. No real brands, no real logos, no real flags, no real political symbols, no watermark, no signature.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 54_FCU_revista_en_el_kiosco
+filename: 54_FCU_revista_en_el_kiosco.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Kiosco en la estación Fulton" - a news kiosk in a New York subway station in 2100: the cover of the business weekly everyone reads in the Corporate Union, with President Valeria Castellane.
+
+lore: The Corporate Union (FCU) is North America run as a corporation: citizens are shareholders, the army is a contract, the government is a rotating board. Its president, Valeria Castellane, comes from the water trust that controls the desalination plants; she is in her second four-year term and every quarterly report is a small panic. In this world its share price is followed like a national mood. Palette of the Union: navy blue, silver, white, small gold.
+
+camera:
+- 35mm lens, f/2.8, 1/60 s, ISO 1600. Handheld, standing in front of the kiosk at chest height, angled about 30 degrees from the left, so the magazines recede in perspective to the right.
+- Focus on the one magazine at left-centre; everything else falls off softly.
+
+composition:
+- The kiosk: a narrow steel news stand of the year 2100 wedged between tiled subway columns, its racks packed with printed magazines and folded newspapers in overlapping rows, clipped with wooden clothes pegs, a little hand-written price card (out of focus), a small transparent rain cover pushed back. Printed paper still sells because it cannot be edited after the fact.
+- Hero magazine, left-centre, in a wire rack, slightly bent forward under its own weight, the top right corner curled, a thin orange price sticker on it (unreadable):
+  - Masthead across the top, a heavy condensed grotesque in white on a navy band: "TICKER".
+  - Cover photo: Valeria Castellane, a woman of 51 with long wavy dark-brown hair with lighter streaks, strong brows, almond eyes, defined cheekbones, red lipstick, a faint scar under the chin, small wrinkles at the eyes, navy suit, photographed from slightly below at a press conference, caught mid-blink with her mouth half-open, a microphone foam edge entering the frame; real press-photo halftone visible up close.
+  - Cover headline, big didone serif in black over a white lower third: "IS YOUR CITIZENSHIP STILL A BUY?"
+  - A small flat red ink line chart (like a stock chart, only lines, no numbers) running down across the corner of the cover.
+  - Nothing else legible on the cover.
+- Around it, out of focus: other magazine covers with blocks of colour and faces (no readable words), a stack of folded newspapers, chewing-gum packets in plain wrappers, a small water-bottle fridge glowing behind the kiosk with water bottles stamped with an abstract droplet emblem.
+- Right side, deep in the background, very soft: the subway platform: commuters in navy and grey workwear with glowing ID badges on lanyards, one man in a security contractor's vest, a train's lit windows blurred by motion.
+- The kiosk owner's hand, old, with a wedding ring and a band-aid on one knuckle, enters from the top right edge adjusting a newspaper, cut by the frame.
+- Bottom 15% (calm): the kiosk's scuffed steel counter, a few coins, a folded paper, in shadow.
+
+light: mixed real light: cold flickering fluorescent tubes of the station from above (greenish-white), warm tungsten bulb hanging inside the kiosk lighting the magazine from the right, the fridge's cold glow. Honest, slightly ugly colour.
+
+avoid: holographic magazines, screens instead of paper, a perfect frontal magazine mock-up, glossy luxury advert lighting, any real magazine's masthead or layout, real stock tickers, gibberish text in focus.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 55_ASC_cartel_del_consejo
+filename: 55_ASC_cartel_del_consejo.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El cartel del Consejo" - a public poster of the Commune's Council of Allocation pasted on a concrete wall in the Ruhr, in the rain, with a human answer scribbled on it.
+
+lore: The Automated Socialist Commune (ASC) rules Europe through planning algorithms (PLAN-41) and robots; the Council of Allocation publishes the results of the year on posters in every town. One of its famous lines: "No human error was recorded this year. No human was consulted." Its graphic style is clean constructivist geometry: red, white and black, diagonals, circles, sans-serif. In German-speaking towns the posters are in German.
+
+camera:
+- 50mm lens, f/4, 1/125 s, ISO 400. Handheld from about two metres away, standing slightly to the right of the poster and a little below it, so the wall recedes toward the left; horizon tilted 3 degrees.
+- Focus on the poster; the street behind on the left goes soft.
+
+composition:
+- A rough grey concrete wall of a 20th-century housing block, stained dark by rain, with older poster layers torn off in strips around it (scraps of paper with faded red and black blocks, no readable words).
+- The poster (large, about 120 x 170 cm, wheat-pasted, three sheets with visible overlaps and seams, one seam bubbling with trapped air, the bottom edge soaked and starting to peel):
+  - Upper half: a constructivist composition printed in flat red and black on off-white paper: a huge red circle, a diagonal black bar, and in the circle a printed halftone photograph of a white-and-red Commune robot hand gently holding a wheat ear, the black ink slightly misregistered against the red.
+  - Headline in bold black condensed sans-serif capitals, two lines, set on the diagonal: "KEIN MENSCHLICHER FEHLER" and below, smaller: "IN DIESEM JAHR".
+  - A narrow black band at the bottom with small white text (too small to read) and a geometric emblem (a hexagon made of six identical triangles, no letters).
+- The human answer: across the headline, someone has written by hand with a thick black marker, in quick, uneven handwriting: "UND KEINER GEFRAGT". Under it, a fresh small sticker (palm-sized, cheap paper, printed in one blue ink) showing a simple drawing of a human hand open, no words.
+- Left third, out of focus: the wet street: a tram stop, a woman in a red work overall with a hood up walking past without looking, a small white Commune maintenance robot on six legs cleaning the gutter with a brush, red lights on its sensor bar blurred.
+- Rain: drops running down the poster, the paper darker where it is wettest, a drip hanging from the peeling corner.
+- Bottom 15% (calm): the base of the wall and the wet pavement: puddles, a dropped tram ticket (blank), a drain grate, in soft focus.
+
+light: grey overcast late afternoon, flat soft light, the wet wall reflecting a pale sky; a single warm street lamp just switching on in the far background, out of focus.
+
+avoid: Soviet or Nazi real symbols, a hammer and sickle, real party posters copied, the poster seen perfectly flat, clean dry paper, printed gradients, neon, robots with faces, gibberish German.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 56_EFE_diario_en_la_feria
+filename: 56_EFE_diario_en_la_feria.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La salud del Emperador" - the front page of the Empire's newspaper, used to wrap tree seedlings at a street market in Buenos Aires.
+
+lore: The Ecofascist Empire (EFE) rules South America from Buenos Aires. Emperor Aurelio IV wants to give back to the world, tree by tree and by force if need be, the forest his grandparents cut down. He is only 54 but his health is failing, and the whole Empire is waiting for the succession; the official newspaper keeps saying he is perfectly well. Imperial palette: forest green, gold laurels. Citizens buy seedlings at street markets because planting is a civic duty.
+
+camera:
+- 28mm lens, f/5.6, 1/250 s, ISO 200. Handheld from above at about 45 degrees, looking down onto a market table, as if the photographer is a customer leaning over the stall.
+- Focus on the newspaper; the market behind falls soft at the top of the frame.
+
+composition:
+- A wooden market table covered with dozens of small tree seedlings (native species: lapacho, ceibo, quebracho, jacarandá) in black plastic pots and in bundles of bare roots tied with string, soil spilled on the boards, a pair of pruning shears with green handles, a tin of water.
+- The hero: a broadsheet newspaper, the front page, half wrapped around a bundle of three seedlings with roots in damp soil; the paper is folded, wet in patches where the soil touches it (the ink of those areas greying and the paper going translucent), torn at one corner, with a muddy thumbprint.
+- What is readable on the front page (everything else out of focus or too small):
+  - Masthead in a classic black didone serif with a small green printed laurel wreath on each side: "LA GACETA DEL MONTE".
+  - Main headline in big black slab-serif capitals: "EL EMPERADOR GOZA DE EXCELENTE SALUD".
+  - Under it, a large printed news photograph in coarse newsprint halftone: Emperor Aurelio IV, a man of 54 with a square heavy face, sun-damaged olive skin, thick salt-and-pepper hair swept back, short grey goatee with a darker moustache, heavy black eyebrows, a drooping left eyelid and a small white scar through the right eyebrow, in a bottle-green high-collar tunic and a thin bronze laurel crown, planting a sapling with a ceremonial spade in a park, held at the elbow by an aide who is half cut by the photo crop; he is visibly ill: grey skin, sweat on the temple, a smile that costs him; the photographer clearly picked the best of a bad set.
+  - The rest of the page: columns of grey body text, a smaller photo of a forest line (all out of focus).
+- The vendor: only her hands enter from the left: brown, strong, soil under the nails, a green imperial ration bracelet on the wrist, twisting string around the bundle.
+- Top of frame, out of focus: the busy market street under plane trees: shoppers with cloth bags, a mate gourd on another stall, a moss-covered tram, a big green-and-gold banner with a laurel and a tree (no words).
+- Bottom 15% (calm): the edge of the wooden table, spilled soil, a few loose leaves, in soft shadow.
+
+light: Buenos Aires late morning in spring, sun filtered through plane tree leaves: dappled warm patches on the newspaper and seedlings, cool shade in between; the white of the paper partly blown out in a sunny patch.
+
+avoid: a glossy newspaper, a flat newspaper mock-up, the Emperor looking heroic or healthy, fascist or Nazi real symbols, real Argentine newspaper mastheads, gibberish Spanish in focus, vignette.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 57_HSN_aviso_de_patentes
+filename: 57_HSN_aviso_de_patentes.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Se buscan corsarios" - a recruitment notice of the High Seas Naval Patent Office pinned on the cork board of a dockside canteen in Singapore.
+
+lore: The High Seas Nation (HSN) rules Asia-Pacific from its ports; it is run by a freight clearing house and an insurance chamber. "The Nation has no enemies; it has policyholders." In peacetime it sells letters of marque: licensed privateers who stop and "insure" the ships of others, under its Naval Patent Office. Its graphic style comes from shipping: marine charts, signal flags, brass, teal and anti-fouling red, stencil lettering. Trade language: English.
+
+camera:
+- 85mm lens, f/2, 1/100 s, ISO 800. Handheld from a seat at a canteen table, about 1.5 metres away, slightly below and to the left of the board, so the board recedes to the right.
+- Focus on the notice; very shallow depth of field.
+
+composition:
+- A crowded cork board on the wall of a dockside canteen, covered in layers of paper: shift rotas, lost-and-found notes, a faded tide table, a child's drawing of a ship, business cards, a torn calendar page, receipts, pinned with mismatched coloured pins and one rusty nail (all their text out of focus or too small).
+- The hero notice (A3, on thick teal-tinted paper, slightly glossy, pinned with four brass pins, one corner hanging loose and curling, a coffee ring stain on the lower left, sun-faded on the right edge):
+  - Top: a printed row of maritime signal flags (abstract geometric flag shapes in red, yellow, blue, black; not a real message).
+  - Headline in a heavy stencil typeface, anti-fouling red: "LETTERS OF MARQUE".
+  - Below it, in black condensed grotesque: "NOW ISSUING".
+  - A large printed halftone photograph: the deck of a small fast patrol boat converted from a fishing trawler, a crew of four in orange life vests and mismatched helmets, one woman at the bow with a rifle slung and a clipboard, the sea grey, spray in the air; a real, slightly crooked press photo.
+  - Bottom block: a printed nautical chart fragment (coastlines and depth contours, no names) with a red dashed line through a strait, and a brass-gold printed seal (a compass rose inside a ring, no letters).
+  - Small text everywhere else: out of focus.
+  - Torn tear-off strips along the bottom edge (like the ones with phone numbers), three of them already torn off, the remaining ones blank or out of focus.
+- Foreground left, out of focus and cut by the frame: the canteen table with a steel tray, a half-eaten bowl of noodles, a can of drink with a plain label, a sailor's tattooed forearm resting on the table.
+- Background right, soft: the canteen's open side giving onto the harbour: stacked teal and red containers, a crane, the bright hazy sky.
+- Bottom 15% (calm): the lower edge of the cork board and the plain painted wall below it, in shadow.
+
+light: humid tropical midday, hard white daylight bouncing in from the harbour on the right, a ceiling fan's moving shadow across the board, a fluorescent tube inside adding a greenish tint on the left. The bright harbour is blown out to near white.
+
+avoid: pirate skull and crossbones, cartoon pirates, treasure-map clichés, real Singapore government or company logos, the notice perfectly flat and centred, gibberish English in focus, glowing teal.
