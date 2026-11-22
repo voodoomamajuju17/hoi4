@@ -3,7 +3,7 @@
 Pedido: "Esos marcos quiero cambiarlos completamente, podés hacer los pedidos que hagan falta" (la barra de
 arriba con "Cargando bases de datos" y la caja de abajo con la frase). La comparten el armado
 (tools/gen/emitters/marcos_carga.py: dónde va cada texto) y el arte (tools/arte/arte.py: el tamaño de
-cada pieza y el pedido en arte/pedidos_fijos/50_marcos_pantalla_carga.txt). Sin PIL.
+cada pieza y el pedido en arte/pedidos_marcos_pantalla_carga.txt). Sin PIL.
 
 Coordenadas dentro de cada imagen (x, y, ancho, alto). Las dos ventanas del juego están centradas: la de
 arriba (CENTER_UP) y la de abajo (CENTER_DOWN), así que el marco va en x = -ancho/2.

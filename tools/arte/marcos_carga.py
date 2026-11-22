@@ -1,6 +1,6 @@
 """Guías de los marcos de la pantalla de carga (2026-11-22): una imagen al doble del tamaño final con las
 zonas que el juego usa (placa del título, ranura de la barra, zona de la frase) marcadas, para adjuntar al
-pedido arte/pedidos_fijos/50_marcos_pantalla_carga.txt. Se guardan en arte/referencias/."""
+pedido arte/pedidos_marcos_pantalla_carga.txt. Se guardan en arte/referencias/."""
 
 from __future__ import annotations
 

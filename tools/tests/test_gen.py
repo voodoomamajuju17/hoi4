@@ -3615,7 +3615,7 @@ def test_marcos_carga() -> None:
           and "GFX_mn_carga_marco_frase" in gui and "GFX_mn_carga_marco_estado" in gui)
     gfx = marcos_carga._gfx()
     check("la barra propia usa las dos imagenes del pedido", "carga_barra_llena.dds" in gfx and "carga_barra_vacia.dds" in gfx)
-    pedido = (REPO_ROOT / "arte" / "pedidos_fijos" / "50_marcos_pantalla_carga.txt").read_text(encoding="utf-8")
+    pedido = (REPO_ROOT / "arte" / "pedidos_marcos_pantalla_carga.txt").read_text(encoding="utf-8")
     check("el pedido tiene las cuatro piezas con su nombre de archivo",
           all(f"filename: {p}.png" in pedido for p in G.PIEZAS) and pedido.count("ASSET_REQUEST") == 4)
     with tempfile.TemporaryDirectory() as tmp:

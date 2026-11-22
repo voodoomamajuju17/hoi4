@@ -96,7 +96,7 @@ KINDS = {
     # lugar en la página); al importar se guarda al tamaño del lugar y se vuelve a armar la página
     "comic_panel": {"size": (800, 600), "transparent": False, "fit": "cover"},
     # 2026-11-22: los marcos de la pantalla de carga (tools/gen/carga_geo.py): cada pieza lleva su tamaño;
-    # el pedido va escrito a mano (arte/pedidos_fijos/50_marcos_pantalla_carga.txt) y al importar se
+    # el pedido va escrito a mano (arte/pedidos_marcos_pantalla_carga.txt) y al importar se
     # estira al tamaño exacto (las ranuras del título, la barra y la frase tienen que caer en su lugar)
     "loading_frame": {"size": (1400, 120), "transparent": True, "fit": "stretch"},
 }
@@ -585,7 +585,7 @@ def _marcos_carga_items() -> list[dict]:
         dest = REPO / "assets" / "menu" / "carga_marcos" / f"{pid}.dds"
         out.append({"type": "loading_frame", "tag": "INTERFAZ", "id": pid, "dest": dest, "done": dest.exists(),
                     "size": p["size"], "transparent": p["transparent"], "hand_written": True,
-                    "description": "ver arte/pedidos_fijos/50_marcos_pantalla_carga.txt"})
+                    "description": "ver arte/pedidos_marcos_pantalla_carga.txt"})
     return out
 
 

@@ -11,7 +11,7 @@ GFX_loadingtip_bg y la barra GFX_loadingstatus_progress). Acá:
   - interface/load_screen.gui: el mismo archivo del juego con nuestros sprites y las posiciones de
     tools/gen/carga_geo.py (la placa del título, la ranura de la barra y la caja de la frase).
 Solo si están las cuatro piezas (assets/menu/carga_marcos/<pieza>.dds, las importa tools/arte/arte.py
-desde el pedido arte/pedidos_fijos/50_marcos_pantalla_carga.txt): con una sola faltando, la pantalla
+desde el pedido arte/pedidos_marcos_pantalla_carga.txt): con una sola faltando, la pantalla
 mezclaría marcos viejos y nuevos, así que queda la del juego y el reporte dice cuáles faltan.
 """
 
@@ -168,7 +168,7 @@ def emit(ctx: BuildContext) -> None:
     faltan = [p for p in G.PIEZAS if not (repo / "assets" / "menu" / "carga_marcos" / f"{p}.dds").exists()]
     if faltan:
         ctx.note(f"pantalla de carga: marcos del juego (faltan {len(faltan)} de {len(G.PIEZAS)} piezas: "
-                 f"{', '.join(faltan)}; pedido en arte/pedidos_fijos/50_marcos_pantalla_carga.txt)")
+                 f"{', '.join(faltan)}; pedido en arte/pedidos_marcos_pantalla_carga.txt)")
         return
     for p in G.PIEZAS:
         ctx.copy_asset(f"assets/menu/carga_marcos/{p}.dds", f"{DIR}/{p}.dds")
