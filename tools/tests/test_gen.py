@@ -3604,6 +3604,29 @@ def test_normales_modelos() -> None:
               info["normales"] > 0 and malos == 0, malos)
 
 
+def test_reporte_2026_11_22() -> None:
+    section("partida 2100-2115 (error.log y reporte 2026-11-22): ronda del lider y uranio de Eurasia")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        eff = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        # la ronda se reinicia aunque el lider de la ASC (Algoritmo) nunca vea los eventos que no le tocan
+        i = eff.index("clr_country_flag = MEGANATIONS_lider_visto_1 ")
+        reset = eff[max(0, i - 3000):i]
+        check("eventos del lider: la ronda se reinicia contando los que el rasgo del lider saltea",
+              "OR = { has_country_flag = MEGANATIONS_lider_visto_2 has_country_leader_with_trait = asc_allocation_algorithm }" in reset,
+              reset[-800:])
+        check("ningun aviso de add_resource omitido", not any("add_resource omitido" in w for w in ctx.warnings),
+              str([w for w in ctx.warnings if "add_resource" in w]))
+        zwe = " ".join((mod / "common/national_focus").joinpath("meganations_zwe_atomica_focus.txt").read_text(encoding="utf-8").split()) \
+            if (mod / "common/national_focus/meganations_zwe_atomica_focus.txt").exists() else \
+            " ".join(" ".join(f.read_text(encoding="utf-8").split()) for f in (mod / "common/national_focus").glob("*.txt")
+                     if "ZWE_a_uranio_de_los_urales" in f.read_text(encoding="utf-8"))
+        j = zwe.index("id = ZWE_a_uranio_de_los_urales")
+        check("Eurasia atomica: el uranio de los Urales se suma en la capital (arbol compartido)",
+              "capital_scope = { add_resource = { type = " in zwe[j:j + 2500], zwe[j:j + 1200])
+
+
 def test_marcos_carga() -> None:
     """2026-11-22 ("Esos marcos quiero cambiarlos completamente"): la pantalla de carga con marcos propios, y
     30 frases nuevas (104 en total)."""
@@ -6831,6 +6854,7 @@ def main() -> int:
         test_arboles,
         test_historietas,
         test_marcos_carga,
+        test_reporte_2026_11_22,
         test_anarquias_finales,
         test_normales_modelos,
     ):

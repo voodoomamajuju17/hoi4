@@ -20110,8 +20110,10 @@ scripted_effects:
       when: {date_after: 2100.4.1, not_flag: MEGANATIONS_lider_espera}
       then:
       - effect: if
+        # error.log 2026-11-22 (ASC, desde 2106): con el Algoritmo de Asignación de líder, los eventos que
+        # no le tocan nunca quedaban 'vistos', la ronda no se reiniciaba y la lista quedaba en cero.
         when:
-          flags: [MEGANATIONS_lider_visto_1, MEGANATIONS_lider_visto_2, MEGANATIONS_lider_visto_3, MEGANATIONS_lider_visto_4, MEGANATIONS_lider_visto_5, MEGANATIONS_lider_visto_6, MEGANATIONS_lider_visto_7, MEGANATIONS_lider_visto_8, MEGANATIONS_lider_visto_9, MEGANATIONS_lider_visto_10, MEGANATIONS_lider_visto_11, MEGANATIONS_lider_visto_12, MEGANATIONS_lider_visto_13, MEGANATIONS_lider_visto_14, MEGANATIONS_lider_visto_15, MEGANATIONS_lider_visto_16, MEGANATIONS_lider_visto_17, MEGANATIONS_lider_visto_18, MEGANATIONS_lider_visto_19, MEGANATIONS_lider_visto_20]
+          all: [{flag: MEGANATIONS_lider_visto_1}, {any: [{flag: MEGANATIONS_lider_visto_2}, {leader_trait: asc_allocation_algorithm}]}, {any: [{flag: MEGANATIONS_lider_visto_3}, {leader_trait: asc_allocation_algorithm}]}, {any: [{flag: MEGANATIONS_lider_visto_4}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_5}, {flag: MEGANATIONS_lider_visto_6}, {any: [{flag: MEGANATIONS_lider_visto_7}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_8}, {any: [{flag: MEGANATIONS_lider_visto_9}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_10}, {any: [{flag: MEGANATIONS_lider_visto_11}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_12}, {any: [{flag: MEGANATIONS_lider_visto_13}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_14}, {any: [{flag: MEGANATIONS_lider_visto_15}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_16}, {any: [{flag: MEGANATIONS_lider_visto_17}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_18}, {any: [{flag: MEGANATIONS_lider_visto_19}, {leader_trait: asc_allocation_algorithm}]}, {flag: MEGANATIONS_lider_visto_20}]
         then:
         - {effect: clear_flag, value: MEGANATIONS_lider_visto_1}
         - {effect: clear_flag, value: MEGANATIONS_lider_visto_2}

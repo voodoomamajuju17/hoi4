@@ -1452,13 +1452,16 @@ def render_effects(owner: str, items: list[dict], known,
             resource = item.get("resource")
             if ec.resources and resource not in ec.resources:
                 raise SpecError(f"{owner}: recurso '{resource}' desconocido", where=where)
-            if ec.capital is None:
-                if ec.warn:
-                    ec.warn(f"{owner}: add_resource omitido, no hay capital resuelta (falta --vanilla-path).")
-                continue
             inner = Block()
             inner.add("type", resource)
             inner.add("amount", int(item.get("amount", 1)))
+            if ec.capital is None:
+                # 2026-11-22 (reporte: "ZWE_a_uranio_de_los_urales: add_resource omitido"): un árbol
+                # compartido (Eurasia atómica) no tiene un país fijo, así que no hay capital por número;
+                # se suma en la capital que tenga el que lo juega, en scope de state.
+                block.add("capital_scope", Block([("add_resource", inner)]))
+                effects_used.setdefault("add_resource", owner)
+                continue
             inner.add("state", ec.capital)
             block.add("add_resource", inner)
             effects_used.setdefault("add_resource", owner)
