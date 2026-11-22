@@ -563,10 +563,28 @@ def catalog() -> list[dict]:
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
     items += _marcos_carga_items()
+    items += _loading_items()
     # 2026-11-18: la Historieta (46_historietas): una imagen por viñeta, del tamaño de su lugar en la página
     from tools.arte import historietas as _hist
     items += _hist.items()
     _apply_icon_looks(items)
+    return items
+
+
+def _loading_items() -> list[dict]:
+    """Pantallas de carga escritas a mano (arte/pedidos_pantallas_carga_*.txt). Las de vida diaria se
+    sacaron el 2026-11-22 (pedido del usuario); estas solo dan el destino para importarlas."""
+    items = []
+    for txt in sorted((REPO / "arte").glob("pedidos_pantallas_carga_*.txt")):
+        bloques = txt.read_text(encoding="utf-8").split("ASSET_REQUEST")[1:]
+        for b in bloques:
+            campos = dict(l.split(": ", 1) for l in b.splitlines() if l.startswith(("type: ", "id: ")))
+            if campos.get("type") != "loading_screen" or "id" not in campos:
+                continue
+            iid = campos["id"].strip()
+            dest = REPO / "assets" / "menu" / "loading" / f"{iid}.dds"
+            items.append({"type": "loading_screen", "tag": "CARGA", "id": iid, "dest": dest, "done": dest.exists(),
+                          "hand_written": True, "description": f"ver arte/{txt.name}"})
     return items
 
 

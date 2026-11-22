@@ -16,6 +16,16 @@
 
 Nadie gobierna las Tierras Sin Ley. El "líder" es el nombre que les dan las meganaciones a los cientos de caudillos que se reparten cada valle.
 
+### Cónsul Elijah Brandt
+*año 2054*
+
+Maestro rural de Kansas. Lo eligieron por sorteo, como a todos, y se niega a cobrar un sueldo. Gobierna desde la misma escuela donde enseñaba.
+
+### Profeta-Presidente Lev Rand
+*año 2059*
+
+Exprogramador que se volvió predicador en un tranvía de Kiev. Sus sermones duran cuatro horas y terminan siempre igual: la libertad no se pide.
+
 ## Las Leyendas
 
 Las Tierras Sin Ley nunca tuvieron héroes: tuvieron al que seguía en pie. Estos dos siguen en pie.
@@ -31,6 +41,17 @@ Las Tierras Sin Ley nunca tuvieron héroes: tuvieron al que seguía en pie. Esto
 |---|---|---|
 | Mariscal Hank Dalloway | Jefe del Ejército | Rasgo: Instrucción Rigurosa |
 | General Nkechi Obi | Alto mando | Rasgo: Guerra de Guerrillas |
+| Mariscal de la Frontera Ezra Whitlock | Mariscal de campo | Era sheriff de un condado de Dakota del Norte. Lo nombraron mariscal porque era el único que tenía, escrita a mano, la lista de todos los fuertes de la Frontera. |
+| General Sila Kuptana | General | Patrulla el norte en trineo motorizado. Sabe dónde se quiebra el hielo en marzo y deja que el enemigo lo aprenda solo. |
+| Coronel Dale Larsen | General | Blindó las cosechadoras de su condado y salió a pelear con ellas. Ahora tiene doscientas. |
+| General Rosario Valenzuela | General | Fue contrabandista de agua en el desierto de Sonora. Conoce cada pozo entre Tijuana y Hermosillo. |
+| General Ixchel Tzul | General | Defiende las montañas de Guatemala por las mismas sendas que usaron sus abuelos contra todos los ejércitos que pasaron. |
+| General Ousmane Sangaré | General | Hace la guerra en el Sahel desde los catorce años. Firmó la paz con todos los ejércitos que pasaron, y con todos la rompió. |
+| Coronel Taras Hnatiuk | General | Sostiene Kiev desde los sótanos del metro. Nadie lo nombró coronel; un día empezaron a llamarlo así y él no los corrigió. |
+| Capitana Dolores Ybarra | General | Ingeniera de Chihuahua. Convirtió cada silo de la llanura en un búnker y cada búnker en una escuela. |
+| Tesorera Mara Okafor | Ministro | Lleva las cuentas de una república sin banco: graneros, horas de trabajo y favores. Las cuentas cierran. |
+| Coronel Bohdan Mises | General | Excampeón de boxeo de Járkov. Manda la primera ola de cada cruzada y nunca pide refuerzos: los refuerzos vienen solos. |
+| Diácono Ivan Rothbard | Ministro | Diácono del Mercado. Vende indulgencias en forma de bonos de guerra y las fábricas de drones se pagan solas. |
 
 ## Espíritus nacionales
 
@@ -94,6 +115,21 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 > La ley llegó hasta acá una vez. Todavía estamos buscando su cuerpo.
 > — *Los Señores de la Guerra*
+
+> La República Última no cobra impuestos. Hace una colecta, y lleva la lista de los que no pusieron.
+> — *Cónsul Elijah Brandt*
+
+> Cada ciudadano tiene un fusil. El problema es que cada ciudadano también tiene una opinión.
+> — *Capitana Dolores Ybarra*
+
+> Llevo las cuentas de un país que juró no tener cuentas.
+> — *Tesorera Mara Okafor*
+
+> El mercado no es un dios. Pero contesta las plegarias más rápido.
+> — *Profeta-Presidente Lev Rand*
+
+> Los domingos, Kiev reza. Los lunes, cotiza.
+> — *Diácono Ivan Rothbard*
 
 ---
 

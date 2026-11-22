@@ -7,11 +7,11 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > El bosque no pide permiso para crecer. Nosotros tampoco.
 > — *Emperador Aurelio IV*
 
-> Cada árbol que plantamos es un soldado que nunca deserta.
-> — *Emperador Aurelio IV*
-
 > El Monte no se conquista. Se pide prestado, y se devuelve con intereses.
 > — *Anahí Quiroga*
+
+> Mis abuelos talaron el mundo. A mí me toca devolverlo, árbol por árbol, aunque sea a la fuerza.
+> — *Emperador Aurelio IV*
 
 ## Comuna Socialista Automatizada
 
@@ -32,9 +32,6 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > No hacemos la guerra. Facturamos la paz por adelantado.
 > — *Marcus Rourke*
 
-> Un contrato bien escrito vale más que diez divisiones.
-> — *Presidenta Valeria Castellane*
-
 ## Nación de Mercado de Alta Mar
 
 > El mar no tiene dueño. Tiene peaje.
@@ -54,12 +51,12 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > Los cóndores no pelean en el valle. Esperan a que el valle suba.
 > — *Sapa Inti Amaru Quispe II*
 
+> El quipu no miente. Solo hay que saber quién hizo los nudos.
+> — *Sapa Inti Amaru Quispe II*
+
 ## Directorio Sino-Armónico
 
 > El río no discute con la piedra. La rodea, y un día la piedra ya no está.
-> — *Lin Wenzhao*
-
-> La armonía no es la ausencia de conflicto. Es el conflicto bien administrado.
 > — *Lin Wenzhao*
 
 > Las compuertas se abren una sola vez. Elegí bien hacia dónde.
@@ -81,9 +78,6 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > Roma no cayó. Se tomó dos mil años de descanso.
 > — *Imperator Lucius Varro*
 
-> La legión no cuenta enemigos. Cuenta pasos hasta la próxima frontera.
-> — *Legado Flavius Arbogast*
-
 > Toda provincia empieza como una conquista y termina como una costumbre.
 > — *Legada Irina Vasilescu*
 
@@ -92,9 +86,24 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > Nadie se lleva la estepa. La estepa se lleva a todos.
 > — *Atamán Oleksandr Grigorenko*
 
+> El primer reactor lo prendimos por miedo. El segundo, por costumbre.
+> — *Doctora Ilona Kurchatova*
+
 ## Señores de la Guerra del Indostán
 
 > Mil reyes no hacen un imperio. Pero mil reyes no se rinden juntos.
+> — *Rani Devika Rathore*
+
+> Alejandro murió joven y dejó un imperio sin heredero. El heredero somos nosotros, con dos mil años de atraso.
+> — *Basileus Antíoco Rashid-Varma*
+
+> Un elefante no sabe que es un símbolo. Por eso carga igual.
+> — *Estratego Kiran Seleukides*
+
+> Dos tesoros, una diadema y ningún recibo. Así nacen los imperios, y así se caen.
+> — *Dioceta Meera Varma*
+
+> Me ofrecieron una diadema griega. Les recordé que acá ya había coronas cuando Grecia era un rumor.
 > — *Rani Devika Rathore*
 
 ## Emiratos del Desierto
@@ -102,9 +111,15 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > El petróleo se acabó. La arena no.
 > — *Emir Khalid al-Rashid*
 
+> Los elefantes vienen de la India. El oro para darles de comer sale de acá.
+> — *Emir Khalid al-Rashid*
+
 ## Caudillos del Amazonas
 
 > En la selva no hay frentes. Hay árboles, y detrás de cada árbol, uno de los nuestros.
+> — *Coronel Tiago Barbosa*
+
+> La selva cerró la puerta. Del lado de adentro estamos bien.
 > — *Coronel Tiago Barbosa*
 
 ## Las Tierras Sin Ley
@@ -112,15 +127,27 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 > La ley llegó hasta acá una vez. Todavía estamos buscando su cuerpo.
 > — *Los Señores de la Guerra*
 
+> La República Última no cobra impuestos. Hace una colecta, y lleva la lista de los que no pusieron.
+> — *Cónsul Elijah Brandt*
+
+> Cada ciudadano tiene un fusil. El problema es que cada ciudadano también tiene una opinión.
+> — *Capitana Dolores Ybarra*
+
+> Llevo las cuentas de un país que juró no tener cuentas.
+> — *Tesorera Mara Okafor*
+
+> El mercado no es un dios. Pero contesta las plegarias más rápido.
+> — *Profeta-Presidente Lev Rand*
+
+> Los domingos, Kiev reza. Los lunes, cotiza.
+> — *Diácono Ivan Rothbard*
+
 ## Del mundo
 
 > Los Estados no cayeron en una guerra. Se deshicieron, porque dejaron de poder alimentar a su gente.
 > — *Crónicas del Gran Desarme*
 
 > En 2100 la pregunta ya no es quién gobierna, sino de dónde saca el derecho a mandar.
-> — *Crónicas del Gran Desarme*
-
-> Ocho potencias, una sola certeza cada una, y ninguna dispuesta a compartirla.
 > — *Crónicas del Gran Desarme*
 
 > El dron ve primero. El soldado decide. El que dude, pierde las dos cosas.
@@ -266,5 +293,53 @@ Las frases que aparecen en las pantallas de carga, ordenadas por quién las dijo
 
 > Voté que no dos veces. En la segunda no estuve sola.
 > — *Anneliese Brandt, a lápiz*
+
+> El que firma un contrato acá firma también el testamento.
+> — *Proverbio de las Tierras Sin Ley*
+
+> Si escuchás el contador Geiger, ya es tarde para escucharlo.
+> — *Manual del Desolador*
+
+> En la estepa hay dos clases de refugio: el que ya cavaste y el que vas a cavar.
+> — *Proverbio de la estepa*
+
+> No odiamos a nadie. Odiar ocupa memoria.
+> — *La Red*
+
+> Ustedes duermen ocho horas por día. Nosotros, ninguna. Hagan la cuenta.
+> — *La Red*
+
+> Si su tostadora le contesta, avise a la guarnición.
+> — *Folleto de la Coalición Humana*
+
+> La deuda de honor no vence. Se hereda con la casa.
+> — *Proverbio de Osaka*
+
+> Los diques sostienen el mar. El giri sostiene los diques.
+> — *Placa en un dique de Tokio*
+
+> La Corona nunca se desconecta. Solo entra en modo de bajo consumo.
+> — *Gaceta de Londres*
+
+> Medio país está en línea. El otro medio está en el pub, que es lo mismo pero más lento.
+> — *Los Desconectados*
+
+> El último ministerio en cerrar fue el de Estadística. Nadie sabe cuándo, porque nadie lo contó.
+> — *Crónicas del Gran Desarme*
+
+> ¿Sabías que...? En 2100 todavía se imprimen pasaportes. Ningún país los pide.
+> — *Archivo del Gran Desarme*
+
+> Cavá la trinchera como si fuera tu casa. Muchas veces lo es.
+> — *Manual del Soldado de 2100*
+
+> La batería del dron dura cuarenta minutos. Lo que vio dura para siempre.
+> — *Manual del Soldado de 2100*
+
+> El mar sube un centímetro por año. Los precios, un centímetro por día.
+> — *Proverbio de los puertos*
+
+> Del otro lado del alambre también hay alguien contando sus balas.
+> — *Proverbio de la Frontera*
 
 [Volver a la Biblioteca](../README.md)

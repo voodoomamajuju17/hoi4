@@ -260,6 +260,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 > Los cóndores no pelean en el valle. Esperan a que el valle suba.
 > — *Sapa Inti Amaru Quispe II*
 
+> El quipu no miente. Solo hay que saber quién hizo los nudos.
+> — *Sapa Inti Amaru Quispe II*
+
 ---
 
 *Página generada desde el spec del mod por `tools/docs/biblioteca.py`. [Volver a la Biblioteca](../README.md).*
