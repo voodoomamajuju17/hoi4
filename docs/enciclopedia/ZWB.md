@@ -22,6 +22,11 @@ Coronel de un ejército que ya no existe. Gobierna los ríos del Amazonas desde 
 |---|---|---|
 | Caudillo Ubirajara Moraes | Jefe del Ejército | Rasgo: Defensa en Profundidad |
 | General Iara Tapajós | Alto mando | Rasgo: Guerra de Guerrillas |
+| Mariscal Sebastião «Onça» Arruda | Mariscal de campo | Cazador de yaguaretés antes del Gran Desarme, cazador de hombres después. El Coronel Barbosa le deja la guerra; él le deja el río. |
+| General Iracema Munduruku | General | Conoce cada raíz que mata. Sus Senderos Envenenados cerraron más caminos del Imperio que cualquier mina. |
+| Capitán General Raimundo Bastos | General | Manda las cañoneras y las balsas. Desembarca donde el río dobla y el enemigo jura que no hay orilla. |
+| General Socorro Silveira | General | Fue maestra rural. Ahora cada pueblo que visitó tiene una milicia y una escuela, en ese orden. |
+| General Kauê Tikuna | General | Construye en los árboles: puestos de tiro a cuarenta metros, puentes de liana y trincheras bajo las raíces. Lo llaman el Muro Verde. |
 
 ## Espíritus nacionales
 
@@ -78,6 +83,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 ## Frases
 
 > En la selva no hay frentes. Hay árboles, y detrás de cada árbol, uno de los nuestros.
+> — *Coronel Tiago Barbosa*
+
+> La selva cerró la puerta. Del lado de adentro estamos bien.
 > — *Coronel Tiago Barbosa*
 
 ---

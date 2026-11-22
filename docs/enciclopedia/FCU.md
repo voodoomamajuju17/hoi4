@@ -267,9 +267,6 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 > No hacemos la guerra. Facturamos la paz por adelantado.
 > — *Marcus Rourke*
 
-> Un contrato bien escrito vale más que diez divisiones.
-> — *Presidenta Valeria Castellane*
-
 ---
 
 *Página generada desde el spec del mod por `tools/docs/biblioteca.py`. [Volver a la Biblioteca](../README.md).*

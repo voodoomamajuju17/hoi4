@@ -257,9 +257,6 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 > El río no discute con la piedra. La rodea, y un día la piedra ya no está.
 > — *Lin Wenzhao*
 
-> La armonía no es la ausencia de conflicto. Es el conflicto bien administrado.
-> — *Lin Wenzhao*
-
 > Las compuertas se abren una sola vez. Elegí bien hacia dónde.
 > — *Zhou Mingyuan*
 

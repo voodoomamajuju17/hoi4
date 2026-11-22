@@ -290,11 +290,11 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 > El bosque no pide permiso para crecer. Nosotros tampoco.
 > — *Emperador Aurelio IV*
 
-> Cada árbol que plantamos es un soldado que nunca deserta.
-> — *Emperador Aurelio IV*
-
 > El Monte no se conquista. Se pide prestado, y se devuelve con intereses.
 > — *Anahí Quiroga*
+
+> Mis abuelos talaron el mundo. A mí me toca devolverlo, árbol por árbol, aunque sea a la fuerza.
+> — *Emperador Aurelio IV*
 
 ---
 

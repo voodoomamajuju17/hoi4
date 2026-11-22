@@ -265,9 +265,6 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 > Roma no cayó. Se tomó dos mil años de descanso.
 > — *Imperator Lucius Varro*
 
-> La legión no cuenta enemigos. Cuenta pasos hasta la próxima frontera.
-> — *Legado Flavius Arbogast*
-
 > Toda provincia empieza como una conquista y termina como una costumbre.
 > — *Legada Irina Vasilescu*
 

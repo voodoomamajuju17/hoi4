@@ -1618,7 +1618,8 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("107 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01)", len([k for k in body.keys() if not str(k).startswith("mn_ley_")]) == 107, str(len(body.keys())))
+        propios = [k for k in body.keys() if not str(k).startswith("mn_ley_")]
+        check("111 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01; 4 de los ministros de los finales de las anarquias, 2026-11-20)", len(propios) == 111, str(len(propios)))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -2254,7 +2255,8 @@ def test_ai() -> None:
         check("Anarquia: cada foco sube el espiritu (swap)", "swap_ideas = { remove_idea = ZWE_resistencia_1 add_idea = ZWE_resistencia_2 }" in zwe_tree)
         check("Anarquia: la culminacion crea divisiones", "create_unit = { division =" in zwe_tree and "division_template = { name = \"Hueste\"" in zwe_tree)
         # error.log 2026-09-29: "create_unit -- invalid scope state". Solo vale en scope de state.
-        state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state"}
+        state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state",
+                        "random_state", "every_state", "random_controlled_state", "every_controlled_state"}
         loose = []
 
         def _walk(block, parent, where, en_state=False):
@@ -2263,7 +2265,8 @@ def test_ai() -> None:
                 if key == "create_unit" and parent not in state_scopes and not en_state:
                     loose.append(f"{where}: dentro de {parent}")
                 if isinstance(value, pdx.Block):
-                    _walk(value, key, where, en_state or str(key).isdigit())
+                    # 2026-11-22: random_state & co. también son un state (La Red: el brote)
+                    _walk(value, key, where, en_state or str(key).isdigit() or key in state_scopes)
         for sub in ("common/national_focus", "common/scripted_effects", "common/decisions", "events"):
             for f in sorted((mod / sub).glob("*.txt")):
                 _walk(pdx.parse(f.read_text(encoding="utf-8-sig")), None, f.name)
@@ -2525,8 +2528,10 @@ def test_ai() -> None:
         spec_ai = yaml.safe_load((REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"))
         decl = [p for p in spec_ai["plans"] if any(st["type"] == "declare_war" for st in p["strategies"])]
         check("todo plan que declara guerra pide ejercito o ya esta en guerra",
-              all("divisions_at_least" in str(p.get("enable")) for p in decl), str([p["id"] for p in decl]))
-        check("prepararse va aparte de declarar", all(len(p["strategies"]) == 1 for p in decl))
+              all("divisions_at_least" in str(p.get("enable")) for p in decl),
+              str([p["id"] for p in decl if "divisions_at_least" not in str(p.get("enable"))]))
+        check("prepararse va aparte de declarar", all(len(p["strategies"]) == 1 for p in decl),
+              str([p["id"] for p in decl if len(p["strategies"]) != 1]))
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         cuotas = decs[decs.index("SHD_aumentar_cuotas = {"):]
         cuotas = cuotas[cuotas.index("ai_will_do"):cuotas.index("ai_will_do") + 900]
