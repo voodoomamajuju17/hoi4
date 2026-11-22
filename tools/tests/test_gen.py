@@ -3618,6 +3618,7 @@ def test_marcos_carga() -> None:
     check("la frase va adentro de su caja y la caja entra en la pantalla",
           G.FRASE_TEXTO[0] + G.FRASE_TEXTO[2] <= G.FRASE[0] and G.FRASE_TEXTO[1] + G.FRASE_TEXTO[3] <= G.FRASE[1]
           and "GFX_mn_carga_marco_frase" in gui and "GFX_mn_carga_marco_estado" in gui)
+    import re
     gfx = marcos_carga._gfx()
     check("la barra propia usa las dos imagenes del pedido", "carga_barra_llena.dds" in gfx and "carga_barra_vacia.dds" in gfx)
     pedido = (REPO_ROOT / "arte" / "pedidos_marcos_pantalla_carga.txt").read_text(encoding="utf-8")
@@ -3628,6 +3629,20 @@ def test_marcos_carga() -> None:
         hay = all((REPO_ROOT / "assets" / "menu" / "carga_marcos" / f"{p}.dds").exists() for p in G.PIEZAS)
         check("sin las cuatro piezas queda la pantalla del juego; con las cuatro, la nuestra",
               (ctx.mod_root / "interface" / "load_screen.gui").exists() == hay)
+        # crash 2026-11-22 ("Could not find sprite type [GFX_mn_carga_marco_estado]"): la pantalla de
+        # carga se dibuja antes de leer los demás .gfx, así que sus sprites van en load_screen.gfx
+        # (con los del juego), nunca en un archivo aparte.
+        lsg = ctx.mod_root / "interface" / "load_screen.gfx"
+        if hay:
+            txt = lsg.read_text(encoding="utf-8") if lsg.exists() else ""
+            usados = set(re.findall(r'spriteType\s*=\s*"([^"]+)"', (ctx.mod_root / "interface" / "load_screen.gui").read_text(encoding="utf-8")))
+            check("los sprites de la pantalla de carga estan en load_screen.gfx (se lee antes que el resto)",
+                  all(f'name = "{n}"' in txt for n in usados | {"GFX_mn_carga_progreso"}), str(usados))
+            check("load_screen.gfx conserva lo del juego",
+                  all(f'name = "{n}"' in txt for n in marcos_carga.VANILLA_SPRITES))
+        others = [f.name for f in (ctx.mod_root / "interface").glob("*.gfx")
+                  if f.name != "load_screen.gfx" and "GFX_mn_carga_" in f.read_text(encoding="utf-8", errors="replace")]
+        check("ningun otro .gfx define los sprites de la pantalla de carga", not others, str(others))
     spec = specload.load(REPO_ROOT / "spec")
     q = spec.raw["scenario"]["loading_quotes"]
     check("104 frases (79 + 30 - 5), todas con su autor en ingles",
