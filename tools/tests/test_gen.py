@@ -3930,14 +3930,33 @@ def test_directorio_siberia() -> None:
         mod = ctx.mod_root
         se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
         on = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8").split())
-        check("Siberia: si el Directorio le declara la guerra a Eurasia con menos de 70% de estabilidad, se levanta",
-              "tag = SHD has_war_with = ZWE has_stability < 0.7" in on and "SIB_siberia_se_levanta = yes" in on, on[:300])
+        check("Siberia: si el Directorio le declara la guerra a Eurasia con menos de 80% de estabilidad, se levanta (2026-11-22: antes 70%)",
+              "tag = SHD has_war_with = ZWE has_stability < 0.8" in on and "SIB_siberia_se_levanta = yes" in on, on[:300])
         check("Siberia: las Tierras Sin Ley entran a la guerra del lado de Eurasia, con tropas, equipo y La Taiga Alimenta",
               "add_to_war = { targeted_alliance = ZWE" in se and "MEGANATIONS_la_taiga_alimenta" in se
               and "type = convoy" in se and "add_manpower = 120000" in se, se[:200])
-        check("Directorio: mecha propia bajo 60% y dos crisis entre 2104 y 2106",
-              "has_stability < 0.6" in se and "meganations_directorio.1" in se and "meganations_directorio.2" in se
+        check("Directorio: mecha propia bajo 65% (y otra tirada bajo 50%) y dos crisis entre 2104 y 2106",
+              "has_stability < 0.65" in se and "has_stability < 0.5" in se and "meganations_directorio.1" in se and "meganations_directorio.2" in se
               and "date > 2104.11.30" in se and "date > 2106.5.31" in se, "")
+        # 2026-11-22 ("dificultar más la estabilidad para SHD"): El Peso de la Conquista
+        check("Directorio: El Peso de la Conquista se calcula cada mes con sus regiones propias",
+              "SHD_peso_conquista_calculo = yes" in se and "value = num_owned_states" in se
+              and "modifier = MEGANATIONS_peso_de_la_conquista" in se, "")
+        dm = " ".join(p.read_text(encoding="utf-8") for p in (mod / "common/dynamic_modifiers").glob("*.txt")).split()
+        dm = " ".join(dm)
+        check("Directorio: El Peso de la Conquista resta estabilidad según la variable",
+              "MEGANATIONS_peso_de_la_conquista = {" in dm and "stability_factor = SHD_peso_conquista" in dm, "")
+        from tools.simulador import estabilidad_shd as _est
+        from tools.gen import specload as _sl
+        _sp = _est.leer_spec(_sl.load(REPO_ROOT / "spec").raw)
+        check("Directorio: el peso de la conquista va de 0 (80 regiones) a -25% (340 o más)",
+              _est.peso_conquista(_sp["conquista"], 80) == 0 and abs(_est.peso_conquista(_sp["conquista"], 190) + 0.10) < 1e-9
+              and abs(_est.peso_conquista(_sp["conquista"], 700) + 0.25) < 1e-9,
+              str([_est.peso_conquista(_sp["conquista"], r) for r in (80, 190, 700)]))
+        check("simulador de estabilidad: lee la mecha del Directorio y no la de otros países",
+              (0.0, 0.65, 0.03, "mecha del Directorio") in _sp["crisis"]
+              and all(abs(p - 0.02) > 1e-9 or d != "MEGANATIONS_crisis_ultimatum" for _, _, p, d in _sp["crisis"]),
+              str(_sp["crisis"]))
         arr = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8").split())
         check("arranque: El Peso de la Armonía en el Directorio y Los Trenes de los Atamanes en Eurasia",
               "MEGANATIONS_peso_de_la_armonia" in arr and "MEGANATIONS_trenes_de_los_atamanes" in arr, "")

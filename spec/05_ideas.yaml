@@ -1740,17 +1740,17 @@ countries:
     - id: SHD_espiritu_sensores
       name: {english: Flow Sensors, spanish: Sensores del Caudal}
       desc: {english: Every flow measured every second., spanish: Cada caudal medido cada segundo.}
-      modifiers: {stability_factor: 0.05, industrial_capacity_factory: 0.05}
+      modifiers: {stability_factor: 0.03, industrial_capacity_factory: 0.05}
       src: user_design
     - id: SHD_espiritu_modelo_del_rio
       name: {english: The River Model, spanish: El Modelo del Río}
       desc: {english: 'The country, simulated down to the drop.', spanish: 'El país, simulado gota por gota.'}
-      modifiers: {research_speed_factor: 0.1, stability_factor: 0.05}
+      modifiers: {research_speed_factor: 0.1, stability_factor: 0.03}
       src: user_design
     - id: SHD_espiritu_caudal_eterno
       name: {english: The Eternal Flow, spanish: El Caudal Eterno}
       desc: {english: The river and the state are one system., spanish: El río y el Estado son un solo sistema.}
-      modifiers: {industrial_capacity_factory: 0.1, stability_factor: 0.1, production_speed_buildings_factor: 0.05}
+      modifiers: {industrial_capacity_factory: 0.1, stability_factor: 0.05, production_speed_buildings_factor: 0.05}
       src: user_design
     - id: SHD_inundacion
       name: {english: The Flood Damage, spanish: Los Daños de la Crecida}
@@ -1771,7 +1771,7 @@ countries:
         spanish: Producción, Orden y Pueblo a cinco puntos uno del otro. El sistema zumba.
       modifiers:
         production_speed_buildings_factor: 0.1
-        stability_factor: 0.05
+        stability_factor: 0.03
         industrial_capacity_factory: 0.05
         research_speed_factor: 0.05
       src: user_design
@@ -1780,7 +1780,7 @@ countries:
       desc:
         english: The flows are close enough. Nobody is drowning.
         spanish: Los caudales están lo bastante cerca. Nadie se ahoga.
-      modifiers: {production_speed_buildings_factor: 0.05, stability_factor: 0.03}
+      modifiers: {production_speed_buildings_factor: 0.05, stability_factor: 0.02}
       src: user_design
     - id: SHD_desborde
       name: {english: Overflow, spanish: Desborde}
@@ -1836,14 +1836,14 @@ countries:
       desc:
         english: The Directorate measures every flow, including people.
         spanish: El Directorio mide cada caudal, incluida la gente.
-      modifiers: {stability_factor: 0.1}
+      modifiers: {stability_factor: 0.05}
       src: user_design
     - id: SHD_caudal_perfecto
       name: {english: The Perfect Flow, spanish: El Caudal Perfecto}
       desc:
         english: A society that corrects itself before anyone notices.
         spanish: Una sociedad que se corrige antes de que alguien lo note.
-      modifiers: {stability_factor: 0.15, political_power_gain: 0.15, production_speed_buildings_factor: 0.1}
+      modifiers: {stability_factor: 0.07, political_power_gain: 0.15, production_speed_buildings_factor: 0.1}
       src: user_design
     - id: SHD_movilizacion_del_rio
       name: {english: Mobilisation of the River, spanish: La Movilización del Río}
@@ -1901,7 +1901,7 @@ countries:
       desc:
         english: Surveillance drones over every province.
         spanish: Drones de vigilancia sobre cada provincia.
-      modifiers: {stability_factor: 0.05, army_defence_factor: 0.05}
+      modifiers: {stability_factor: 0.03, army_defence_factor: 0.05}
       src: user_design
     - id: SHD_revancha
       name: {english: Revanche, spanish: Revancha}
@@ -1915,7 +1915,7 @@ countries:
       desc:
         english: A year of perfect harmony. The people say the Directorate has the Mandate of Heaven.
         spanish: Un año de armonía perfecta. La gente dice que el Directorio tiene el Mandato del Cielo.
-      modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.05, stability_factor: 0.05}
+      modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.05, stability_factor: 0.03}
       src: user_design
     - id: SHD_era_de_la_armonia
       name: {english: The Age of Harmony, spanish: La Era de la Armonía}
@@ -1929,7 +1929,7 @@ countries:
       desc:
         english: 'Every decision is a valve: opened, closed or regulated by the engineers of harmony.'
         spanish: 'Cada decisión es una válvula: se abre, se cierra o se regula por los ingenieros de la armonía.'
-      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, production_speed_buildings_factor: 0.05}
+      modifiers: {stability_factor: 0.03, political_power_gain: 0.15, production_speed_buildings_factor: 0.05}
       src: user_request
     - id: SHD_el_caudal_reunido
       name: {english: The Reunited Flow, spanish: El Caudal Reunido}
@@ -1937,7 +1937,7 @@ countries:
         english: The river left its bed and came back. Every channel answers to one directorate again.
         spanish: El río salió de su cauce y volvió. Cada canal responde otra vez a un solo directorio.
       modifiers:
-        stability_factor: 0.15
+        stability_factor: 0.07
         war_support_factor: 0.1
         political_power_gain: 0.4
         army_org_factor: 0.1
@@ -1949,7 +1949,7 @@ countries:
         english: Every river of Asia runs through one control room.
         spanish: Cada río de Asia pasa por una sola sala de control.
       modifiers:
-        stability_factor: 0.1
+        stability_factor: 0.04
         war_support_factor: 0.1
         political_power_gain: 0.5
         industrial_capacity_factory: 0.15

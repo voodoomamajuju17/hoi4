@@ -1,0 +1,49 @@
+# Supuestos del simulador de estabilidad del Directorio (tools/simulador/estabilidad_shd.py).
+# Lo que sale del spec (espíritus, focos, castigos, chances de guerra civil) NO va acá:
+# se lee de spec/ cada vez. Acá va solo lo que el spec no dice: cuándo pasan las cosas
+# en una partida, y lo que pone el motor del juego (que se calibra con una partida real).
+
+corridas: 2000
+semilla: 2100
+meses: 240          # 2100 a 2119
+
+# Partida del 2026-11-22 (game.log, bitácora de enero de cada año): estabilidad del
+# Directorio. Sirve para calibrar lo que pone el juego (popularidad del partido, leyes...).
+partida_estabilidad: {2100: 0.67, 2101: 0.87, 2102: 0.81, 2103: 1.0, 2104: 1.0, 2105: 1.0}
+
+# Regiones del Directorio en enero de cada año, por escenario. "como_la_partida" es la
+# partida del 2026-11-22 (de 71 a 671 regiones).
+escenarios:
+  como_la_partida:
+    regiones: {2100: 71, 2101: 71, 2102: 69, 2103: 171, 2104: 226, 2105: 290, 2106: 347, 2107: 440,
+               2108: 493, 2109: 500, 2110: 537, 2111: 576, 2112: 621, 2113: 671, 2114: 671, 2115: 672,
+               2116: 671, 2119: 671}
+    forma_final: 2108.1      # deja de ser el Gigante (en la partida, los avisos de Ginebra paran en 2107)
+    declara_a_eurasia: 2102.6
+  conquista_moderada:
+    regiones: {2100: 71, 2102: 71, 2103: 120, 2105: 160, 2108: 200, 2119: 220}
+    forma_final: 2110.1
+    declara_a_eurasia: 2103.1
+  sin_conquistar:
+    regiones: {2100: 71, 2119: 80}
+    forma_final: 2112.1
+    declara_a_eurasia: null
+
+# Los focos: días del spec x este ritmo (la IA no hace un foco tras otro sin pausa; mismo
+# valor que el simulador de la IA) y un desvío al azar.
+focos_ritmo: 1.6
+focos_desvio: [0.85, 1.35]
+
+# Espíritus que no da el árbol: cuándo los tiene (mes desde enero de 2100) y con qué chance.
+espiritus_externos:
+  SHD_armonia_parcial: {desde: 2100.7, chance: 0.6, hasta_perfecta: true}
+  SHD_armonia_perfecta: {desde: 2102.1, chance: 0.45}
+  SHD_mandato_del_cielo: {desde: 2102.10, chance: 0.7}   # meganations_shd.192 (en la partida: 2102.10)
+  SHD_armonia_celeste: {en_forma_final: true}
+
+# Eventos sueltos (los de todo el mundo y los propios): en la partida le sumaron a la base
+# -3,5 puntos por año en promedio (de +7 a -11 según el año).
+eventos_por_anio: {media: -0.035, desvio: 0.05}
+
+# El Ultimátum de los Generales: si el líder resiste estalla la guerra civil (una sola vez).
+# La chance de resistir sale del spec (meganations_lider.21); si acepta, el líder cae.

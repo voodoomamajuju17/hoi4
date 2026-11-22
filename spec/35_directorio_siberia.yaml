@@ -31,6 +31,19 @@
 #     sin comer: infraestructura +2 y un centro de suministro en cada región,
 #     divisiones con equipo, convoyes, trenes, hombres y La Taiga Alimenta (un
 #     año de menos consumo, desgaste e invierno).
+#
+# 2026-11-22 (partida 2100-2116: el Directorio llegó a 671 regiones y 3436 fábricas militares
+# con estabilidad 100% desde 2103; pedido: "habría que triggerear más esas guerras civiles,
+# dificultar más la estabilidad para SHD... corré una simulación, tendría que dificultarse
+# mucho mantener la estabilidad, sin que sea un suplicio"):
+#  6. El Peso de la Conquista: -1% de estabilidad cada 10 regiones propias por encima de 90,
+#     hasta -25%. Los satélites no cuentan. Vale también en la forma final.
+#  7. El Peso de la Armonía pasa de -5% a -8%; la mecha propia, de 60%/2% a 65%/3%, y bajo 50%
+#     una segunda tirada de 4%; Siberia se levanta con menos de 80% (antes 70%).
+#  8. Los espíritus del Directorio dan la mitad de estabilidad, más o menos (05_ideas).
+#  La simulación (tools/simulador/estabilidad_shd.py, SIMULADOR_ESTABILIDAD_SHD.md): conquistando
+#  como en esa partida, guerra civil en ~56% de las partidas para 2108; con conquista moderada
+#  ~15%; sin conquistar ~5% (antes: 0-2% en los tres).
 # =============================================================================
 
 extend_scripted_effects:
@@ -39,17 +52,30 @@ extend_scripted_effects:
 
 decisions:
   scripted_effects:
+  # El Peso de la Conquista (2026-11-22): -1% de estabilidad cada 8 regiones por encima de 80,
+  # hasta -30% (a las 320). Cuenta solo las propias: un satélite no pesa (soltar regiones como
+  # protectorados es la salida). Vale también en la forma final, a diferencia del
+  # Sobreestiramiento del Gigante.
+  - id: SHD_peso_conquista_calculo
+    effects:
+    - {effect: math, ops: [[set, SHD_peso_conquista, num_owned_states], [sub, SHD_peso_conquista, 90]]}
+    - {effect: clamp, var: SHD_peso_conquista, min: 0, max: 250}
+    - {effect: math, ops: [[mul, SHD_peso_conquista, -0.001]]}
   - id: SHD_pulso_directorio
     effects:
     - effect: if
       when: {tag: SHD}
       then:
-      # la mecha propia
+      # 2026-11-22 (pedido: "habría que triggerear más esas guerras civiles, dificultar más la
+      # estabilidad para SHD... sin que sea un suplicio"): El Peso de la Conquista, cada mes
+      - {effect: run, value: SHD_peso_conquista_calculo}
+      - {effect: dynamic_modifier, id: MEGANATIONS_peso_de_la_conquista}
+      # la mecha propia (2026-11-22: desde 65% y 3% por mes; antes 60% y 2%)
       - effect: if
         when:
           all:
           - {date_after: 2100.6.1}
-          - {stability_below: 0.6}
+          - {stability_below: 0.65}
           - {civil_war: false}
           - {capitulated: false}
           - not: {flag: MEGANATIONS_crisis_espera}
@@ -58,8 +84,26 @@ decisions:
         then:
         - effect: random
           options:
-          - {weight: 98, effects: []}
-          - weight: 2
+          - {weight: 97, effects: []}
+          - weight: 3
+            effects:
+            - {effect: run, value: MEGANATIONS_crisis_estalla}
+      # y bajo 50%, otra tirada (si salió la primera, la espera de un año corta esta)
+      - effect: if
+        when:
+          all:
+          - {date_after: 2100.6.1}
+          - {stability_below: 0.5}
+          - {civil_war: false}
+          - {capitulated: false}
+          - not: {flag: MEGANATIONS_crisis_espera}
+          - not: {flag: MEGANATIONS_rebelde}
+          - not: {global_flag: MEGANATIONS_rebelion_SHD}
+        then:
+        - effect: random
+          options:
+          - {weight: 96, effects: []}
+          - weight: 4
             effects:
             - {effect: run, value: MEGANATIONS_crisis_estalla}
       # crisis 1: en 2104 (1 en 8 por mes; si no salió, en diciembre sale sí o sí)
@@ -178,6 +222,9 @@ decisions:
       - [[Khabarovsk], [Amur]]
       - [[Primorye, Primorsky Krai, Vladivostok], [North Sakhalin, Sakhalin]]
 
+  variable_names:
+    SHD_peso_conquista: {english: "Weight of Conquest", spanish: "Peso de la Conquista"}
+
   dynamic_modifiers:
   - id: MEGANATIONS_peso_de_la_armonia
     country: null
@@ -186,7 +233,16 @@ decisions:
     desc:
       english: 'A third of the world answers to Beijing, and every province is another dam to watch, another river to hold back, another governor to suspect.'
       spanish: 'Un tercio del mundo responde a Pekín, y cada provincia es otra represa que vigilar, otro río que contener, otro gobernador del que sospechar.'
-    modifiers: {stability_factor: -0.05, war_support_factor: -0.05, '?required_garrison_factor': 0.15}
+    # 2026-11-22: -8% (antes -5%)
+    modifiers: {stability_factor: -0.08, war_support_factor: -0.05, '?required_garrison_factor': 0.15}
+  - id: MEGANATIONS_peso_de_la_conquista
+    country: null
+    no_art: true
+    name: {english: The Weight of Conquest, spanish: El Peso de la Conquista}
+    desc:
+      english: 'Every conquered province sends two reports to Beijing: the governor''s, which says all is calm, and the river''s, which says otherwise. -1% stability for every 8 provinces above 80 (up to -30%). Protectorates do not count.'
+      spanish: 'Cada provincia conquistada manda dos informes a Pekín: el del gobernador, que dice que todo está en calma, y el del río, que dice otra cosa. -1% de estabilidad cada 8 regiones por encima de 80 (hasta -30%). Los protectorados no cuentan.'
+    modifiers: {stability_factor: SHD_peso_conquista}
   - id: MEGANATIONS_trenes_de_los_atamanes
     country: null
     no_art: true
@@ -234,7 +290,7 @@ decisions:
         all:
         - {tag: SHD}
         - {war_with: ZWE}
-        - {stability_below: 0.7}
+        - {stability_below: 0.8}   # 2026-11-22: antes 70%
         - not: {global_flag: MEGANATIONS_siberia_levantada}
       then:
       - {effect: run, value: SIB_siberia_se_levanta}
