@@ -921,7 +921,12 @@ def _juego_items() -> list[dict]:
 REBELDES = {   # 2026-11-16: líderes rebeldes sin retrato (pedido fijo 36_retratos_rebeldes.txt)
     "rebelde_masaki_hayama": "ZJP", "rebelde_nao_fujita": "ZJP", "rebelde_nanami_117": "ZJP",
     "rebelde_josiah_hale": "ZAL", "rebelde_ezra_vance": "FCU",
+    # 2026-11-22 (captura de la Legión Perdida: "fijate los retratos que faltan para estas cosas"): los seis
+    # líderes rebeldes de los finales de las aventuras de las anarquías (pedido fijo 50_retratos_rebeldes_anarquias.txt)
+    "rebelde_gran_molinero": "ZWE", "rebelde_la_cabra": "ZWI", "rebelde_gaius_severo": "ZWM",
+    "rebelde_santa_mano": "ZWB", "rebelde_baron_del_hielo": "ZAN", "rebelde_nadie": "ZAN",
 }
+_PEDIDO_REBELDE = {t: "50_retratos_rebeldes_anarquias.txt" for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")}
 
 
 def _albion_caminos_items() -> list[dict]:
@@ -945,7 +950,8 @@ def _rebeldes_items() -> list[dict]:
     """Los retratos de líderes rebeldes: el pedido va escrito a mano (pedidos_fijos), acá solo el destino."""
     return [{"type": "leader_portrait", "tag": t, "id": i, "dest": REPO / "assets" / t / "leaders" / f"{i}.dds",
              "done": (REPO / "assets" / t / "leaders" / f"{i}.dds").exists(), "hand_written": True,
-             "description": "ver arte/pedidos_fijos/36_retratos_rebeldes.txt"} for i, t in REBELDES.items()]
+             "description": f"ver arte/pedidos_fijos/{_PEDIDO_REBELDE.get(t, '36_retratos_rebeldes.txt')}"}
+            for i, t in REBELDES.items()]
 
 
 def _industria_items() -> list[dict]:
