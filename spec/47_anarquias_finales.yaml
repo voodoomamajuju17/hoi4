@@ -212,58 +212,6 @@ decisions:
       src: user_request
 
   on_actions:
-  # 2026-11-22 ("adaptá este save para que tenga los nuevos generales"): los mandos de las anarquías
-  # (03_leaders, rama cnzwn8) se reclutan en la historia, que solo corre al empezar una partida. En una
-  # partida empezada antes, el primer pulso del mes los recluta una sola vez; en las nuevas el arranque
-  # pone la marca y el pulso no hace nada.
-  - id: MN_mandos_anarquias_arranque
-    hook: on_startup
-    effects:
-    - effect: if
-      when: {country_exists: ZWE}
-      then: [{effect: scope, target: ZWE, effects: [{effect: flag, value: MN_mandos_anarquia}]}]
-    - effect: if
-      when: {country_exists: ZWI}
-      then: [{effect: scope, target: ZWI, effects: [{effect: flag, value: MN_mandos_anarquia}]}]
-    - effect: if
-      when: {country_exists: ZWM}
-      then: [{effect: scope, target: ZWM, effects: [{effect: flag, value: MN_mandos_anarquia}]}]
-    - effect: if
-      when: {country_exists: ZWB}
-      then: [{effect: scope, target: ZWB, effects: [{effect: flag, value: MN_mandos_anarquia}]}]
-    - effect: if
-      when: {country_exists: ZAN}
-      then: [{effect: scope, target: ZAN, effects: [{effect: flag, value: MN_mandos_anarquia}]}]
-  - id: MN_mandos_anarquias_ZWE
-    hook: on_monthly_ZWE
-    effects:
-    - effect: if
-      when: {not_flag: MN_mandos_anarquia}
-      then: [{effect: recruit, character: ZWE_mariscal_bulava}, {effect: recruit, character: ZWE_gen_zarubina}, {effect: recruit, character: ZWE_gen_tkachenko}, {effect: recruit, character: ZWE_gen_sokolov}, {effect: recruit, character: ZWE_gen_bekov}, {effect: flag, value: MN_mandos_anarquia}]
-  - id: MN_mandos_anarquias_ZWI
-    hook: on_monthly_ZWI
-    effects:
-    - effect: if
-      when: {not_flag: MN_mandos_anarquia}
-      then: [{effect: recruit, character: ZWI_mariscal_chauhan}, {effect: recruit, character: ZWI_gen_iyer}, {effect: recruit, character: ZWI_gen_gurung}, {effect: recruit, character: ZWI_gen_qureshi}, {effect: recruit, character: ZWI_gen_deshmukh}, {effect: flag, value: MN_mandos_anarquia}]
-  - id: MN_mandos_anarquias_ZWM
-    hook: on_monthly_ZWM
-    effects:
-    - effect: if
-      when: {not_flag: MN_mandos_anarquia}
-      then: [{effect: recruit, character: ZWM_mariscal_mazrui}, {effect: recruit, character: ZWM_gen_harbi}, {effect: recruit, character: ZWM_gen_kamali}, {effect: recruit, character: ZWM_gen_obeidi}, {effect: recruit, character: ZWM_gen_khoury}, {effect: flag, value: MN_mandos_anarquia}]
-  - id: MN_mandos_anarquias_ZWB
-    hook: on_monthly_ZWB
-    effects:
-    - effect: if
-      when: {not_flag: MN_mandos_anarquia}
-      then: [{effect: recruit, character: ZWB_mariscal_arruda}, {effect: recruit, character: ZWB_gen_munduruku}, {effect: recruit, character: ZWB_gen_bastos}, {effect: recruit, character: ZWB_gen_silveira}, {effect: recruit, character: ZWB_gen_tikuna}, {effect: flag, value: MN_mandos_anarquia}]
-  - id: MN_mandos_anarquias_ZAN
-    hook: on_monthly_ZAN
-    effects:
-    - effect: if
-      when: {not_flag: MN_mandos_anarquia}
-      then: [{effect: recruit, character: ZAN_mariscal_whitlock}, {effect: recruit, character: ZAN_gen_kuptana}, {effect: recruit, character: ZAN_gen_larsen}, {effect: recruit, character: ZAN_gen_valenzuela}, {effect: recruit, character: ZAN_gen_tzul}, {effect: recruit, character: ZAN_gen_sangare}, {effect: recruit, character: ZAN_gen_hnatiuk}, {effect: flag, value: MN_mandos_anarquia}]
   # el Amazonas: si igual empieza una guerra con la selva cerrada, paz blanca en el acto
   - id: ZWB_selva_cerrada_guerra
     hook: on_declare_war
