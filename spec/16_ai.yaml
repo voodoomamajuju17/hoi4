@@ -581,15 +581,33 @@ plans:
   - {type: antagonize, target: ASC, value: 150}
   - {type: antagonize, target: NRE, value: 100}
   - {type: prepare_for_war, target: ASC, value: 200}
-  - {type: declare_war, target: ZAN, value: 200}
-  - {type: declare_war, target: ASC, value: 150}
-- id: ZWE_el_primer_golpe
+# Declarar va en planes aparte, uno por blanco y con un ejército mínimo (regla de siempre: sin
+# ejército no se declara; la paranoia no le regala divisiones a nadie).
+- id: ZWE_la_horda_atomica_declara_ZAN
   country: ZWE
-  lore: 'Con la Doctrina del Primer Golpe declara apenas tiene la justificación.'
-  enable: {flag: ZWE_primer_golpe}
+  enable: {flag: ZWE_atomica, divisions_at_least: 12}
+  strategies:
+  - {type: declare_war, target: ZAN, value: 200}
+- id: ZWE_la_horda_atomica_declara_ASC
+  country: ZWE
+  enable: {flag: ZWE_atomica, divisions_at_least: 16}
+  strategies:
+  - {type: declare_war, target: ASC, value: 150}
+- id: ZWE_el_primer_golpe_ASC
+  country: ZWE
+  lore: 'Con la Doctrina del Primer Golpe declara apenas tiene la justificación (y un ejército).'
+  enable: {flag: ZWE_primer_golpe, divisions_at_least: 12}
   strategies:
   - {type: declare_war, target: ASC, value: 300}
+- id: ZWE_el_primer_golpe_NRE
+  country: ZWE
+  enable: {flag: ZWE_primer_golpe, divisions_at_least: 12}
+  strategies:
   - {type: declare_war, target: NRE, value: 200}
+- id: ZWE_el_primer_golpe_SHD
+  country: ZWE
+  enable: {flag: ZWE_primer_golpe, divisions_at_least: 12}
+  strategies:
   - {type: declare_war, target: SHD, value: 150}
 coalition:
   src: user_request

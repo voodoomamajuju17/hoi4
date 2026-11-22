@@ -1618,7 +1618,8 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("107 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01)", len([k for k in body.keys() if not str(k).startswith("mn_ley_")]) == 107, str(len(body.keys())))
+        propios = [k for k in body.keys() if not str(k).startswith("mn_ley_")]
+        check("111 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01; 4 de los ministros de los finales de las anarquias, 2026-11-20)", len(propios) == 111, str(len(propios)))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -2254,7 +2255,8 @@ def test_ai() -> None:
         check("Anarquia: cada foco sube el espiritu (swap)", "swap_ideas = { remove_idea = ZWE_resistencia_1 add_idea = ZWE_resistencia_2 }" in zwe_tree)
         check("Anarquia: la culminacion crea divisiones", "create_unit = { division =" in zwe_tree and "division_template = { name = \"Hueste\"" in zwe_tree)
         # error.log 2026-09-29: "create_unit -- invalid scope state". Solo vale en scope de state.
-        state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state"}
+        state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state",
+                        "random_state", "every_state", "random_controlled_state", "every_controlled_state"}
         loose = []
 
         def _walk(block, parent, where, en_state=False):
@@ -2263,7 +2265,8 @@ def test_ai() -> None:
                 if key == "create_unit" and parent not in state_scopes and not en_state:
                     loose.append(f"{where}: dentro de {parent}")
                 if isinstance(value, pdx.Block):
-                    _walk(value, key, where, en_state or str(key).isdigit())
+                    # 2026-11-22: random_state & co. también son un state (La Red: el brote)
+                    _walk(value, key, where, en_state or str(key).isdigit() or key in state_scopes)
         for sub in ("common/national_focus", "common/scripted_effects", "common/decisions", "events"):
             for f in sorted((mod / sub).glob("*.txt")):
                 _walk(pdx.parse(f.read_text(encoding="utf-8-sig")), None, f.name)
@@ -2525,8 +2528,10 @@ def test_ai() -> None:
         spec_ai = yaml.safe_load((REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"))
         decl = [p for p in spec_ai["plans"] if any(st["type"] == "declare_war" for st in p["strategies"])]
         check("todo plan que declara guerra pide ejercito o ya esta en guerra",
-              all("divisions_at_least" in str(p.get("enable")) for p in decl), str([p["id"] for p in decl]))
-        check("prepararse va aparte de declarar", all(len(p["strategies"]) == 1 for p in decl))
+              all("divisions_at_least" in str(p.get("enable")) for p in decl),
+              str([p["id"] for p in decl if "divisions_at_least" not in str(p.get("enable"))]))
+        check("prepararse va aparte de declarar", all(len(p["strategies"]) == 1 for p in decl),
+              str([p["id"] for p in decl if len(p["strategies"]) != 1]))
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         cuotas = decs[decs.index("SHD_aumentar_cuotas = {"):]
         cuotas = cuotas[cuotas.index("ai_will_do"):cuotas.index("ai_will_do") + 900]
@@ -3599,6 +3604,29 @@ def test_normales_modelos() -> None:
               info["normales"] > 0 and malos == 0, malos)
 
 
+def test_reporte_2026_11_22() -> None:
+    section("partida 2100-2115 (error.log y reporte 2026-11-22): ronda del lider y uranio de Eurasia")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        eff = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        # la ronda se reinicia aunque el lider de la ASC (Algoritmo) nunca vea los eventos que no le tocan
+        i = eff.index("clr_country_flag = MEGANATIONS_lider_visto_1 ")
+        reset = eff[max(0, i - 3000):i]
+        check("eventos del lider: la ronda se reinicia contando los que el rasgo del lider saltea",
+              "OR = { has_country_flag = MEGANATIONS_lider_visto_2 has_country_leader_with_trait = asc_allocation_algorithm }" in reset,
+              reset[-800:])
+        check("ningun aviso de add_resource omitido", not any("add_resource omitido" in w for w in ctx.warnings),
+              str([w for w in ctx.warnings if "add_resource" in w]))
+        zwe = " ".join((mod / "common/national_focus").joinpath("meganations_zwe_atomica_focus.txt").read_text(encoding="utf-8").split()) \
+            if (mod / "common/national_focus/meganations_zwe_atomica_focus.txt").exists() else \
+            " ".join(" ".join(f.read_text(encoding="utf-8").split()) for f in (mod / "common/national_focus").glob("*.txt")
+                     if "ZWE_a_uranio_de_los_urales" in f.read_text(encoding="utf-8"))
+        j = zwe.index("id = ZWE_a_uranio_de_los_urales")
+        check("Eurasia atomica: el uranio de los Urales se suma en la capital (arbol compartido)",
+              "capital_scope = { add_resource = { type = " in zwe[j:j + 2500], zwe[j:j + 1200])
+
+
 def test_marcos_carga() -> None:
     """2026-11-22 ("Esos marcos quiero cambiarlos completamente"): la pantalla de carga con marcos propios, y
     30 frases nuevas (104 en total)."""
@@ -3613,6 +3641,7 @@ def test_marcos_carga() -> None:
     check("la frase va adentro de su caja y la caja entra en la pantalla",
           G.FRASE_TEXTO[0] + G.FRASE_TEXTO[2] <= G.FRASE[0] and G.FRASE_TEXTO[1] + G.FRASE_TEXTO[3] <= G.FRASE[1]
           and "GFX_mn_carga_marco_frase" in gui and "GFX_mn_carga_marco_estado" in gui)
+    import re
     gfx = marcos_carga._gfx()
     check("la barra propia usa las dos imagenes del pedido", "carga_barra_llena.dds" in gfx and "carga_barra_vacia.dds" in gfx)
     pedido = (REPO_ROOT / "arte" / "pedidos_marcos_pantalla_carga.txt").read_text(encoding="utf-8")
@@ -3623,6 +3652,20 @@ def test_marcos_carga() -> None:
         hay = all((REPO_ROOT / "assets" / "menu" / "carga_marcos" / f"{p}.dds").exists() for p in G.PIEZAS)
         check("sin las cuatro piezas queda la pantalla del juego; con las cuatro, la nuestra",
               (ctx.mod_root / "interface" / "load_screen.gui").exists() == hay)
+        # crash 2026-11-22 ("Could not find sprite type [GFX_mn_carga_marco_estado]"): la pantalla de
+        # carga se dibuja antes de leer los demás .gfx, así que sus sprites van en load_screen.gfx
+        # (con los del juego), nunca en un archivo aparte.
+        lsg = ctx.mod_root / "interface" / "load_screen.gfx"
+        if hay:
+            txt = lsg.read_text(encoding="utf-8") if lsg.exists() else ""
+            usados = set(re.findall(r'spriteType\s*=\s*"([^"]+)"', (ctx.mod_root / "interface" / "load_screen.gui").read_text(encoding="utf-8")))
+            check("los sprites de la pantalla de carga estan en load_screen.gfx (se lee antes que el resto)",
+                  all(f'name = "{n}"' in txt for n in usados | {"GFX_mn_carga_progreso"}), str(usados))
+            check("load_screen.gfx conserva lo del juego",
+                  all(f'name = "{n}"' in txt for n in marcos_carga.VANILLA_SPRITES))
+        others = [f.name for f in (ctx.mod_root / "interface").glob("*.gfx")
+                  if f.name != "load_screen.gfx" and "GFX_mn_carga_" in f.read_text(encoding="utf-8", errors="replace")]
+        check("ningun otro .gfx define los sprites de la pantalla de carga", not others, str(others))
     spec = specload.load(REPO_ROOT / "spec")
     q = spec.raw["scenario"]["loading_quotes"]
     check("104 frases (79 + 30 - 5), todas con su autor en ingles",
@@ -6811,6 +6854,7 @@ def main() -> int:
         test_arboles,
         test_historietas,
         test_marcos_carga,
+        test_reporte_2026_11_22,
         test_anarquias_finales,
         test_normales_modelos,
     ):
