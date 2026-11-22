@@ -3772,11 +3772,21 @@ def test_arboles() -> None:
                 if (x, y) in vistos:
                     choques.setdefault(tag, []).append((fid, vistos[(x, y)]))
                 vistos[(x, y)] = fid
+            # 2026-11-22 (capturas del usuario, EFE y NAS: "hay iconos que se superponen"): a una columna de
+            # distancia los nombres se pisan; dos focos de una misma fila van a 2 columnas o más
+            filas: dict[str, list[tuple[int, str]]] = {}
+            for fid, x, y in celdas:
+                filas.setdefault(y, []).append((int(x), fid))
+            for fila in filas.values():
+                fila.sort()
+                choques.setdefault(tag, []).extend((a, b) for (xa, a), (xb, b) in zip(fila, fila[1:]) if xb - xa < 2)
+            if not choques.get(tag):
+                choques.pop(tag, None)
             if len(celdas) < 60 or min(int(x) for _f, x, _y in celdas) < 0 or min(int(y) for _f, _x, y in celdas) < 0:
                 choques.setdefault(tag, []).append(("coordenadas", len(celdas)))
             if "initial_show_position = {" not in txt:
                 sin_raiz.append(tag)
-        check("ningun casillero con dos focos y nada en coordenadas negativas", not choques, str(choques))
+        check("ningun casillero con dos focos, ningun par a una sola columna (los nombres se pisan) y nada en coordenadas negativas", not choques, str(choques))
         check("cada arbol se abre centrado en su foco raiz", not sin_raiz, str(sin_raiz))
         efe = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text(encoding="utf-8-sig").split())
         i = efe.find("id = EFE_ministerio_de_restauracion")

@@ -417,6 +417,12 @@ def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma:
         return cand
 
     ocupado = {v: k for k, v in pos.items()}
+
+    # 2026-11-22 (captura del usuario: "hay iconos que se superponen en los árboles"): un foco ocupa dos
+    # columnas; a una sola columna de distancia los nombres se pisan. Dos focos de una fila, a 2 o más.
+    def libre(x: int, y: int, ignorar: str | None = None) -> bool:
+        return all(ocupado.get((x + dx, y)) in (None, ignorar) for dx in (-1, 0, 1))
+
     pendientes = list(specs)
     while pendientes:
         listo = next((s for s in pendientes
@@ -427,7 +433,7 @@ def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma:
         for k in range(0, 41):
             shift = (k + 1) // 2 * (2 if k % 2 else -2)
             cand = armar(ids, ox, d, shift)
-            if any(c in ocupado for c in cand.values()) or len(set(cand.values())) < len(cand):
+            if any(not libre(*c) for c in cand.values()) or len(set(cand.values())) < len(cand):
                 continue
             costo = cruces(cand) * 60 + abs(shift)
             if mejor is None or costo < mejor[0]:
@@ -447,7 +453,7 @@ def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma:
         for fid, (x, y) in list(pos.items()):
             need = max([pos[p][1] + 1 for p in previos[fid]] or [0])
             if y < need:
-                while (x, need) in ocupado:
+                while not libre(x, need, fid):
                     x += 2
                 del ocupado[pos[fid]]
                 pos[fid] = (x, need)
@@ -485,7 +491,7 @@ def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma:
                     continue
                 x, y = pos[mover]
                 for dx in (2, -2, 4, -4, 6, -6, 8, -8, 10, -10):
-                    if (x + dx, y) in ocupado:
+                    if not libre(x + dx, y, mover):
                         continue
                     del ocupado[(x, y)]
                     pos[mover] = (x + dx, y)
