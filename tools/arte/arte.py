@@ -95,6 +95,10 @@ KINDS = {
     # 2026-11-18: viñetas de la Historieta (tools/arte/historietas.py): cada pedido lleva su tamaño (2x su
     # lugar en la página); al importar se guarda al tamaño del lugar y se vuelve a armar la página
     "comic_panel": {"size": (800, 600), "transparent": False, "fit": "cover"},
+    # 2026-11-22: los marcos de la pantalla de carga (tools/gen/carga_geo.py): cada pieza lleva su tamaño;
+    # el pedido va escrito a mano (arte/pedidos_fijos/50_marcos_pantalla_carga.txt) y al importar se
+    # estira al tamaño exacto (las ranuras del título, la barra y la frase tienen que caer en su lugar)
+    "loading_frame": {"size": (1400, 120), "transparent": True, "fit": "stretch"},
 }
 
 # 2026-10-16, pedido del usuario: "el estilo tiene que ser un poco cómic/novela
@@ -559,6 +563,7 @@ def catalog() -> list[dict]:
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
     items += _loading_items()
+    items += _marcos_carga_items()
     # 2026-11-18: la Historieta (46_historietas): una imagen por viñeta, del tamaño de su lugar en la página
     from tools.arte import historietas as _hist
     items += _hist.items()
@@ -570,6 +575,18 @@ LOADING_STYLE = (
     "Hearts of Iron IV loading screen, wide cinematic painting, retrofuturist year 2100, rich painterly detail, "
     "everyday life of ordinary people (not a battle), atmospheric light, no text, no letters, no logos, no watermark"
 )
+
+
+def _marcos_carga_items() -> list[dict]:
+    """Los marcos de la pantalla de carga (2026-11-22): solo el destino, el pedido va escrito a mano."""
+    from tools.gen import carga_geo
+    out = []
+    for pid, p in carga_geo.PIEZAS.items():
+        dest = REPO / "assets" / "menu" / "carga_marcos" / f"{pid}.dds"
+        out.append({"type": "loading_frame", "tag": "INTERFAZ", "id": pid, "dest": dest, "done": dest.exists(),
+                    "size": p["size"], "transparent": p["transparent"], "hand_written": True,
+                    "description": "ver arte/pedidos_fijos/50_marcos_pantalla_carga.txt"})
+    return out
 
 
 def _loading_items() -> list[dict]:
@@ -1282,7 +1299,11 @@ def pedidos() -> None:
         + "\n".join(bloques), encoding="utf-8")
     summary.insert(0, f"0_TODO_LO_QUE_FALTA.txt: {len(bloques)}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
-    _zip_pedidos([i["referencia"] for i in items if i.get("referencia")] + pin_refs)
+    # 2026-11-22: las guías de los marcos de la pantalla de carga, mientras falten
+    from tools.arte import marcos_carga
+    marcos_refs = [r for pid, r in marcos_carga.GUIAS.items()
+                   if not (REPO / "assets" / "menu" / "carga_marcos" / f"{pid}.dds").exists()]
+    _zip_pedidos([i["referencia"] for i in items if i.get("referencia")] + pin_refs + marcos_refs)
     print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
     for line in summary:
         print("  " + line)
@@ -1451,6 +1472,16 @@ def importar(source: str) -> None:
             left, top = (img.width - w) // 2, (img.height - h) // 2
             item["dest"].parent.mkdir(parents=True, exist_ok=True)
             img.crop((left, top, left + w, top + h)).save(item["dest"], "DDS", pixel_format="DXT1")
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
+        if item["type"] == "loading_frame":
+            # tamaño exacto (se pidió al doble, con la misma proporción): estirar, no recortar
+            img = img.convert("RGBA").resize((w, h), Image.LANCZOS)
+            raw = img.tobytes()
+            px = [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)]
+            if not transparente:
+                px = [(r, g, b, 255) for r, g, b, _ in px]
+            art.write_dds(item["dest"], w, h, px)
             done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
             continue
         if item["type"] == "ui_icon":

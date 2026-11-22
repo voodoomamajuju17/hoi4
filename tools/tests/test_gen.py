@@ -3599,6 +3599,39 @@ def test_normales_modelos() -> None:
               info["normales"] > 0 and malos == 0, malos)
 
 
+def test_marcos_carga() -> None:
+    """2026-11-22 ("Esos marcos quiero cambiarlos completamente"): la pantalla de carga con marcos propios, y
+    30 frases nuevas (104 en total)."""
+    section("pantalla de carga: marcos propios y frases")
+    from tools.gen import carga_geo as G
+    from tools.gen.emitters import marcos_carga
+    gui = " ".join(marcos_carga._gui().split())
+    ew, _ = G.ESTADO
+    check("la barra de progreso cae justo en la ranura del marco de arriba",
+          f"position = {{ x = {-ew // 2 + G.ESTADO_RANURA[0]} y = {G.ESTADO_RANURA[1]} }}" in gui
+          and G.ESTADO_RANURA[2:] == G.BARRA)
+    check("la frase va adentro de su caja y la caja entra en la pantalla",
+          G.FRASE_TEXTO[0] + G.FRASE_TEXTO[2] <= G.FRASE[0] and G.FRASE_TEXTO[1] + G.FRASE_TEXTO[3] <= G.FRASE[1]
+          and "GFX_mn_carga_marco_frase" in gui and "GFX_mn_carga_marco_estado" in gui)
+    gfx = marcos_carga._gfx()
+    check("la barra propia usa las dos imagenes del pedido", "carga_barra_llena.dds" in gfx and "carga_barra_vacia.dds" in gfx)
+    pedido = (REPO_ROOT / "arte" / "pedidos_fijos" / "50_marcos_pantalla_carga.txt").read_text(encoding="utf-8")
+    check("el pedido tiene las cuatro piezas con su nombre de archivo",
+          all(f"filename: {p}.png" in pedido for p in G.PIEZAS) and pedido.count("ASSET_REQUEST") == 4)
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        hay = all((REPO_ROOT / "assets" / "menu" / "carga_marcos" / f"{p}.dds").exists() for p in G.PIEZAS)
+        check("sin las cuatro piezas queda la pantalla del juego; con las cuatro, la nuestra",
+              (ctx.mod_root / "interface" / "load_screen.gui").exists() == hay)
+    spec = specload.load(REPO_ROOT / "spec")
+    q = spec.raw["scenario"]["loading_quotes"]
+    check("104 frases (79 + 30 - 5), todas con su autor en ingles",
+          len(q["quotes"]) == 104 and all(a in q["authors_en"] for a in (
+              "La Red", "Manual del Desolador", "Proverbio de la estepa", "Archivo del Gran Desarme",
+              "Cónsul Elijah Brandt", "Basileus Antíoco Rashid-Varma", "Doctora Ilona Kurchatova")),
+          len(q["quotes"]))
+
+
 def test_historietas() -> None:
     """2026-11-18 (la Historieta): la introducción de cada nación en una página de 8 viñetas."""
     section("historieta: la introduccion de cada nacion en 8 viñetas")
@@ -6777,6 +6810,7 @@ def main() -> int:
         test_albion_caminos,
         test_arboles,
         test_historietas,
+        test_marcos_carga,
         test_anarquias_finales,
         test_normales_modelos,
     ):

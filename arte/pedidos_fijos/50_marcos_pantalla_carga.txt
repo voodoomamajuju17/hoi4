@@ -1,0 +1,49 @@
+# 4 pedidos - los marcos de la pantalla de carga (2026-11-22)
+#
+# "Esos marcos quiero cambiarlos completamente": la barra de arriba (donde dice "Cargando bases de datos"),
+# la barra de progreso (dos imágenes: vacía y llena) y la caja de la frase de abajo.
+#
+# IMPORTANTE: el juego escribe ENCIMA de estas imágenes. Las zonas marcadas en las guías tienen que quedar
+# lisas y oscuras (sin adornos ni dibujos), porque ahí va el texto o la barra:
+#   - pedidos/referencias/carga_marco_estado_guia.png (rojo = título, azul = ranura de la barra)
+#   - pedidos/referencias/carga_marco_frase_guia.png  (rojo = la frase y su firma)
+# Adjuntá la guía de cada marco al pedirlo. Las medidas son al doble del tamaño final: se achican solas.
+# Nombres exactos de archivo (carga_marco_estado.png, etc.): así el importador sabe dónde va cada una.
+
+ASSET_REQUEST
+type: loading_frame
+id: carga_marco_estado
+filename: carga_marco_estado.png
+size: 2800x240 (exacto o con la misma proporción, 35:3)
+reference_image: referencias/carga_marco_estado_guia.png (adjuntar: marca las zonas que tienen que quedar lisas)
+style: game user-interface frame for a 2100 grand strategy game in a 'glass and copper' design: deep petrol-blue to near-black smoked glass (#14222b to #060c10), hair-thin warm copper lines and rivets (#c27a45), a faint cold teal glow (#4fd6c8); art-deco precision, elegant and clean, flat front view, no perspective; no text, no letters, no logos, no watermark
+description: The top banner of the loading screen, a long horizontal bar seen straight on. It has two parts that MUST match the guide exactly. (1) A title plate centred at the top (guide: red box, from x=600 to x=2200, y=24 to y=112): a smooth dark glass plaque with copper edges where the game writes "Loading databases" in white; keep its inside plain and dark. (2) Below it, a long recessed slot for the progress bar (guide: blue box, from x=466 to x=2334, y=140 to y=210): a sunken, plain, almost black channel framed by a thin copper rim; nothing drawn inside. Around both: an art-deco copper and glass framework that tapers to fine points at the left and right ends, with small stepped ornaments and a few tiny teal indicator lights. Everything outside the frame (corners above and below the tapered ends) fully transparent.
+transparent_background: true
+
+ASSET_REQUEST
+type: loading_frame
+id: carga_marco_frase
+filename: carga_marco_frase.png
+size: 2800x380 (exacto o con la misma proporción, 140:19)
+reference_image: referencias/carga_marco_frase_guia.png (adjuntar: marca la zona que tiene que quedar lisa)
+style: game user-interface frame for a 2100 grand strategy game in a 'glass and copper' design: deep petrol-blue to near-black smoked glass (#14222b to #060c10), hair-thin warm copper lines and rivets (#c27a45), a faint cold teal glow (#4fd6c8); art-deco precision, elegant and clean, flat front view, no perspective; no text, no letters, no logos, no watermark
+description: The quote box at the bottom of the loading screen, where the game writes a short quote (two or three lines) and its author, centred. A wide panel of dark smoked glass, slightly translucent towards the middle, with a thin copper border, art-deco stepped corners and a discreet copper ornament at the centre of the top edge and of the bottom edge (like a bookmark or a small seal), and two thin copper quotation-mark-shaped brackets just outside the text zone at the left and right (shapes only, no letters). The text zone (guide: red box, from x=300 to x=2500, y=56 to y=324) must stay plain, dark and even, with nothing drawn on it. Outside the panel fully transparent.
+transparent_background: true
+
+ASSET_REQUEST
+type: loading_frame
+id: carga_barra_vacia
+filename: carga_barra_vacia.png
+size: 1868x70 (exacto o con la misma proporción, 934:35)
+style: game user-interface texture for a 2100 grand strategy game in a 'glass and copper' design: near-black smoked glass, cold teal, warm copper; flat front view; no text, no letters, no logos, no watermark
+description: The EMPTY progress bar: a long horizontal channel of dark, almost black glass filling the whole image edge to edge, with very faint evenly spaced vertical tick marks (like a gauge scale) and a soft inner shadow at the top. No border (the frame around it is a different image). Must look like it is waiting to be filled.
+transparent_background: false
+
+ASSET_REQUEST
+type: loading_frame
+id: carga_barra_llena
+filename: carga_barra_llena.png
+size: 1868x70 (exacto o con la misma proporción, 934:35)
+style: game user-interface texture for a 2100 grand strategy game in a 'glass and copper' design: glowing teal energy and warm copper; flat front view; no text, no letters, no logos, no watermark
+description: The FULL progress bar: the same channel as the empty bar but filled edge to edge with glowing energy: a bright cold teal core (#4fd6c8) fading to deeper teal at the top and bottom edges, with a thin warm copper highlight line along the top and the same faint vertical tick marks as the empty bar, so the filled part reads as the same gauge lit up. Even along its whole length (the game cuts it at any point), no bright spot at either end, no border.
+transparent_background: false
