@@ -16,12 +16,24 @@
 
 Señor de los pozos muertos. Cuando se acabó el petróleo le quedó el desierto, los camiones y los hombres que sabían usarlos.
 
+### Basileus Antíoco Rashid-Varma
+*año 2056*
+
+Hijo de un camionero del Golfo y de una princesa sin reino de Rajputana. Se hizo coronar con una diadema de chapa dorada y una falange de fusileros; dice que Seleuco hizo lo mismo con menos.
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |
 |---|---|---|
 | Caíd Tariq al-Hashimi | Jefe del Ejército | Rasgo: Ofensiva Implacable |
 | General Layla Haddad | Alto mando | Rasgo: Guerra de Guerrillas |
+| Emir de los Ejércitos Yusuf al-Mazrui | Mariscal de campo | Comandó la guardia de un jeque que ya no tiene reino. Ahora manda los ejércitos de cuarenta oasis y cobra en agua. |
+| Caíd Salim al-Harbi | General | Sus técnicas cruzan el Rub al-Jali de noche, sin luces, guiándose por las estrellas como su abuelo con los camellos. |
+| Sardar Dariush Kamali | General | Pinta tanques en las dunas con espejos y lona. Una vez una división del Imperio bombardeó un día entero a un ejército que no existía. |
+| Caída Nour al-Obeidi | General | Ataca con la tormenta de arena a la espalda. Sus hombres pelean con la cara tapada y los ojos cerrados la mitad del tiempo. |
+| Coronel Elias Khoury | General | Lleva la cuenta de cada pozo que todavía da algo. Con eso mueve camiones que el resto del mundo daba por chatarra. |
+| Estratego Kiran Seleukides | General | Domador de elefantes de guerra y lector obsesivo de Polibio. Forma a sus milicias en falange porque, dice, funciona igual con fusiles. |
+| Dioceta Meera Varma | Ministro | Administra el agua del Tigris al Ganges con un libro de cuentas en griego, persa e hindi. Nadie sabe leer los tres; ella sí. |
 
 ## Espíritus nacionales
 

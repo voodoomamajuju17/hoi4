@@ -22,6 +22,13 @@ Excomandante de una guarnición del Dniéper. Controla los silos de grano entre 
 |---|---|---|
 | Atamán Grigori Voronov | Jefe del Ejército | Rasgo: Moral de Hierro |
 | General Darya Kozlova | Alto mando | Rasgo: Guerra de Guerrillas |
+| Hetman Stepan Bulava | Mariscal de campo | Era sargento de la última guarnición rusa de Smolensk. Cuando se fue el último oficial, los soldados lo eligieron a los gritos y desde entonces nadie se animó a desdecirse. |
+| General Olena Zarubina | General | Hace la guerra en enero. Deja que el enemigo avance por la nieve y le corta la retirada cuando se le congela el combustible. |
+| Atamán Bohdan Tkachenko | General | Asalta trenes blindados con camiones y escaleras. Tiene tres trenes robados que pintó de verde y les puso nombres de santos. |
+| Coronel Matvei Sokolov | General | Cambia trigo por balas en cada pueblo del Volga. Sus columnas nunca pasan hambre porque llegan a los silos antes que la cosecha. |
+| Atamán Ruslan Bekov | General | Sus jinetes andan en motos de nieve en invierno y a caballo el resto del año. Dice que los caballos no se quedan sin combustible. |
+| Doctora Ilona Kurchatova | Ministro | La única que sabe prender los reactores viejos. Duerme al lado del núcleo y dice que el zumbido la tranquiliza. |
+| Mayor Pavlo Sych | General | Manda a los Desoladores. Nunca se saca la máscara; algunos dicen que ya no puede. |
 
 ## Espíritus nacionales
 

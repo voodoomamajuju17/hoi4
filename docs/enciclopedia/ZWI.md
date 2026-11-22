@@ -16,12 +16,24 @@
 
 Heredera de una casa de Rajputana que volvió a armar milicias cuando cayó Delhi. Negocia agua con el Directorio y arroz con la Alta Mar.
 
+### Basileus Antíoco Rashid-Varma
+*año 2056*
+
+Hijo de un camionero del Golfo y de una princesa sin reino de Rajputana. Se hizo coronar con una diadema de chapa dorada y una falange de fusileros; dice que Seleuco hizo lo mismo con menos.
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |
 |---|---|---|
 | Senapati Vikram Rathore | Jefe del Ejército | Rasgo: Organización Impecable |
 | General Priya Nair | Alto mando | Rasgo: Guerra de Guerrillas |
+| Mahasenapati Rudra Chauhan | Mariscal de campo | Cada señor del Durbar le manda un regimiento y un sobrino. Los regimientos pelean; los sobrinos son la garantía de que nadie se vaya del frente. |
+| General Meenakshi Iyer | General | Espera la lluvia para atacar. Sus hombres cruzan a nado los ríos crecidos mientras los tanques del enemigo se hunden en el barro. |
+| General Kumar Bahadur Gurung | General | Gurkha de cuarta generación. Lleva el kukri del bisabuelo y nunca perdió una colina que le mandaron sostener. |
+| General Farhan Qureshi | General | Manda la Leva Incontable: chicos del campo con un fusil cada tres. Sabe el nombre de muchos y llora a todos. |
+| General Anjali Deshmukh | General | Convierte templos en fuertes sin romper una sola estatua. Los sacerdotes la bendicen; los ingenieros del Directorio la odian. |
+| Estratego Kiran Seleukides | General | Domador de elefantes de guerra y lector obsesivo de Polibio. Forma a sus milicias en falange porque, dice, funciona igual con fusiles. |
+| Dioceta Meera Varma | Ministro | Administra el agua del Tigris al Ganges con un libro de cuentas en griego, persa e hindi. Nadie sabe leer los tres; ella sí. |
 
 ## Espíritus nacionales
 
