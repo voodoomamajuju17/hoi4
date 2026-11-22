@@ -1,0 +1,203 @@
+# 4 pedidos - loading_screen - pantallas de carga de batallas (2026-11-22)
+
+Para el generador de imágenes:
+- Cada bloque ASSET_REQUEST es UNA imagen. Pedir una imagen por vez, pegando el bloque entero.
+- Devolverla con el nombre EXACTO de `filename`.
+- Proporción 4:3 horizontal (1920x1440 o más grande con la misma proporción). PNG.
+- Sin texto, letras, números legibles, logos, banderas reales ni marcas de agua.
+- Zona libre: el 15% inferior del cuadro queda tranquilo (suelo, agua, sombra, cubierta), porque ahí el juego dibuja la barra de carga.
+- Las cuatro son batallas: fotorrealistas, cinematográficas, acción al máximo y ciencia ficción dura (tecnología creíble, física creíble). Cada una con su propia cámara, encuadre y técnica.
+- Si la imagen sale "con cara de IA" (todo brillante, todo nítido, colores de póster, caras de plástico, composición centrada y simétrica), pedir que la rehaga siguiendo la sección "anti-AI look" del bloque.
+- Van a assets/menu/loading/ y el juego las reparte entre sus pantallas de carga.
+
+====================================================================
+REGLAS COMUNES A LOS CUATRO PEDIDOS (pegarlas junto con cada bloque)
+====================================================================
+
+anti-AI look (very important, applies to every image of this batch):
+- It must look like a single frame pulled from a real, expensive war film shot on location with real cameras, practical effects and real actors in real costumes. Not a digital painting, not concept art, not a video-game render, not a poster.
+- Realistic exposure: highlights are allowed to clip to pure white near explosions and muzzle flashes, shadows are allowed to crush to near-black. No HDR look, no halo around silhouettes, no glow added to everything.
+- Restrained, natural colour: no teal-and-orange grading, no oversaturated skies, no neon unless the request names a specific light source. Most of the frame is dull, dirty, mixed colour; the strong colours come only from the light sources named.
+- Optical honesty: real depth of field from the stated lens and aperture (out-of-focus areas are genuinely soft), slight chromatic aberration at the corners, mild barrel distortion on wide lenses, motion blur on fast objects at the stated shutter speed, lens flare only where a real light hits the lens, dirt or water droplets on the front element when the request says so, fine sensor/film grain over everything.
+- Human imperfection: skin with pores, stubble, scars, sweat, dirt in the creases, chapped lips, uneven teeth; nobody looks like a model; expressions are tense, ugly, real, mid-movement (mouths half-open, eyes squinting), never posed heroically at the camera. Nobody looks into the lens.
+- Physical imperfection: equipment is worn, scratched, dusty, patched, mismatched; straps twisted; fabric creased; mud and soot where it would really collect. Nothing is shiny and new unless the request says so.
+- Composition: off-centre, asymmetric, cluttered foreground, things cut by the frame edges, partial occlusion (a shoulder, a pillar, smoke covering part of the action). No symmetrical "hero in the middle" layout, no perfectly balanced triangle composition, no vignette added on top.
+- Counting is exact: the numbers of people, drones and machines given in the request are the numbers in the picture.
+- No text, no letters, no readable numbers, no logos, no real flags, no watermark, no signature, no UI overlay, no crosshairs drawn on the image.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 50_ZWE_vs_ASC_los_desoladores_aguantan
+filename: 50_ZWE_vs_ASC_los_desoladores_aguantan.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Los Desoladores aguantan" - point of view of a squad of Eurasian Desolators holding a ruined grain elevator against an assault platoon of the Automated Socialist Commune and its swarm of drones.
+
+style: Hyper-realistic first-person-adjacent war film frame, shot handheld on a full-frame cinema camera wearing a cracked protective visor housing, as if the camera operator is the fourth Desolator crouched in the line: violent, close, chaotic, but perfectly readable. Practical pyrotechnics, real dust, real debris, real sparks. Natural film grain, slight motion blur on everything that moves fast. No CGI gloss, no illustration, no painting, no video-game look. Follow the anti-AI look rules above.
+
+setting and lore:
+- Year 2100s, the frontier between the Eurasian warlord lands (ZWE) and the Automated Socialist Commune (ASC), somewhere on the flat black-earth steppe west of Smolensk, late autumn, first wet snow mixed with ash. The position is a collapsed Soviet-era concrete grain elevator: a row of huge cracked silos, one of them broken open like an egg, rebar sticking out, frozen rail tracks at its foot.
+- The Desolators are Eurasia's unique heavy infantry: volunteers sealed in home-made LEAD armour (dull grey lead sheet hammered over steel plates, riveted at the edges, the lead dented and smeared like soft metal, lumpy and heavy), full-face gas masks with round glass eyepieces and twin filter cans, thick rubberised sleeves, old cossack and steppe motifs scratched into the lead by hand (no letters). Each carries a radiation cannon: a heavy shoulder-and-hip weapon fed by a thick armoured cable from a lead-shielded reactor pack on the back; the barrel is a fat ribbed cylinder of lead and copper rings ending in a ceramic emitter cone. Hard science, not fantasy: the beam itself is INVISIBLE; what you see is its effect on the air and the target (a faint violet-blue ionisation glow hanging in the air along the line of fire, like the glow around a high-voltage line in fog; heat shimmer; frost instantly boiling off; paint blistering and flaking on what it touches). They are commanded by Major Pavlo Sych, who never takes his mask off. In their manual: "If you can hear the Geiger counter, it is too late to listen."
+- The Commune army needs no humans: its soldiers are 2.1-metre robots of pure constructivist geometry, white ceramic armour plates on red structural frames, black sensor glass with rows of identical small red sensor eyes, no face, no mouth, modular blocks that clip together, geometric serial markings (no letters). They move in perfect spacing, like a production line. Their drones are white faceted triangles and hexagons with red frame lines, ducted fans, black sensor strips.
+
+camera:
+- Lens: 24mm, aperture f/4, shutter 1/100 s, ISO 3200 (grainy, dark, real).
+- Position: low, at kneeling height, BEHIND and slightly LEFT of the Desolator squad, pressed against the inside lip of the broken silo wall; the camera is looking out through the jagged hole in the concrete toward the attacking platoon. The concrete edge of the hole is in the extreme foreground, out of focus, framing the top left and left side of the image like a ragged rough window.
+- Angle: almost level, a 6 degree Dutch tilt to the right; the camera has just flinched from a nearby impact (a faint double image on the brightest highlights, concrete grit in the air in front of the lens, two out-of-focus droplets of melted snow on the visor housing at upper right).
+
+composition (exact counts):
+- Foreground left third (cut by the frame edge at the shoulder): the back and right side of the nearest Desolator, kneeling, enormous in frame, his lead pauldron dented and streaked with soot, the armoured cable from his reactor pack running down across the bottom of the frame. He is FIRING his radiation cannon through the gap: the emitter cone glows dull cherry-red from heat, a faint violet-blue ionised line in the misty air leads from it to the target, and the snowflakes along that line are flashing into steam.
+- Middle-left, deeper inside the silo: two more Desolators. One is half-standing, bracing his cannon on a twisted steel beam, gas mask turned toward the sky where the drones are. The other is down on one knee, pulling a fresh lead-shielded power cell from a crate, his gloved hand smoking; a dented old Geiger counter hangs from his belt.
+- Centre and right, outside, 40 to 150 metres away across the snowy rail yard: the Commune assault platoon advancing in a perfect staggered line: TWELVE white-and-red robot soldiers, walking, not running, rifles level, every one in identical stride. Two of them, at centre, are being hit: the nearest one has its chest plates cracking and flaking white ceramic, its red sensor eyes flickering out one by one, steam bursting from its joints, starting to fall forward stiffly. Behind the line: TWO crewless Commune walkers (six-legged, low, white prisms with a red-framed weapons cube on top), one firing a long tracer burst toward the silo.
+- The sky, upper half: DRONES OF EVERY KIND, all Commune white-and-red, clearly different classes:
+  - a swarm of about THIRTY tiny quadcopter munitions (fist-sized white triangles) diving at the silo in a ragged stream, some of them already detonating in small sharp flashes against the concrete;
+  - THREE medium hexagonal hovering drones with spotlight-like red sensor rings, hanging still above the rail yard, painting the silo with thin red laser designator lines visible in the snow-fog;
+  - ONE large flying-wing drone, high and grey with distance, a white triangle against the cloud, launching two small glide bombs;
+  - ONE drone falling burning in a spiral at upper right, hit by a radiation beam: its white panels blistered and browned, smoke trail.
+- Between the silo and the robots: churned black earth showing through the snow, frozen rail tracks, a derailed grain wagon on its side, shell craters with steam rising from them, burning debris, spent Commune cartridges glinting.
+- Bottom 15% (calm zone for the loading bar): the dark floor of the silo inside the frame: broken concrete, grey grain dust mixed with snow, the armoured cable, a spent lead power cell lying on its side, empty ammunition crates; no action, in shadow.
+
+light:
+- Overcast late afternoon, flat cold grey daylight from the sky, the snow-fog making everything beyond 100 metres lower in contrast.
+- Hard warm flashes: the drone detonations against the concrete (small, white-orange, sharp), the burning wagon (orange, steady).
+- Cold accents: the faint violet-blue ionisation glow along each radiation beam, the red sensor eyes and red designator lines of the Commune machines.
+- Inside the silo: dark, lit only by the flashes and by the dull red glow of the emitter cones.
+
+atmosphere: wet snow falling diagonally, ash mixed into it, grain dust and concrete grit hanging in the air, steam where beams hit snow, smoke trails from falling drones, the whole frame feels deafening.
+
+palette: lead grey, soot black, dirty snow white, black earth, rust; Commune ceramic white with structural red; small violet-blue ionisation glow; orange fire.
+
+avoid: green radioactive glow, glowing green goo, Red Alert or any existing game's Desolator design, Fallout power armour, Terminator skulls, humanoid robot faces, Star Wars droids, Soviet or Nazi real symbols, readable text, crosshairs, HUD, video-game look, heroic posing, clean new armour.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 51_ZWM_vs_ZRD_emboscada_a_nueva_seleucia
+filename: 51_ZWM_vs_ZRD_emboscada_a_nueva_seleucia.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La falange no se rompe" - a column of the New Seleucid army is ambushed by La Red in a mountain pass and defends itself heroically around its armoured war elephants.
+
+style: Epic, hyper-realistic battle frame from a large-scale war film, shot with a long telephoto lens from a ridge across the gorge, like a war photographer's famous frame: compressed perspective that stacks the planes of the fight on top of each other, heat shimmer and dust haze between planes, everything sharp only on one plane. Real practical dust and fire, real animals, real costumes. Natural film grain. No CGI gloss, no illustration, no painting, no fantasy art. Follow the anti-AI look rules above.
+
+setting and lore:
+- 2110s. New Seleucia is the empire born when the desert emirates (ZWM) and the Hindustan warlord realms (ZWI) united under one diadem "from the Tigris to the Ganges": they are proud "Seleucid larpers". Their flag is deep royal purple with a large golden anchor (the old Seleucid emblem) and a small golden war-elephant above it, with a lower band split in desert ochre and monsoon green. Their Strategos, Kiran Seleukides, is a war-elephant tamer and obsessive reader of Polybius who forms his riflemen in a phalanx "because it works the same with rifles".
+- The soldiers mix both halves: desert ochre and sand camouflage, black and gold from the emirates; saffron, crimson and dusty white from Hindustan; improvised armour with ornate hammered-brass plates; modern rifles with long bayonets; big round bronze-faced composite shields with the golden anchor embossed (anti-shrapnel shields, real and dented), crested helmets that are modern ballistic helmets with a horsehair crest bolted on.
+- The WAR ELEPHANTS are real Asian elephants in modern armour: articulated ceramic and brass plates over a padded quilted blanket in purple and gold, a steel face plate with eye slits, cut and capped tusks with steel sleeves, a small armoured howdah on the back with two soldiers and a heavy machine gun, cable-tied radios and antennas.
+- LA RED is the machine network that woke up in 2113. Its machines look GROWN in silos, not built: one continuous black-chrome carapace made of ribbed, vertebra-like segments that overlap like insect plates; bone-white jointed legs, claws and fins; bundles of cable like tendons at every joint; clusters of small icy-cyan sensor points instead of a head; frost along the edges of the plates. NEVER humanoid, never a face, no skulls, no red eyes, no green glow, no wheels, no tracks, no turrets, no crew. The only light they give off is ONE icy cyan. Its units: "El Zángano" (dog-sized six-legged beetle-wasp drones with two folded mantis blades and a ridge of dart-launcher spines, always in packs), "El Segador" (an eight-legged walker the size of a tank, domed ribbed spider carapace, a segmented tail arched over its back ending in a railgun barrel), "El Ciempiés" (a 16-metre centipede of twenty segments, each with a short rack of launch tubes; the front segments rear up like a snake). La Red says: "We hate no one. Hatred takes up memory."
+
+camera:
+- Lens: 300mm telephoto, aperture f/5.6, shutter 1/1000 s (dust, debris and darts frozen in mid-air).
+- Position: on the opposite side of a narrow mountain gorge (the Zagros mountains, a dry pass with an old road and the ruins of a caravanserai), about 400 metres away and 60 metres higher than the road, looking down and across at the column.
+- Angle: high, 20 degrees down, level horizon. The frame is filled edge to edge with the fight; no sky except a thin bright strip at the very top right.
+
+composition (exact counts):
+- The whole image is a stack of planes along the road, which runs diagonally from lower left to upper right.
+- Front plane (lower left, out of focus, soft): the near rim of rock with dry thorn bushes, and a cyan streak of a dart passing very close to the lens.
+- Sharp plane, left-centre to centre: the heart of the defence. The Seleucid infantry has formed a tight phalanx-like square around TWO armoured war elephants: about FORTY soldiers in four ragged ranks, the front rank kneeling behind their big round bronze-faced anchor shields locked edge to edge, the second rank firing rifles over them, muzzle flashes and smoke along the whole line, spent brass flying. One officer, the Strategos Kiran Seleukides (a lean man of about 32, sharp Indo-Greek features, black beard, a purple scarf, horsehair crest on a battered ballistic helmet), standing on the stone wall of the caravanserai beside the bigger elephant, one arm pointing at the enemy, shouting orders mid-word, NOT looking at the camera.
+- The first elephant rears with its trunk up and a roar, its face plate scored with fresh white scratches, the howdah gunner firing the heavy machine gun downward in a long burst; the second elephant is pushing into the side of a Segador with its armoured head and capped tusks, the spider walker's bone-white legs buckling.
+- Attacking from the slope above the road (upper centre and right): La Red pouring down out of crevices and dust: about TWENTY-FIVE Zángano drones scuttling down the scree in a wide spray, several already leaping at the shield wall with blades unfolded; TWO Segador walkers coming down the rock face like spiders, one firing its tail railgun (a straight white-hot streak and a shockwave ring in the dust); ONE Ciempiés reared up on the ridge at upper right, its front segments raised like a cobra, a salvo of small rockets leaving its back tubes in a fan of grey smoke trails.
+- Evidence of the ambush: an overturned ochre armoured truck burning in the middle of the road, a second truck stopped behind it, a broken caravanserai arch, a fallen purple-and-gold banner with the golden anchor half trampled into the dust, Zángano wrecks with their bone-white legs curled up like dead insects, shield fragments, smoke.
+- Far plane (upper right, soft through the haze): the rest of the column strung out along the road, more soldiers running toward the square, a third elephant in the distance.
+- Bottom 15% (calm zone for the loading bar): the dry rocky slope on our side of the gorge in soft focus, scree, thorn bushes, shadow; no action.
+
+light:
+- Harsh high desert sun from upper left, late morning: hard shadows, bleached highlights on the stones and on the brass, deep black shadows under the shields and the elephants' bellies.
+- Dust haze between planes, glowing warm in the sun.
+- Cold accents ONLY from La Red: tiny icy-cyan sensor clusters on every machine and the cyan streaks of their darts.
+- Orange fire and black smoke from the burning trucks.
+
+atmosphere: dust everywhere, spent brass in the air, the elephants' trumpeting almost visible, heroic and desperate, the line is holding.
+
+palette: desert ochre and sand, dusty rock, brass and bronze, royal purple and gold accents, saffron and crimson cloth, dull khaki; La Red black-chrome, bone white and a single icy cyan.
+
+avoid: fantasy armour, Lord of the Rings oliphaunts, ancient Greek bronze cosplay without rifles, Terminator or Matrix sentinel copies, glowing red eyes, green glow, humanoid robots, readable text, real flags, cartoon blood, clean costumes, posed heroes looking at the camera.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 52_ZAN_la_iglesia_de_liberculto
+filename: 52_ZAN_la_iglesia_de_liberculto.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La iglesia de Liberculto" - inside a fortified Liberculto church in Kyiv, during the battle: Khavier Svoboda and his shock platoon in full view.
+
+style: Hyper-realistic cinematic interior frame, shot on an anamorphic cinema lens in a real ruined Orthodox church dressed as a set, practical lights only: chiaroscuro worthy of a Caravaggio turned into a modern film frame, God-rays through smoke, deep blacks, warm candle and cold daylight mixed, real dust and smoke particles, anamorphic horizontal flares only from the strongest sources. Natural film grain. No CGI gloss, no illustration, no painting. Follow the anti-AI look rules above.
+
+setting and lore:
+- 2110s. Liberculto is the state that the Lawless Lands founded in Kyiv: libertarian fanatics, cyberpunk and religious. They want to impose freedom by force: preachers with implants behind the ear broadcast "the Gospel of the Contract" on every frequency ("Thou shalt not aggress. Unless thou art freeing someone."), crusades "to liberate" the neighbours, "Drones of the Faith, each one blessed, each one paid for by a believer". Their look: scavenged junk and welded scrap, rust, black and hazard yellow, raider graffiti WITHOUT letters. Their flag: black field with a radiant hazard-yellow sunburst; in its centre a coiled snake wrapped around a circuit-board cross, neon magenta edges.
+- Khavier Svoboda, "the Captain": a FICTIONAL character, not resembling any real person. A wild-haired man of 36 with long unkempt sideburns, intense eyes and a permanent shout; a home-made superhero costume over combat armour: black and hazard-yellow bodysuit, a cape with a coiled snake, a domino mask pushed up on his forehead, a chainsaw-bayonet rifle, neon implants glowing behind one ear; cyberpunk preacher energy. Nobody knows where he came from: he appeared in Kyiv in a cape, preaching from the roof of a tram. His cry: "Freedom, damn it!"
+
+camera:
+- Lens: 40mm anamorphic, aperture T2.8, shutter 1/48 s, ISO 1600.
+- Position: high in the women's gallery (the upper balcony at the back of the nave), behind the carved wooden balustrade, looking DOWN the length of the nave toward the iconostasis and the main doors on the side. The broken wooden balustrade is in the immediate foreground, out of focus, cutting across the lower left corner.
+- Angle: 25 degrees down, slight tilt; the camera is still, the people below are not.
+
+composition (exact counts):
+- The church: a 19th-century Kyivan Orthodox church, white walls blackened by smoke, faded frescoes of saints peeling from the vaults, a huge central dome with its windows blown out, shafts of cold daylight falling through the dust from the drum of the dome. The old gilded iconostasis is still standing but half of its icons are replaced by things the believers bolted on: cracked tablet screens showing only light, circuit boards, old phones, a hazard-yellow sunburst made of welded scrap with the coiled snake around a circuit-board cross in the middle, magenta neon tubes along its edges. Hundreds of candles burning on brass stands and on the floor. Cables run everywhere along the floor and up the columns like vines.
+- The church is a fortress in a battle: the tall windows on the left are sandbagged with gaps for rifles, the main doors on the right side are barricaded with church benches and a burnt-out car, and through a fresh shell hole in the left wall we see the street outside: smoke, a burning tram, the yellow flash of an explosion.
+- Centre of the nave, in sharp focus: Khavier Svoboda standing ON the altar step (not on the altar itself), cape swinging as he turns, chainsaw-bayonet rifle raised over his head in one hand, mouth wide open shouting at his men, the implant behind his ear glowing magenta, domino mask pushed up on his sweaty forehead, his face caught in a hard shaft of daylight. He is NOT posing for the camera; he is in the middle of a sentence, half turned toward the barricade.
+- His platoon, around and in front of him, about TWENTY fighters in full view, all different: scavenged armour plates painted black and hazard yellow, helmets with welded crosses and sunbursts, a few with small capes or yellow sashes, prayer beads wound around rifle grips, glowing implants behind ears. Four of them are firing out of the sandbagged windows on the left (muzzle flashes, smoke, falling brass); three are dragging a heavy machine gun onto a church bench by the barricade; one kneels in front of a cyber-preacher (an old bearded priest in a black cassock with a hazard-yellow stole and a cable plugged behind his ear) who is blessing a small quadcopter "Drone of the Faith" held up in the soldier's hands (the drone has a tiny brass icon frame bolted to it and a yellow sunburst painted on); two are carrying a wounded comrade on a stretcher made of a door; the rest are loading magazines, praying, shouting.
+- Above them, three small Drones of the Faith hover in the dome's light shafts, rotors blurred, tiny lights blinking magenta.
+- Bottom 15% (calm zone for the loading bar): the gallery floor in front of us and the darker back of the nave below: worn stone, scattered hymn books with blank pages, candle stubs, spent brass, shadows; no action.
+
+light:
+- Main: cold white-blue daylight falling in hard shafts from the broken dome, cutting through smoke and dust, hitting Svoboda and the altar step.
+- Warm: hundreds of candles giving a low golden glow on faces and gilding.
+- Accents: magenta neon on the scrap sunburst and on the implants, small magenta drone lights, the orange flash of the explosion through the shell hole, muzzle flashes at the windows.
+- The rest of the church in deep shadow.
+
+atmosphere: incense and gunsmoke mixed into a thick haze, falling plaster dust, candle smoke, sacred and insane at the same time, the bells are about to ring.
+
+palette: smoked white walls, faded fresco blues and ochres, old gold of the iconostasis, rust and black, hazard yellow, a few strokes of neon magenta, cold blue daylight, warm candlelight.
+
+avoid: any real person's face or likeness, real political symbols, real flags, readable text or Cyrillic letters, Warhammer 40k cathedral style, satanic imagery, mockery of real religion beyond the costume (the church is treated with weight, not as a joke), comic-book superhero gloss, clean costumes, symmetrical cathedral one-point composition.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 53_FCU_vs_EFE_mercante_bajo_drones
+filename: 53_FCU_vs_EFE_mercante_bajo_drones.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Fuego en la cubierta" - view from the deck of a Corporate Union merchant ship attacked by a swarm of air drones of the Ecofascist Empire, in the Caribbean.
+
+style: Hyper-realistic maritime action frame, shot handheld on a ruggedised camera with a wide lens strapped to a crewman's chest, sea spray on the lens: rolling deck, horizon tilting, real seawater, real fire, real smoke, real tracer. Like the best handheld scenes of a modern naval war film. Natural film grain, motion blur on everything fast. No CGI gloss, no illustration, no painting. Follow the anti-AI look rules above.
+
+setting and lore:
+- 2100s, the Caribbean approaches to the Panama Canal. The Corporate Union (FCU), North America ruled as a corporation, runs its convoys like a business: its ships are premium commercial products, over-engineered and glossy, navy blue and silver chrome with white, smoked glass, LED strips, gold trim, abstract sponsor-like badges and barcode panels (no letters). Its convoys are guarded by paid private contractors, and every ship has a "subscription" point-defence turret bolted on.
+- The Ecofascist Empire (EFE), South America, does not build weapons, it GROWS them in bio-forges: everything is partly alive, made of "bio-steel", a dark green-bronze material like lacquered hardwood fused with insect chitin, with growth rings, veins and knots, no straight lines, no bolts; translucent veins of glowing amber sap; small gold laurel inlays. Its drones are named after South American fauna and really resemble them.
+
+camera:
+- Lens: 16mm wide, aperture f/8, shutter 1/250 s.
+- Position: on the open main deck of a large FCU container ship, between two towering stacks of navy-blue and silver containers, at chest height, looking diagonally forward and up toward the bow and the sky over the starboard side.
+- Angle: the ship is rolling: the horizon tilted 12 degrees down to the right; low enough to see the deck and high enough to see the sky full of drones. Three or four droplets of seawater on the lens, one of them smearing a light at upper left.
+
+composition (exact counts):
+- Left edge (cut by the frame): the corrugated wall of a navy-blue container with a silver stripe and an abstract white barcode panel, scratched, running away from us in strong wide-angle perspective, dripping seawater.
+- Foreground right: TWO FCU private security contractors behind a waist-high armoured deck shield, in sleek navy-and-silver body armour with small gold trim and smoked visors, one firing a long rifle almost straight up, the other crouching and shouting into a wrist radio, hand clamped on his helmet; spent brass rolling across the wet steel deck; one of their visors reflects a burning drone.
+- Midground, on a raised platform near the bow: the ship's chrome point-defence turret, a glossy white-and-silver dome with a multi-barrel rotary cannon, firing a solid line of orange tracer into the sky, hot casings pouring out in a waterfall, a thin trail of smoke from the overheated barrels; its LED strip flashing amber.
+- The sky (upper two thirds), the EFE attack, exact classes and counts:
+  - about FORTY small "wasp" drones: bio-steel missile-wasps the size of a cat, segmented green-bronze bodies with yellow-and-black warning bands like real wasps, translucent wings blurred, amber glow at the abdomen, diving in a loose swarm toward the containers; several of them exploding on the containers in small sharp flashes;
+  - SIX larger "Harpy" drones: grown flying predators modelled on the harpy eagle, 6-metre wingspan, dark green-bronze chitin with feather-like overlapping plates on broad rounded wings, a crested head with two amber eye sensors, talon-like claws gripping a bomb-pod; two of them banking hard right over the ship's bridge, one releasing its pod, one torn apart by the tracer with feather-plates and amber sap spraying in the air;
+  - ONE "Hornero" bomber high above, a plump rounded clay-brown and green twin-engine drone with seed-spinner propellers, its bomb bay open like a nest entrance, small against a towering storm cloud.
+- Damage: forward, one container stack is on fire and spilling its cargo (consumer goods in silver packaging bursting out), black smoke pouring across the deck and over the sea; a container lid is hanging open and swinging; a fire hose writhing loose on the deck spraying water.
+- Background right: a second FCU ship of the convoy, a sleek navy-and-white tanker, 600 metres away, burning at the stern; beyond it a small FCU escort corvette firing missiles upward (white smoke trails curving into the swarm).
+- Bottom 15% (calm zone for the loading bar): the wet navy-grey anti-slip deck plates in front of us, puddles reflecting the fire, a coiled mooring line, a dropped helmet; no action.
+
+light:
+- Tropical late afternoon under a massive storm cloud: the sun low at the left behind the cloud edge, throwing hard golden light under the cloud onto the sea and the side of the containers, while the upper sky is dark slate grey.
+- Fire light: orange from the burning containers and the tanker.
+- Tracer: a bright orange line, lighting the smoke from inside.
+- Amber sap glow on the EFE drones; small amber LED on the turret.
+
+atmosphere: sea spray blowing across the deck, rain starting, smoke, flying debris, the ship rolling under our feet, overwhelming noise.
+
+palette: FCU navy blue, silver chrome, white, a little gold; deep forest green, chitin bronze, wasp yellow-black and amber of the EFE drones; slate-grey storm sky, golden low sun, dark Caribbean sea with white foam, orange fire.
+
+avoid: pirate ships, real shipping company logos or colours, readable text or numbers on containers, cartoon insects, fantasy dragons, glossy video-game sky, calm sea, symmetrical composition, heroes looking at the camera, real flags.
