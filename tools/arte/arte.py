@@ -89,8 +89,8 @@ KINDS = {
     # 2026-11-06: la Lámina de las aventuras de las meganaciones (tools/gen/emitters/laminas.py):
     # se pide grande y se guarda a 960x408 (DXT1), y también como imagen del evento
     "adventure_plate": {"size": (1920, 816), "transparent": False, "fit": "cover"},
-    # pantallas de carga (arte/pantallas_carga_descripciones.yaml, 2026-10-24): la vida
-    # diaria de cada potencia y anarquía; 1920x1440 en DXT1, como las que ya hay
+    # pantallas de carga: 1920x1440 en DXT1 (las de vida diaria se sacaron el 2026-11-22;
+    # ahora todas son pedidos escritos a mano en arte/pedidos_pantallas_carga_*.txt)
     "loading_screen": {"size": (1920, 1440), "transparent": False, "fit": "cover"},
     # 2026-11-18: viñetas de la Historieta (tools/arte/historietas.py): cada pedido lleva su tamaño (2x su
     # lugar en la página); al importar se guarda al tamaño del lugar y se vuelve a armar la página
@@ -562,19 +562,12 @@ def catalog() -> list[dict]:
     items += _adventure_items()
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
-    items += _loading_items()
     items += _marcos_carga_items()
     # 2026-11-18: la Historieta (46_historietas): una imagen por viñeta, del tamaño de su lugar en la página
     from tools.arte import historietas as _hist
     items += _hist.items()
     _apply_icon_looks(items)
     return items
-
-
-LOADING_STYLE = (
-    "Hearts of Iron IV loading screen, wide cinematic painting, retrofuturist year 2100, rich painterly detail, "
-    "everyday life of ordinary people (not a battle), atmospheric light, no text, no letters, no logos, no watermark"
-)
 
 
 def _marcos_carga_items() -> list[dict]:
@@ -587,24 +580,6 @@ def _marcos_carga_items() -> list[dict]:
                     "size": p["size"], "transparent": p["transparent"], "hand_written": True,
                     "description": "ver arte/pedidos_marcos_pantalla_carga.txt"})
     return out
-
-
-def _loading_items() -> list[dict]:
-    """Pantallas de carga de la vida diaria (2026-10-24): una por potencia y anarquía."""
-    path = REPO / "arte" / "pantallas_carga_descripciones.yaml"
-    if not path.exists():
-        return []
-    data = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("pantallas") or {}
-    items = []
-    for n, (tag, p) in enumerate(data.items(), start=20):
-        iid = f"{n}_{tag}_vida_diaria"
-        dest = REPO / "assets" / "menu" / "loading" / f"{iid}.dds"
-        items.append({
-            "type": "loading_screen", "tag": tag, "id": iid, "dest": dest, "done": dest.exists(),
-            "style": f"{LOADING_STYLE}; {STYLE.get(tag, '')}",
-            "description": f"{p['titulo']}: {_one_line(p['escena'])}",
-        })
-    return items
 
 
 def _mapa_items(composition: str) -> list[dict]:
