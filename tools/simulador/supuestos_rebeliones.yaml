@@ -1,0 +1,46 @@
+# Supuestos del simulador de rebeliones (tools/simulador/rebeliones.py, 2026-11-23).
+#
+# Pedido: "calculame la probabilidad de cada rebelión/guerra civil/división/golpe para cada nación jugable".
+# Las chances que el mod escribe (el Ultimátum, la ruta forzada, la mecha de la HSN y la NAS, la del Directorio, el
+# Rumor de Golpe, cuánto resiste la IA) se leen del spec cada vez. Acá va solo lo que el spec no dice porque lo decide
+# la partida: cómo anda la estabilidad, y cuánto llegan a moverse las barras propias de cada potencia.
+
+corridas: 4000
+semilla: 2100
+meses: 240            # enero de 2100 a diciembre de 2119
+
+# La estabilidad de cada potencia, mes a mes: vuelve de a poco a su media (10% por mes) con un ruido que la deja
+# típicamente a ±10 puntos de la media. Tres escenarios: el mismo para las ocho, para comparar.
+estabilidad:
+  vuelta: 0.10
+  ruido: 0.045
+  escenarios:
+    tranquila: 0.70   # sin guerras largas: casi nunca baja de 50%
+    tipica: 0.60      # lo de una IA normal: unos meses por año bajo 50%
+    agitada: 0.50     # guerra larga o mal gobierno: la mitad del tiempo bajo 50%
+
+# El Rumor de Golpe (El Peso del Poder): fuera de las crisis, qué parte de las veces el líder tiene poca Astucia (bajo
+# 10), y qué parte de las otras malas noticias le tocan (dependen de sus stats).
+rumor: {astucia_baja: 0.3, otras_noticias: 0.5}
+
+# Las ramas políticas que llevan a una guerra civil: qué parte de las partidas la IA las elige. Se leen de
+# SIMULADOR_IA.md (columna "IA típica"), así siguen al simulador de la IA. Cuándo elige: a partir del mes 'abre',
+# con esta chance por mes (la misma del simulador de la IA).
+ramas: {abre: 6, eleccion_mensual: 0.35, demora_foco_meses: 3}
+
+# Lo que depende de las barras propias de cada potencia (el motor no las simula): chance en la partida y años en que
+# pasaría. Son estimaciones a mano, a la vista para poder cambiarlas.
+barras:
+  EFE_monte: {chance: 0.6, desde: 2101.6, hasta: 2104.12}     # con los Incendios, el control del monte llega a 60
+  ASC_plan41: {chance: 0.30, desde: 2106.1, hasta: 2112.12}   # Cómputo 100 y Calor 50 (o 80/40 y el 8% por mes), en paz
+  ASC_valhalla: 0.35                                          # la Furia de los Hijos de Odín llega a 100 (la IA la baja con decisiones)
+  SHD_crecida: {chance: 0.15, desde: 2101.6, hasta: 2110.12}  # el Pueblo en 70 con el Orden bajo 36, o tres meses desbordado
+  HSN_reputacion_50: 0.4                                      # parte de los meses con la infamia del corso en 50 o más
+  NAS_sol_bajo: 0.25                                          # el Sol Bajo, una estación de cuatro (igual que el simulador de la IA)
+  HSN_australia_satelite: 0.9                                 # Australia sigue siendo satélite de la HSN en 2103.6
+  ZJP_se_separa: {chance: 0.30, desde: 2102.1, hasta: 2112.12}  # dos de tres: invadidas las islas, perdida Singapur, estabilidad bajo 65%
+  ZAL_renace: {chance: 0.15, desde: 2104.1, hasta: 2114.12}   # Albión renace solo si la Comuna pierde contra Roma
+  ZAL_guerra_eras: 0.25                                       # ya con Albión: la Pompa cae dos veces bajo 10 (o la Red cae dos veces)
+
+# El Directorio usa la misma estabilidad de arriba con sus dos mechas propias (65% y 50%). Su simulador propio
+# (SIMULADOR_ESTABILIDAD_SHD.md, con regiones, focos y espíritus) da más detalle según cuánto conquiste.

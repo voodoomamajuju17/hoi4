@@ -3794,6 +3794,32 @@ def test_arboles() -> None:
               "prerequisite = { focus = EFE_el_mandato_renovado focus = EFE_los_incendios_de_gaia }" in efe[i:i + 600])
 
 
+def test_simulador_rebeliones() -> None:
+    """2026-11-23 ("calculame la probabilidad de cada rebelión/guerra civil/división/golpe para cada nación
+    jugable"): el simulador lee las chances del spec; si el mod las cambia, el simulador las sigue."""
+    section("simulador de rebeliones: las reglas salen del spec")
+    from tools.simulador import rebeliones as rb
+    raw = specload.load(REPO_ROOT / "spec").raw
+    sp = rb.leer_spec(raw)
+    check("rebeliones: el Ultimatum (1,5% bajo 50%, 3% bajo 35%, un anio de espera) y la IA resiste el 55%",
+          abs(sp["ult_50"] - 0.015) < 1e-9 and abs(sp["ult_35"] - 0.03) < 1e-9 and sp["espera"] == 12
+          and abs(sp["resiste"] - 0.55) < 1e-9 and sp["umbral"] == 0.5, str(sp))
+    check("rebeliones: la ruta forzada (4%), la mecha de la HSN y la NAS (2%) y las dos del Directorio",
+          abs(sp["ruta"] - 0.04) < 1e-9 and abs(sp["mecha_hsn_nas"] - 0.02) < 1e-9
+          and sorted(sp["mechas_shd"]) == [(0.5, 0.04), (0.65, 0.03)], str(sp))
+    check("rebeliones: el Rumor de Golpe (El Peso del Poder) termina en Ultimatum 1 de cada 16",
+          abs(sp["rumor_ultimatum"] - 0.0625) < 1e-9 and sp["cada_meses"] == 5, str(sp))
+    check("rebeliones: en la FCU se van las Zonas (division) y en la Comuna arrancan los Hijos de Odin",
+          sp["rebelion"]["FCU"][1] == "división" and sp["rebelion"]["ASC"][1] == "crisis"
+          and all(sp["rebelion"][t][1] == "guerra civil" for t in ("EFE", "HSN", "NAS", "SHD", "APF", "NRE")),
+          str(sp["rebelion"]))
+    av = rb.aventura(raw["adventures"]["sagas"]["ZWM"])
+    check("rebeliones: la aventura de los Emiratos puede terminar en la Legion Perdida",
+          0 < av.get("rebelión: Legado Gaius Severo", 0) < 0.5, str(av))
+    check("rebeliones: las ramas de la IA salen de SIMULADOR_IA.md",
+          set(rb.ramas_ia(REPO_ROOT / "SIMULADOR_IA.md")) == {"EFE", "APF", "NRE"})
+
+
 def test_paneles_recurso() -> None:
     """2026-11-15: el panel del recurso propio de cada nación (ventana propia, acciones como botones)."""
     section("paneles del recurso: ventana propia por nación, acciones como botones, decisiones para la IA")
@@ -6881,6 +6907,7 @@ def main() -> int:
         test_cuatro,
         test_albion_caminos,
         test_arboles,
+        test_simulador_rebeliones,
         test_historietas,
         test_marcos_carga,
         test_reporte_2026_11_22,
