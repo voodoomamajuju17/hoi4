@@ -1,4 +1,5 @@
 # 2026-11-10: modelo animado EFE_infanteria (idle, move, attack)
+# 2026-11-23: ataque exagerado (torso, brazos, arma y dron x2,5; piernas igual) con tools/arte/ampliar_animacion.py
 # 2026-11-21: animaciones mejoradas a 60 fps (idle 6 s, move 4,5 s, attack 4 s, die 3,2 s)
 animation = {
     name = "EFE_infanteria_idle_animation"
@@ -40,4 +41,6 @@ entity = {
     state = { name = "die" animation = "die" animation_blend_time = 0.08 looping = no }
     state = { name = "death" animation = "die" animation_blend_time = 0.08 looping = no }
     state = { name = "defend" animation = "attack" animation_blend_time = 0.20 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.20 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.20 looping = yes }
 }
