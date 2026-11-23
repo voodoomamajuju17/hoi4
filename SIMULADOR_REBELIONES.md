@@ -19,13 +19,13 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | Nación | tranquila | tipica | agitada |
 |---|---|---|---|
 | Imperio Ecofascista (EFE) | 23% | 43% | 73% |
-| Comuna Algorítmica (ASC) | 32% | 37% | 49% |
-| Unión Corporativa (FCU) | 100% | 100% | 100% |
-| Liga Hanseática del Mar (HSN) | 13% | 40% | 78% |
-| Imperio del Sol (NAS) | 13% | 40% | 75% |
-| Directorio (SHD) | 76% | 96% | 100% |
-| Federación Panafricana (APF) | 38% | 52% | 78% |
-| Nueva Roma (NRE) | 36% | 51% | 77% |
+| Comuna Socialista Automatizada (ASC) | 32% | 37% | 49% |
+| Unión Libre de Capital Corporativo (FCU) | 100% | 100% | 100% |
+| Nación de Mercado de Alta Mar (HSN) | 13% | 40% | 78% |
+| Reino Celeste Neoandino (NAS) | 13% | 40% | 75% |
+| Directorio Sino-Armónico (SHD) | 76% | 96% | 100% |
+| Federación de los Pueblos Africanos (APF) | 38% | 52% | 78% |
+| Neo Imperio Romano (NRE) | 36% | 51% | 77% |
 
 ## Nación por nación
 
@@ -38,7 +38,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | La Guerra del Monte (los Incendios de Gaia → El Monte se Levanta) | guerra civil | 14% | 16% | 15% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 15% | 23% |
 
-### Comuna Algorítmica (ASC)
+### Comuna Socialista Automatizada (ASC)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -49,7 +49,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | PLAN-41 se Desconecta | guerra civil | 28% | 27% | 26% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 11% | 16% | 23% |
 
-### Unión Corporativa (FCU)
+### Unión Libre de Capital Corporativo (FCU)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -58,7 +58,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | La Secesión de Meridian | guerra civil | 100% | 100% | 100% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 16% | 22% |
 
-### Liga Hanseática del Mar (HSN)
+### Nación de Mercado de Alta Mar (HSN)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -68,7 +68,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | Nace la República Pirata | división | 90% | 89% | 90% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 15% | 22% |
 
-### Imperio del Sol (NAS)
+### Reino Celeste Neoandino (NAS)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -76,7 +76,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | Golpe: el líder renuncia ante el Ultimátum | golpe | 11% | 28% | 45% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 13% | 16% | 23% |
 
-### Directorio (SHD)
+### Directorio Sino-Armónico (SHD)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | El Río se Desborda | guerra civil | 11% | 7% | 4% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 15% | 24% |
 
-### Federación Panafricana (APF)
+### Federación de los Pueblos Africanos (APF)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -94,7 +94,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 | La Guerra de los Consejos (Los Consejos se Arman) | guerra civil | 30% | 30% | 34% |
 | *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 15% | 23% |
 
-### Nueva Roma (NRE)
+### Neo Imperio Romano (NRE)
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
@@ -107,7 +107,7 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 
 - **Japón (Shogunato de los Astilleros)**: no tiene Ultimátum propio (no está en la lista de rebeliones de las potencias); se parte solo en sus aventuras (abajo).
 - **Albión**: además de sus aventuras, la Guerra de las Dos Eras (la Pompa cae dos veces bajo 10, o la Red cae dos veces): 25% estimado, con Albión ya formada (renace en el 15% de las partidas, si la Comuna pierde contra Roma).
-- **Las anarquías** (Caudillos del Amazonas, Señores de la Guerra de Eurasia, de Hindustán, Emiratos del Desierto, Tierras Sin Ley): sin Ultimátum; se parten en los finales malos de sus aventuras.
+- **Las anarquías** (Caudillos del Amazonas, Señores de la Guerra de Eurasia, del Indostán, Emiratos del Desierto, Tierras Sin Ley): sin Ultimátum; se parten en los finales malos de sus aventuras.
 
 ## Las aventuras (si las jugás eligiendo al azar)
 

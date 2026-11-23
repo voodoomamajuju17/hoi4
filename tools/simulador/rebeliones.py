@@ -34,9 +34,7 @@ from ..gen import specload
 REPO = Path(__file__).resolve().parents[2]
 SUPUESTOS = Path(__file__).with_name("supuestos_rebeliones.yaml")
 POTENCIAS = ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"]
-NOMBRES = {"EFE": "Imperio Ecofascista (EFE)", "ASC": "Comuna Algorítmica (ASC)", "FCU": "Unión Corporativa (FCU)",
-           "HSN": "Liga Hanseática del Mar (HSN)", "NAS": "Imperio del Sol (NAS)", "SHD": "Directorio (SHD)",
-           "APF": "Federación Panafricana (APF)", "NRE": "Nueva Roma (NRE)"}
+NOMBRES: dict[str, str] = {}   # se llena con los nombres del spec (02_countries), "Nombre (TAG)"
 
 
 def mes(fecha) -> int:
@@ -324,7 +322,18 @@ RUTA = {"EFE": "La Guerra del Monte (los Incendios de Gaia → El Monte se Levan
         "NRE": "La Guerra de las Legiones (La Legión Decide)"}
 
 
+def nombres(raw: dict) -> dict[str, str]:
+    """2026-11-23 ("¿qué carajo es una Liga Hanseática?"): los nombres salen del spec, nunca a mano."""
+    out = {}
+    for d in _todos(raw["countries"]):
+        n = d.get("name")
+        if d.get("tag") in POTENCIAS and isinstance(n, dict) and isinstance(n.get("spanish"), str):
+            out.setdefault(d["tag"], f"{n['spanish']} ({d['tag']})")
+    return out
+
+
 def informe(raw: dict, sup: dict, out: dict, ramas: dict, corridas: int) -> str:
+    NOMBRES.update(nombres(raw))
     sp, res = out["spec"], out["res"]
     escs = list(sup["estabilidad"]["escenarios"])
     L = ["# Rebeliones, guerras civiles, divisiones y golpes: la chance de cada nación", "",
@@ -379,7 +388,7 @@ def informe(raw: dict, sup: dict, out: dict, ramas: dict, corridas: int) -> str:
           f"- **Albión**: además de sus aventuras, la Guerra de las Dos Eras (la Pompa cae dos veces bajo 10, o la Red cae "
           f"dos veces): {zal['ZAL_guerra_eras']:.0%} estimado, con Albión ya formada (renace en el "
           f"{zal['ZAL_renace']['chance']:.0%} de las partidas, si la Comuna pierde contra Roma).",
-          "- **Las anarquías** (Caudillos del Amazonas, Señores de la Guerra de Eurasia, de Hindustán, Emiratos del "
+          "- **Las anarquías** (Caudillos del Amazonas, Señores de la Guerra de Eurasia, del Indostán, Emiratos del "
           "Desierto, Tierras Sin Ley): sin Ultimátum; se parten en los finales malos de sus aventuras.", ""]
     L += ["## Las aventuras (si las jugás eligiendo al azar)", "",
           "Personaje y opciones al azar: la chance de llegar a un final o una opción con rebelión o crisis.", "",

@@ -3813,6 +3813,11 @@ def test_simulador_rebeliones() -> None:
           sp["rebelion"]["FCU"][1] == "división" and sp["rebelion"]["ASC"][1] == "crisis"
           and all(sp["rebelion"][t][1] == "guerra civil" for t in ("EFE", "HSN", "NAS", "SHD", "APF", "NRE")),
           str(sp["rebelion"]))
+    # 2026-11-23 ("¿qué carajo es una Liga Hanseática?"): el informe le había puesto nombres inventados a mano
+    nm = rb.nombres(raw)
+    check("rebeliones: los nombres de las potencias salen del spec (la HSN es la Nacion de Mercado de Alta Mar)",
+          set(nm) == set(rb.POTENCIAS) and nm["HSN"] == "Nación de Mercado de Alta Mar (HSN)"
+          and "Hanse" not in (REPO_ROOT / "SIMULADOR_REBELIONES.md").read_text(encoding="utf-8"), str(nm))
     av = rb.aventura(raw["adventures"]["sagas"]["ZWM"])
     check("rebeliones: la aventura de los Emiratos puede terminar en la Legion Perdida",
           0 < av.get("rebelión: Legado Gaius Severo", 0) < 0.5, str(av))
