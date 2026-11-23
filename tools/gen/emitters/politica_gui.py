@@ -29,6 +29,15 @@ BAJAN = ("pol_faction_icon", "political_pie_chart", "ruling_party_info", "autono
          "manage_occupied_button_text", "subjects_button_container", "show_exiles_collaborations_button",
          "manage_exiled_collaborations_governments", "icon_exiled_collaborations_governments",
          "icon_occupied_territories", "parties_grid")
+# 2026-11-23 (captura: "los retratos no encajan bien, sin achicar la imagen... ¿agrandar el espacio
+# entre las filas?"): los retratos de los asesores ocupan la casilla entera (65x67, sin el margen
+# transparente de los íconos del juego) y pisan el título de su sección y el de la siguiente. Cada
+# sección ("Leyes y gobierno", "Investigación y producción", "Personal militar") se hace más alta:
+# la fila de retratos baja BAJA_FILA px y entre secciones queda ESPACIO_SECCION px más. La lista de
+# secciones ya tiene barra de desplazamiento, así que el panel no cambia de tamaño.
+BAJA_FILA = 8
+ESPACIO_SECCION = 18
+SECCION = "country_politics_idea_category_entry"
 FONDO = "GFX_mn_pol_view_bg_alto"
 FONDO_TEX = "gfx/interface/meganations/pol_view_bg_alto.dds"
 _POS = re.compile(r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s*y\s*=\s*(-?\d+)\s*\}')
@@ -124,6 +133,40 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     return (None if faltan else texto), faltan
 
 
+def parchar_asesores(texto: str) -> tuple[str | None, list[str]]:
+    """Secciones de asesores más altas: (None, faltan) si el .gui no es el esperado."""
+    faltan = []
+    r = _cambiar_en(texto, "idea_categories_grid",
+                    r'slotsize\s*=\s*\{\s*width\s*=\s*(\d+)\s*height\s*=\s*(\d+)\s*\}',
+                    lambda m: f"slotsize = {{ width = {m.group(1)} height = {int(m.group(2)) + ESPACIO_SECCION} }}")
+    if r is None:
+        faltan.append("idea_categories_grid")
+    else:
+        texto = r
+    b = _bloque(texto, SECCION)
+    if not b:
+        return None, faltan + [SECCION]
+    cuerpo = texto[b[0]:b[1]]
+    # el primer size del bloque es el de la sección entera (viene antes que los de adentro)
+    m = re.search(r'name\s*=\s*"%s"' % SECCION, cuerpo)
+    t = re.compile(r'size\s*=\s*\{\s*width\s*=\s*([\d%]+)\s*height\s*=\s*(\d+)\s*\}')
+    sz = t.search(cuerpo, m.end())
+    otro = re.search(r'(containerWindowType|gridbox[Tt]ype|iconType|instantText[Bb]oxType)\s*=', cuerpo[m.end():])
+    if not sz or (otro and m.end() + otro.start() < sz.start()):
+        faltan.append(SECCION)
+    else:
+        cuerpo = (cuerpo[:sz.start()] + f"size = {{ width = {sz.group(1)} height = {int(sz.group(2)) + ESPACIO_SECCION} }}"
+                  + cuerpo[sz.end():])
+    nuevo = _bajar(cuerpo, "ideas_grid", BAJA_FILA)
+    if nuevo is None:
+        faltan.append("ideas_grid")
+    else:
+        cuerpo = nuevo
+    if faltan:
+        return None, faltan
+    return texto[:b[0]] + cuerpo + texto[b[1]:], []
+
+
 FONDO_ASSET = "assets/ui/politica/pol_view_bg_alto.dds"
 
 
@@ -166,6 +209,13 @@ def emit(ctx: BuildContext) -> None:
         ctx.warn(f"política: {GUI} de este juego no es el esperado ({', '.join(faltan)}); "
                  "los espíritus quedan como en el juego")
         return
+    asesores, faltan_as = parchar_asesores(texto)
+    if asesores is None:
+        ctx.warn(f"política: las secciones de asesores de {GUI} no son las esperadas ({', '.join(faltan_as)}); "
+                 "los retratos quedan con el espacio del juego")
+    else:
+        texto = asesores
+        ctx.note(f"política: secciones de asesores {ESPACIO_SECCION} px más altas, retratos {BAJA_FILA} px más abajo")
     if DY == 0 or not _fondo_alto(ctx):
         texto = texto.replace(f'spriteType = "{FONDO}"', 'spriteType = "GFX_pol_view_bg"')
     else:
