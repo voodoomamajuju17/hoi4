@@ -15202,11 +15202,18 @@ scripted_effects:
       - {effect: event, id: meganations_fcu.150, days: 1}
     # La secesión de Meridian (2026-10-10, pedido del usuario: una corporación se
     # rebela y se alía con las Tierras Sin Ley)
+    # 2026-11-23 (simulador de rebeliones: pasaba en el 100% de las partidas; el usuario: "bajar la posibilidad
+    # que suceda"): ya no es fija. Desde 2103.3, solo con la Unión bajo 50% de estabilidad, 1% por mes.
     - effect: if
-      when: {date_after: 2103.3.1, not_flag: FCU_cadena_meridian, civil_war: false}
+      when: {date_after: 2103.3.1, not_flag: FCU_cadena_meridian, civil_war: false, stability_below: 0.5}
       then:
-      - {effect: flag, value: FCU_cadena_meridian}
-      - {effect: event, id: meganations_fcu.310, days: 1}
+      - effect: random
+        options:
+        - {weight: 99, effects: []}
+        - weight: 1
+          effects:
+          - {effect: flag, value: FCU_cadena_meridian}
+          - {effect: event, id: meganations_fcu.310, days: 1}
     - {effect: run, value: MEGANATIONS_obras_de_la_ia}
     - effect: if
       when: {date_after: 2100.4.2, not_flag: FCU_menor_200}

@@ -70,7 +70,9 @@ decisions:
       # estabilidad para SHD... sin que sea un suplicio"): El Peso de la Conquista, cada mes
       - {effect: run, value: SHD_peso_conquista_calculo}
       - {effect: dynamic_modifier, id: MEGANATIONS_peso_de_la_conquista}
-      # la mecha propia (2026-11-22: desde 65% y 3% por mes; antes 60% y 2%)
+      # la mecha propia (2026-11-22: desde 65% y 3% por mes; antes 60% y 2%). 2026-11-23 (simulador de rebeliones:
+      # guerra civil en el 95% de las partidas con una estabilidad típica; el usuario: "bajar también la posibilidad
+      # en SHD, si quedó demasiado alta"): 1,5% por mes bajo 65% y 2,5% más bajo 50%
       - effect: if
         when:
           all:
@@ -84,8 +86,8 @@ decisions:
         then:
         - effect: random
           options:
-          - {weight: 97, effects: []}
-          - weight: 3
+          - {weight: 985, effects: []}
+          - weight: 15
             effects:
             - {effect: run, value: MEGANATIONS_crisis_estalla}
       # y bajo 50%, otra tirada (si salió la primera, la espera de un año corta esta)
@@ -102,8 +104,8 @@ decisions:
         then:
         - effect: random
           options:
-          - {weight: 96, effects: []}
-          - weight: 4
+          - {weight: 975, effects: []}
+          - weight: 25
             effects:
             - {effect: run, value: MEGANATIONS_crisis_estalla}
       # crisis 1: en 2104 (1 en 8 por mes; si no salió, en diciembre sale sí o sí)

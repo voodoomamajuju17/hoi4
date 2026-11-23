@@ -6,7 +6,8 @@
 
 - **El Ultimátum de los Generales**: con estabilidad bajo 50%, 1.5% por mes (3% bajo 35%); después, 12 meses de espera. La IA resiste el 55% (rebelión) y renuncia el resto (golpe: cae el líder, -10% de estabilidad). La rebelión propia pasa una vez por partida.
 - **Por cada año entero bajo 50%**: 17% de Ultimátum, 9% de rebelión. Bajo 35%: 31% y 17%.
-- **Mechas propias**: la HSN (infamia 50 o más) y la NAS (Sol Bajo) suman 2% por mes bajo 50%; el Directorio, 3% por mes bajo 65% y 4% por mes bajo 50%.
+- **Mechas propias**: la HSN (infamia 50 o más) y la NAS (Sol Bajo) suman 2% por mes bajo 50%; el Directorio, 2% por mes bajo 65% y 2% por mes bajo 50%.
+- **La Secesión de Meridian** (FCU): desde 2103.3, con estabilidad bajo 50%, 1% por mes.
 - **La rama forzada** (EFE, APF, Roma): bajo 50%, 4% por mes de que el foco que lleva a la guerra civil se complete solo.
 - **El Rumor de Golpe** (El Peso del Poder): cada 5 meses sale una mala noticia del líder o una tregua (peso 3 contra 1 por noticia, de 8); el Rumor sale bajo 50% de estabilidad o con poca Astucia, y termina en Ultimátum el 6.25% de las veces (sin mirar la estabilidad).
 
@@ -20,10 +21,10 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 |---|---|---|---|
 | Imperio Ecofascista (EFE) | 23% | 43% | 73% |
 | Comuna Socialista Automatizada (ASC) | 32% | 37% | 49% |
-| Unión Libre de Capital Corporativo (FCU) | 100% | 100% | 100% |
+| Unión Libre de Capital Corporativo (FCU) | 5% | 29% | 63% |
 | Nación de Mercado de Alta Mar (HSN) | 13% | 40% | 78% |
 | Reino Celeste Neoandino (NAS) | 13% | 40% | 75% |
-| Directorio Sino-Armónico (SHD) | 76% | 96% | 100% |
+| Directorio Sino-Armónico (SHD) | 58% | 89% | 98% |
 | Federación de los Pueblos Africanos (APF) | 38% | 52% | 78% |
 | Neo Imperio Romano (NRE) | 36% | 51% | 77% |
 
@@ -53,10 +54,10 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
-| Las Zonas Rompen con la Unión (el líder resiste el Ultimátum) | división | 11% | 32% | 69% |
-| Golpe: el líder renuncia ante el Ultimátum | golpe | 9% | 25% | 43% |
-| La Secesión de Meridian | guerra civil | 100% | 100% | 100% |
-| *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 16% | 22% |
+| Las Zonas Rompen con la Unión (el líder resiste el Ultimátum) | división | 12% | 33% | 68% |
+| Golpe: el líder renuncia ante el Ultimátum | golpe | 10% | 24% | 44% |
+| La Secesión de Meridian | guerra civil | 5% | 29% | 63% |
+| *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 13% | 15% | 24% |
 
 ### Nación de Mercado de Alta Mar (HSN)
 
@@ -80,10 +81,10 @@ Media de la estabilidad de cada potencia (vuelve a la media y se mueve ±10 punt
 
 | Qué | Tipo | tranquila | tipica | agitada |
 |---|---|---|---|---|
-| La Máquina Roja (el líder resiste el Ultimátum) | guerra civil | 71% | 95% | 100% |
-| Golpe: el líder renuncia ante el Ultimátum | golpe | 43% | 48% | 49% |
-| El Río se Desborda | guerra civil | 11% | 7% | 4% |
-| *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 12% | 15% | 24% |
+| La Máquina Roja (el líder resiste el Ultimátum) | guerra civil | 52% | 87% | 98% |
+| Golpe: el líder renuncia ante el Ultimátum | golpe | 35% | 47% | 51% |
+| El Río se Desborda | guerra civil | 11% | 9% | 5% |
+| *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | 13% | 16% | 24% |
 
 ### Federación de los Pueblos Africanos (APF)
 

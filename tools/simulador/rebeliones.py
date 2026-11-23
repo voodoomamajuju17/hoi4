@@ -119,6 +119,13 @@ def leer_spec(raw: dict) -> dict:
             pw = sum(x["weight"] for x in r["options"])
             ult = sum(x["weight"] for x in r["options"] if any(y.get("id") == "meganations_lider.21" for y in x["effects"]))
             out["rumor_ultimatum"] = o["ai_chance"] / total * ult / pw
+    # la Secesión de Meridian (FCU): desde cuándo, bajo qué estabilidad y con qué chance por mes
+    mer = next(e for e in _todos(raw["decisions"]) if e.get("effect") == "if"
+               and (e.get("when") or {}).get("not_flag") == "FCU_cadena_meridian")
+    out["meridian_desde"] = mes(mer["when"]["date_after"].rsplit(".", 1)[0])
+    out["meridian_umbral"] = mer["when"].get("stability_below", 1.01)
+    rnd = next((x for x in mer["then"] if x.get("effect") == "random"), None)
+    out["meridian"] = _chance_de(rnd) if rnd else 1.0
     # qué rebelión le toca a cada potencia
     out["rebelion"] = {}
     for e in _script(raw, "MEGANATIONS_lider_guerra_civil"):
@@ -175,8 +182,7 @@ def correr(tag: str, media: float, sp: dict, sup: dict, ramas: dict, rng: random
         sueltos["PLAN-41 se Desconecta (guerra civil)"] = _cuando(rng, bar["ASC_plan41"])
     if tag == "SHD" and rng.random() < bar["SHD_crecida"]["chance"]:
         sueltos["El Río se Desborda (guerra civil)"] = _cuando(rng, bar["SHD_crecida"])
-    if tag == "FCU":
-        sueltos["La Secesión de Meridian (guerra civil)"] = mes(2103.3) + 2   # cadena fija: 310 -> 311 -> 312
+
     if tag == "HSN":
         if rng.random() < bar["HSN_australia_satelite"]:
             sueltos["Nace la República Pirata (división: Australia)"] = mes(2103.6) + 2
@@ -196,6 +202,13 @@ def correr(tag: str, media: float, sp: dict, sup: dict, ramas: dict, rng: random
                 if "guerra civil" in k and en_guerra:
                     continue
                 pasa[k] = m
+        # la Secesión de Meridian (2026-11-23: ya no es fija): desde 2103.3, bajo 50%, con chance por mes; la cadena
+        # 310 -> 311 -> 312 tarda unos dos meses
+        mer = "La Secesión de Meridian (guerra civil)"
+        if tag == "FCU" and m >= sp["meridian_desde"] and s < sp["meridian_umbral"] and "meridian_arranca" not in pasa \
+                and not any("Valhalla" in x for x in pasa) and rng.random() < sp["meridian"]:
+            pasa["meridian_arranca"] = m
+            sueltos[mer] = m + 2
         if ruta_hecha == m and "ruta" not in pasa:
             pasa["ruta"] = m
         ultimatum = False
@@ -350,6 +363,8 @@ def informe(raw: dict, sup: dict, out: dict, ramas: dict, corridas: int) -> str:
          f"{1 - (1 - sp['ult_35']) ** 12:.0%} y {(1 - (1 - sp['ult_35']) ** 12) * sp['resiste']:.0%}.",
          f"- **Mechas propias**: la HSN (infamia 50 o más) y la NAS (Sol Bajo) suman {sp['mecha_hsn_nas']:.0%} por mes "
          "bajo 50%; el Directorio, " + " y ".join(f"{p:.0%} por mes bajo {u:.0%}" for u, p in sp["mechas_shd"]) + ".",
+         f"- **La Secesión de Meridian** (FCU): desde {2100 + sp['meridian_desde'] // 12}.{sp['meridian_desde'] % 12 + 1}, "
+         f"con estabilidad bajo {sp['meridian_umbral']:.0%}, {sp['meridian']:.0%} por mes.",
          f"- **La rama forzada** (EFE, APF, Roma): bajo 50%, {sp['ruta']:.0%} por mes de que el foco que lleva a la "
          "guerra civil se complete solo.",
          f"- **El Rumor de Golpe** (El Peso del Poder): cada {sp['cada_meses']} meses sale una mala noticia del líder o una "
@@ -373,7 +388,7 @@ def informe(raw: dict, sup: dict, out: dict, ramas: dict, corridas: int) -> str:
             filas.append(("ruta", RUTA[t], "guerra civil"))
         claves = set().union(*(res[(e, t)].keys() for e in escs))
         for k in sorted(claves):
-            if k not in ("rebelion", "golpe", "ruta", "rumor", "rumor_sale", "ultimatum", "_alguna"):
+            if k not in ("rebelion", "golpe", "ruta", "rumor", "rumor_sale", "ultimatum", "meridian_arranca", "_alguna"):
                 tipo_k = "guerra civil" if "guerra civil" in k else "división" if "división" in k else "crisis"
                 filas.append((k, k.split(" (")[0] + (f" ({k.split(' (', 1)[1]}" if "si pierde" in k else ""), tipo_k))
         for k, txt, tipo_k in filas:

@@ -3806,7 +3806,12 @@ def test_simulador_rebeliones() -> None:
           and abs(sp["resiste"] - 0.55) < 1e-9 and sp["umbral"] == 0.5, str(sp))
     check("rebeliones: la ruta forzada (4%), la mecha de la HSN y la NAS (2%) y las dos del Directorio",
           abs(sp["ruta"] - 0.04) < 1e-9 and abs(sp["mecha_hsn_nas"] - 0.02) < 1e-9
-          and sorted(sp["mechas_shd"]) == [(0.5, 0.04), (0.65, 0.03)], str(sp))
+          and sorted(sp["mechas_shd"]) == [(0.5, 0.025), (0.65, 0.015)], str(sp))
+    # 2026-11-23 ("Meridian debería fortalecerse entre un 10 y un 15%, pero bajar la posibilidad que suceda")
+    check("rebeliones: Meridian ya no es fija (desde 2103.3, bajo 50% de estabilidad, 1% por mes) y se lleva el 40%",
+          sp["meridian_desde"] == 38 and sp["meridian_umbral"] == 0.5 and abs(sp["meridian"] - 0.01) < 1e-9
+          and any(e.get("effect") == "civil_war" and e.get("tag") == "FCU" and e.get("size") == 0.40
+                  for e in rb._todos(rb._evento(raw, "meganations_fcu", 312))), str(sp))
     check("rebeliones: el Rumor de Golpe (El Peso del Poder) termina en Ultimatum 1 de cada 16",
           abs(sp["rumor_ultimatum"] - 0.0625) < 1e-9 and sp["cada_meses"] == 5, str(sp))
     check("rebeliones: en la FCU se van las Zonas (division) y en la Comuna arrancan los Hijos de Odin",
@@ -3995,7 +4000,7 @@ def test_directorio_siberia() -> None:
               and abs(_est.peso_conquista(_sp["conquista"], 700) + 0.25) < 1e-9,
               str([_est.peso_conquista(_sp["conquista"], r) for r in (80, 190, 700)]))
         check("simulador de estabilidad: lee la mecha del Directorio y no la de otros países",
-              (0.0, 0.65, 0.03, "mecha del Directorio") in _sp["crisis"]
+              (0.0, 0.65, 0.015, "mecha del Directorio") in _sp["crisis"]
               and all(abs(p - 0.02) > 1e-9 or d != "MEGANATIONS_crisis_ultimatum" for _, _, p, d in _sp["crisis"]),
               str(_sp["crisis"]))
         arr = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8").split())
