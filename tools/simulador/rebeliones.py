@@ -369,7 +369,7 @@ def informe(raw: dict, sup: dict, out: dict, ramas: dict, corridas: int) -> str:
                 filas.append((k, k.split(" (")[0] + (f" ({k.split(' (', 1)[1]}" if "si pierde" in k else ""), tipo_k))
         for k, txt, tipo_k in filas:
             L.append(f"| {txt} | {tipo_k} | " + " | ".join(_pct(res[(e, t)].get(k, 0)) for e in escs) + " |")
-        L.append(f"| *(de esos Ultimátums, los que vinieron por el Rumor de Golpe)* | | "
+        L.append(f"| *(partidas con un Ultimátum que vino del Rumor de Golpe)* | | "
                  + " | ".join(_pct(res[(e, t)].get("rumor", 0)) for e in escs) + " |")
         L.append("")
     zal = sup["barras"]
