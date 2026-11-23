@@ -55,6 +55,7 @@ PROPIEDADES = {
     "oxido": (0.9, 0.2, 2.0),
     "barro": (0.95, 0.0, 2.2),
     "vertebra": (0.2, 0.9, 1.6),     # La Red (2026-11-20): costillas de cromo negro con borde de hueso
+    "vidrio": (0.08, 0.3, 0.5),      # el mundo 2100 (2026-11-23): vidrio solar de techos y ventanas
 }
 
 # Materiales que en una nación no son como en las demás (nación_material). 2026-11-20: el casco de
