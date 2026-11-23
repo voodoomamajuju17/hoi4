@@ -1,4 +1,5 @@
 # 2026-11-10: modelo animado EFE_tanque_medio (idle, move, attack)
+# 2026-11-23: ataque exagerado (torreta x2,2, retroceso x2,5) con tools/arte/ampliar_animacion.py; estados defend, support_attack y retreat
 # 2026-11-21: animaciones mejoradas a 60 fps (idle 6 s, move 5 s, attack 4 s; zapatas sin saltos)
 animation = {
     name = "EFE_tanque_medio_idle_animation"
@@ -31,4 +32,7 @@ entity = {
     state = { name = "idle" animation = "idle" looping = yes animation_blend_time = 0.20 }
     state = { name = "move" animation = "move" looping = yes animation_blend_time = 0.20 }
     state = { name = "attack" animation = "attack" looping = yes animation_blend_time = 0.20 }
+    state = { name = "defend" animation = "attack" looping = yes animation_blend_time = 0.20 }
+    state = { name = "support_attack" animation = "attack" looping = yes animation_blend_time = 0.20 }
+    state = { name = "retreat" animation = "move" looping = yes animation_blend_time = 0.20 }
 }
