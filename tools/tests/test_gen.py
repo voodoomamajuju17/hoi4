@@ -2877,6 +2877,14 @@ def test_modelos_3d() -> None:
     from tools.gen import modelo3d, pdxbin
     from tools.gen.emitters.modelos import escala_para, escalar
     base = REPO_ROOT / "assets/modelos"
+    # 2026-11-24 (llegan los trenes: el cañón chino nuevo pisaba al Dragón del Gran Canal, la unidad única de China,
+    # con la misma entidad SHD_railway_gun_entity): ninguna entidad definida dos veces
+    import re as _re
+    _nombres = [n for f in base.glob("*/gfx/entities/*.asset")
+                for n in _re.findall(r'entity\s*=\s*\{\s*name\s*=\s*"([^"]+)"', f.read_text(encoding="utf-8-sig"))]
+    _dup = sorted({n for n in _nombres if _nombres.count(n) > 1})
+    check("modelos: ninguna entidad definida en dos piezas (el Dragón del Gran Canal sigue siendo el cañón de China)",
+          not _dup and "SHD_railway_gun_entity" in _nombres and "COMUN_railway_gun_entity" in _nombres, str(_dup))
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)

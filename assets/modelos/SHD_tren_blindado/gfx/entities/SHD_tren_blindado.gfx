@@ -1,0 +1,18 @@
+objectTypes = {
+    pdxmesh = {
+        name = "SHD_tren_blindado_mesh"
+        file = "gfx/models/trains/SHD_tren_blindado/SHD_tren_blindado.mesh"
+        scale = 1.0
+        animation = { id = "idle" type = "SHD_tren_blindado_idle_animation" }
+        animation = { id = "move" type = "SHD_tren_blindado_move_animation" }
+        animation = { id = "attack" type = "SHD_tren_blindado_attack_animation" }
+        meshsettings = {
+            name = "SHD_tren_blindadoShape"
+            index = 0
+            texture_diffuse = "SHD_tren_blindado_diffuse.dds"
+            texture_normal = "SHD_tren_blindado_normal_pdx.dds"
+            texture_specular = "SHD_tren_blindado_specular.dds"
+            shader = "PdxMeshAdvanced"
+        }
+    }
+}

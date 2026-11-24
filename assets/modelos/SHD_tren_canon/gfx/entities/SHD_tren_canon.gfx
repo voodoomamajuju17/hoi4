@@ -1,0 +1,18 @@
+objectTypes = {
+    pdxmesh = {
+        name = "SHD_tren_canon_mesh"
+        file = "gfx/models/trains/SHD_tren_canon/SHD_tren_canon.mesh"
+        scale = 1.0
+        animation = { id = "idle" type = "SHD_tren_canon_idle_animation" }
+        animation = { id = "move" type = "SHD_tren_canon_move_animation" }
+        animation = { id = "attack" type = "SHD_tren_canon_attack_animation" }
+        meshsettings = {
+            name = "SHD_tren_canonShape"
+            index = 0
+            texture_diffuse = "SHD_tren_canon_diffuse.dds"
+            texture_normal = "SHD_tren_canon_normal_pdx.dds"
+            texture_specular = "SHD_tren_canon_specular.dds"
+            shader = "PdxMeshAdvanced"
+        }
+    }
+}

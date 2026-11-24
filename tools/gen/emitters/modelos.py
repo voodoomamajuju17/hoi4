@@ -30,7 +30,7 @@ ESCALA = {
     "armored_car": ("largo", 3.6), "mechanized": ("largo", 4.6), "amphibious_mechanized": ("largo", 4.6),
     "kiboko": ("largo", 4.6), "motorized": ("largo", 4.6), "centinela": ("largo", 4.0),
     "centinela_2": ("largo", 4.0), "centinela_3": ("largo", 4.4), "artillery": ("largo", 4.2),
-    "anti_tank": ("largo", 3.8), "anti_air": ("largo", 3.8), "railway_gun": ("largo", 9.0),
+    "anti_tank": ("largo", 3.8), "anti_air": ("largo", 3.8), "railway_gun": ("largo", 9.0), "armored_train": ("largo", 14.0),
     "dragon_del_canal": ("largo", 9.0),
     "fighter": ("ancho", 4.0), "light_plane": ("ancho", 4.0), "cas": ("ancho", 4.3),
     "naval_bomber": ("ancho", 4.6), "medium_plane": ("ancho", 5.7), "tactical_bomber": ("ancho", 5.7),
@@ -248,6 +248,8 @@ SPRITES = {
     "fighter": ["fighter"], "tactical_bomber": ["tactical_bomber"],
     "destroyer": ["destroyer"], "light_cruiser": ["light_cruiser"], "heavy_cruiser": ["heavy_cruiser"],
     "battleship": ["battleship"], "carrier": ["carrier"], "submarine": ["submarine"], "convoy": ["convoy"],
+    # 2026-11-24: los trenes del mundo 2100 (arte/pedidos_fijos/60_modelos_3d_mundo_2100.txt, parte C)
+    "railway_gun": ["railway_gun"], "armored_train": ["armored_train"],
 }
 # lista del diseñador -> (sprite, filtro de batallón)
 DISENADOR = [
