@@ -381,6 +381,35 @@ class Vanilla:
         self._adjacency = pairs
         return pairs
 
+    def province_at(self, x: float, z: float) -> int | None:
+        """La provincia en una posición del mapa (x, z de map/buildings.txt), leída de map/provinces.bmp
+        (2026-11-24, los monumentos de las capitales: el juego ubica un edificio de provincia por dónde cae su
+        punto de aparición). El BMP va de abajo hacia arriba, como la z del mapa."""
+        import struct
+        if getattr(self, "_bmp_raw", None) is None:
+            bmp = self.root / "map" / "provinces.bmp"
+            self._bmp_raw = bmp.read_bytes() if bmp.exists() else b""
+            self._bmp_colors = {c: p for p, (c, _, _) in self._definition().items()}
+        raw = self._bmp_raw
+        if raw[:2] != b"BM":
+            return None
+        offset = struct.unpack_from("<I", raw, 10)[0]
+        width, height = struct.unpack_from("<ii", raw, 18)
+        stride = (width * 3 + 3) & ~3
+        col, fila = int(x), int(z) if height > 0 else abs(height) - 1 - int(z)
+        if not (0 <= col < width and 0 <= fila < abs(height)):
+            return None
+        i = offset + fila * stride + col * 3
+        return self._bmp_colors.get(raw[i + 2] << 16 | raw[i + 1] << 8 | raw[i])
+
+    def map_buildings(self) -> list[list[str]]:
+        """map/buildings.txt, una lista por línea ("state;edificio;x;y;z;giro;provincia_de_mar")."""
+        path = self.root / "map" / "buildings.txt"
+        if not path.exists():
+            return []
+        return [line.split(";") for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
+                if line.count(";") >= 5]
+
     def country_tags(self) -> set[str]:
         """TAGs que ya usa el juego (common/country_tags/)."""
         tags: set[str] = set()

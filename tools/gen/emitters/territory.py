@@ -159,13 +159,17 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["manpower_new"] = manpower_new
     forts = _fort_lines(ctx, assignment, states, names)
     ctx.data["fort_lines"] = forts
+    # 2026-11-24: el monumento de cada capital (assets/mundo_2100/monumentos), en la historia de su estado
+    from . import edificios_mapa as edificios_mod
+    monumentos = edificios_mod.plan_monumentos(ctx, capitals, by_state)
     for s in states:
         new_owner = assignment.get(s.id)
         if new_owner is None and s.id not in deposits:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
                  resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()),
-                 manpower_new.get(s.id), forts.get(s.id), (ctx.data.get("extra_slots") or {}).get(s.id, 0))
+                 manpower_new.get(s.id), forts.get(s.id), (ctx.data.get("extra_slots") or {}).get(s.id, 0),
+                 monumentos.get(s.id))
     _startup_ownership(ctx, assignment)
 
 
@@ -636,7 +640,7 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
              resource_delta: dict | None = None, add_buildings: dict | None = None,
              claims=(), manpower: int | None = None, bunkers: dict[int, int] | None = None,
-             extra_slots: int = 0) -> bool:
+             extra_slots: int = 0, monumento: tuple[int, str] | None = None) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
@@ -692,6 +696,23 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
             history = Block()
             state.add("history", history)
         history.entries.insert(0, ("add_extra_state_shared_building_slots", int(extra_slots)))
+
+    if monumento:
+        # 2026-11-24: el monumento de la capital en su provincia; si ahí había uno del juego (landmark_*), sale
+        prov, clave = monumento
+        history = state.get("history")
+        if not isinstance(history, Block):
+            history = Block()
+            state.add("history", history)
+        buildings = history.get("buildings")
+        if not isinstance(buildings, Block):
+            buildings = Block()
+            history.add("buildings", buildings)
+        slot = buildings.get(str(prov))
+        if not isinstance(slot, Block):
+            slot = Block()
+            buildings.add(str(prov), slot)
+        slot.entries = [(k, v) for k, v in slot.entries if not str(k).startswith("landmark_")] + [(clave, 1)]
 
     if bunkers:
         # Línea de fuertes: búnker por provincia (el bloque `<provincia> = { bunker = N }`

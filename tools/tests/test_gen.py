@@ -2900,6 +2900,33 @@ def test_modelos_3d() -> None:
           [n for _i, _j, n in _em.bloques(_txt)] == ["westerngfx_house_1_1", "building_arms_factory",
                                                        "building_industrial_complex", "building_bunker_destroyed",
                                                        "building_nuclear_reactor_heavy_water"])
+    # 2026-11-24: el monumento de cada capital cae en la provincia de su punto de victoria (map/provinces.bmp), con
+    # un punto de aparición nuevo ahí si no había
+    import struct as _st, types as _ty
+    from tools.gen.vanilla import Vanilla as _V, StateInfo as _SI
+
+    def _bmp(w, h, filas):
+        stride = (w * 3 + 3) & ~3
+        data = b"".join(b"".join(bytes((b, g, r)) for r, g, b in fila).ljust(stride, b"\0") for fila in filas)
+        return (b"BM" + _st.pack("<IHHI", 54 + len(data), 0, 0, 54)
+                + _st.pack("<IiiHHIIiiII", 40, w, h, 1, 24, 0, len(data), 0, 0, 0, 0) + data)
+    with tempfile.TemporaryDirectory() as _t:
+        _r = Path(_t)
+        for d in ("map", "common", "history"):
+            (_r / d).mkdir()
+        _a, _b = (10, 0, 0), (20, 0, 0)
+        (_r / "map/provinces.bmp").write_bytes(_bmp(4, 2, [[_a, _a, _b, _b], [_a, _a, _b, _b]]))
+        (_r / "map/definition.csv").write_text("1;10;0;0;land;false;plains;1\n2;20;0;0;land;false;plains;1\n")
+        (_r / "map/buildings.txt").write_text("7;bunker;0.5;9;0.5;0;0\n7;bunker;2.5;9;1.5;0;0\n")
+        _v = _V(_r)
+        _ctx = _ty.SimpleNamespace(vanilla=_v, data={}, spec=_ty.SimpleNamespace(root=REPO_ROOT / "spec"), warn=print)
+        _plan = _em.plan_monumentos(_ctx, {"NRE": 7}, {7: _SI(id=7, name_key="x", owner="NRE", provinces=[1, 2],
+                                                               path=_r / "x.txt", vp_provinces=(2,))})
+        check("monumentos: van a la provincia del punto de victoria, con su punto de aparición",
+              _v.province_at(0.5, 0.5) == 1 and _v.province_at(3.2, 1.2) == 2
+              and _plan == {7: (2, "landmark_mn_NRE")}
+              and _ctx.data["monumentos"]["NRE"]["linea"] == "7;landmark_spawn;2.5;9;1.5;0.00;0",
+              str((_plan, _ctx.data)))
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)
