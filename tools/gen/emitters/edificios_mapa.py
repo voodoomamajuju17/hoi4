@@ -281,7 +281,8 @@ def emit_monumentos(ctx: BuildContext) -> None:
         for f in sorted((carpeta / "gfx" / "models").rglob("*")):
             if f.is_file() and f.suffix != ".png":
                 ctx.copy_asset(f.relative_to(ctx.spec.root.parent).as_posix(), f.relative_to(carpeta).as_posix())
-        ctx.loc.define(clave, en=en, es=es, file="meganations_monumentos", origin="edificios_mapa")
+        # el juego nombra el edificio con su clave (como landmark_big_ben): la usa él, no un archivo nuestro
+        ctx.loc.define_and_reference(clave, en=en, es=es, file="meganations_monumentos", origin="edificios_mapa")
     ctx.write_text("common/buildings/meganations_monumentos.txt",
                    banner_for("assets/mundo_2100/monumentos (un monumento por capital)")
                    + "buildings = {\n" + "\n\n".join(defs) + "\n}\n")

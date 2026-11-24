@@ -2927,6 +2927,24 @@ def test_modelos_3d() -> None:
               and _plan == {7: (2, "landmark_mn_NRE")}
               and _ctx.data["monumentos"]["NRE"]["linea"] == "7;landmark_spawn;2.5;9;1.5;0.00;0",
               str((_plan, _ctx.data)))
+    # 2026-11-25 (reporte del usuario: "la localisation no cierra: landmark_mn_* definidas sin usar"): el armado
+    # completo con un mapa donde Roma (909 en la fixture, provincia 13) tiene dónde poner su monumento
+    import shutil as _sh
+    with tempfile.TemporaryDirectory() as _t:
+        _van = Path(_t) / "vanilla"
+        _sh.copytree(FIXTURE_VANILLA, _van)
+        (_van / "map/provinces.bmp").write_bytes(_bmp(4, 2, [[(1, 1, 1)] * 4, [(1, 1, 1)] * 4]))
+        (_van / "map/buildings.txt").write_text("909;bunker;1.5;9;0.5;0;0\n")
+        _ctx = build(Path(_t) / "out", vanilla_path=str(_van), quiet=True)
+        _mod = _ctx.mod_root
+        _def = (_mod / "common/buildings/meganations_monumentos.txt").read_text(encoding="utf-8")
+        _hist = " ".join("".join(f.read_text(encoding="utf-8-sig") for f in (_mod / "history/states").glob("909*")).split())
+        _mapa = (_mod / "map/buildings.txt").read_text(encoding="utf-8")
+        check("monumentos: el armado completo los define, los nombra y los pone en la historia y en el mapa",
+              "landmark_mn_NRE = {" in _def and "13 = { landmark_mn_NRE = 1 }" in _hist
+              and "909;landmark_spawn;1.5;9;0.5;0.00;0" in _mapa
+              and 'name = "building_landmark_mn_NRE"' in (_mod / "gfx/entities/meganations_monumentos.asset").read_text(),
+              _hist[:400])
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)
