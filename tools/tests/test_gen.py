@@ -6059,7 +6059,7 @@ def test_rebeliones_reforzadas() -> None:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         fcu = " ".join((ctx.mod_root / "events/meganations_fcu.txt").read_text().split())
         cw = fcu[fcu.index("start_civil_war"):][:9000] if "start_civil_war" in fcu else ""
-        check("Meridian se lleva al menos el 35% del pais", "size = 0.35" in cw, cw[:200])
+        check("Meridian se lleva el 40% del pais (2026-11-23: +14%)", "size = 0.4 " in cw, cw[:200])
         check("los rebeldes arrancan con su columna, gente y fervor",
               "Columna_Rebelde" in cw.replace("Columna Rebelde", "Columna_Rebelde") and "add_manpower = 120000" in cw
               and "MEGANATIONS_fervor_rebelde" in cw, cw[:600])
