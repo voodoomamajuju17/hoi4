@@ -3,7 +3,7 @@
 Lo que llega de `arte/pedidos_fijos/60_modelos_3d_mundo_2100.txt` y todavía NO entra al juego. Cada carpeta tiene el
 `.blend`, la vista y lo que va al juego (`gfx/entities/<id>.asset` y `.gfx`, la malla y sus tres `.dds`). Mallas fijas.
 
-- `edificios/`: los 20 de la parte B (6 a 25): fábricas civil y militar, astillero, puerto, base aérea, fuerte, fuerte
+- `edificios/` (ENTRAN AL JUEGO desde el 2026-11-24, tools/gen/emitters/edificios_mapa.py: reemplazan las entidades building_<edificio> del juego; el puerto flotante y la vía maglev no, el juego no los dibuja como edificio): los 20 de la parte B (6 a 25): fábricas civil y militar, astillero, puerto, base aérea, fuerte, fuerte
   costero, antiaérea, radar, sitio de cohetes, reactor de fusión, refinería, silo, centro de suministro, puerto flotante,
   vía maglev (con su textura plana, por si el juego dibuja las vías como textura) y las 4 instalaciones de proyectos
   especiales. Algunos traen animación (grúas, radar, antiaérea).

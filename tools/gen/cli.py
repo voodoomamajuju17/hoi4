@@ -65,6 +65,7 @@ from .emitters import music as em_music
 from .emitters import ui_skin as em_ui_skin
 from .emitters import politica_gui as em_politica_gui
 from .emitters import modelos as em_modelos
+from .emitters import edificios_mapa as em_edificios_mapa
 from .emitters import aventuras as em_aventuras
 from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
@@ -147,6 +148,7 @@ EMITTERS = [
     ("facciones", em_facciones.emit),         # 2026-11-15: emblemas de facción (sprites; falta engancharlos)             # 2026-11-15: el panel del recurso propio de cada nación
     ("eventos_gui", em_eventos_gui.emit),     # 2026-11-15: eventos en el Receptor, noticias en el cable de Ginebra
     ("modelos", em_modelos.emit),       # 2026-11-08: modelos 3D propios (assets/modelos, el Gliptodonte)
+    ("edificios_mapa", em_edificios_mapa.emit),  # 2026-11-24: los edificios del mapa del mundo 2100
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("eventos_rotos", em_cleanup.emit_event_refs),  # 2026-11-07 (auditoría): llamadas a eventos que no cargan

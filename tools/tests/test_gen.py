@@ -2885,6 +2885,21 @@ def test_modelos_3d() -> None:
     _dup = sorted({n for n in _nombres if _nombres.count(n) > 1})
     check("modelos: ninguna entidad definida en dos piezas (el Dragón del Gran Canal sigue siendo el cañón de China)",
           not _dup and "SHD_railway_gun_entity" in _nombres and "COMUN_railway_gun_entity" in _nombres, str(_dup))
+    # 2026-11-24 ("chequeá cada modelado nuevo 3D, que no haya posibilidad de que den problemas"): los trenes, los
+    # edificios, las ciudades y los monumentos del mundo 2100 pasan la auditoría (mallas, texturas DDS que el juego
+    # lee, meshsettings, animaciones con su esqueleto, entidades)
+    from tools.arte import auditar_modelos as _aud
+    _piezas = sorted(base.glob("*_tren_*")) + sorted((REPO_ROOT / "assets/mundo_2100").glob("*/*"))
+    _errores = {p.name: e for p in _piezas if (p / "gfx").is_dir() for e in [_aud.auditar(p)[0]] if e}
+    check(f"modelos: los {len(_piezas)} modelos nuevos pasan la auditoría", len(_piezas) >= 70 and not _errores,
+          str(_errores)[:600])
+    # los edificios del mapa: el archivo del juego con las entidades building_<edificio> cambiadas
+    from tools.gen.emitters import edificios_mapa as _em
+    _txt = (FIXTURE_VANILLA / "gfx/entities/buildings.asset").read_text(encoding="utf-8")
+    check("edificios del mapa: se leen las entidades del archivo del juego (con comentarios y clones)",
+          [n for _i, _j, n in _em.bloques(_txt)] == ["westerngfx_house_1_1", "building_arms_factory",
+                                                       "building_industrial_complex", "building_bunker_destroyed",
+                                                       "building_nuclear_reactor_heavy_water"])
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)
