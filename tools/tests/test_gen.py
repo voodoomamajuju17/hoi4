@@ -2241,9 +2241,10 @@ def test_ai() -> None:
         check("forma final: decision para renovar los objetivos en las 8",
               sum(1 for i in dec_ids if str(i).endswith("_reclamar_el_destino")) == 8, str([i for i in dec_ids if "destino" in str(i)]))
         cap = " ".join((mod / "common/dynamic_modifiers/meganations_tope_naval.txt").read_text().split())
-        check("tope naval: solo la IA, la HSN 120 y el resto 25",
-              "is_ai = yes" in cap and "original_tag = HSN has_navy_size = { size > 120 }" in cap
-              and "has_navy_size = { size > 25 }" in cap and "industrial_capacity_dockyard = -2.0" in cap, cap[:600])
+        # 2026-11-24 ("subí los límites de flota, un 50%"): HSN 120 -> 180, el resto 25 -> 38
+        check("tope naval: solo la IA, la HSN 180 y el resto 38",
+              "is_ai = yes" in cap and "original_tag = HSN has_navy_size = { size > 180 }" in cap
+              and "has_navy_size = { size > 38 }" in cap and "industrial_capacity_dockyard = -2.0" in cap, cap[:600])
         cap_on = " ".join((mod / "common/on_actions/05_meganations_tope_naval.txt").read_text().split())
         check("tope naval: se da a todos al arrancar",
               "on_startup = { effect = { every_country = { limit = { is_ai = yes } add_dynamic_modifier = { modifier = MEGANATIONS_tope_naval" in cap_on, cap_on)

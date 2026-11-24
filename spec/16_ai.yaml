@@ -195,8 +195,10 @@ invasions:
 # -----------------------------------------------------------------------------
 naval_cap:
   src: user_request
-  default: 25
-  by_country: {HSN: 120, FCU: 60, NRE: 50, ASC: 50, ZJP: 50}
+  # 2026-11-24 (pedido del usuario: "subí los límites de flota, un 50%"): 25 -> 38; HSN 120 -> 180, FCU 60 -> 90,
+  # NRE, ASC y Japón 50 -> 75
+  default: 38
+  by_country: {HSN: 180, FCU: 90, NRE: 75, ASC: 75, ZJP: 75}
   # -2 y no -1: las ideas y la industria les suman bonos de astillero
   modifiers: {industrial_capacity_dockyard: -2.0}
   name: {english: "Fleet at Capacity", spanish: "Flota completa"}
