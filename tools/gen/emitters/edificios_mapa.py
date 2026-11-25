@@ -94,6 +94,56 @@ def lado_mayor(malla: Path) -> float:
     return lado
 
 
+def medidas_juego(raiz: Path, nombres: set[str]) -> dict[str, float]:
+    """2026-11-25 (captura del usuario: "está todo mega chiquito"): cuánto mide en el mapa cada entidad del juego
+    (lado mayor de la caja de su malla x la escala del .gfx x la escala de la entidad), leído de la instalación. Los
+    nuestros se llevan a esa medida: misma huella en el mapa que el edificio que reemplazan."""
+    ents = raiz / "gfx" / "entities"
+    if not ents.is_dir():
+        return {}
+    entidad_de: dict[str, tuple[str | None, float, str | None]] = {}   # nombre -> (malla, escala, clon de)
+    for f in sorted(ents.glob("*.asset")):
+        texto = f.read_text(encoding="utf-8-sig", errors="replace")
+        for i, j, nombre in bloques(texto):
+            if not nombre:
+                continue
+            b = texto[i:j]
+            pm = re.search(r'pdxmesh\s*=\s*"([^"]+)"', b)
+            # la escala de la entidad, no la de un locator ni la de un estado
+            esc = re.search(r'(?m)^\s*scale\s*=\s*([0-9.]+)', b)
+            clon = re.search(r'clone\s*=\s*"([^"]+)"', b)
+            entidad_de[nombre] = (pm.group(1) if pm else None, float(esc.group(1)) if esc else 1.0,
+                                  clon.group(1) if clon else None)
+    malla_de: dict[str, tuple[str, float]] = {}
+    for f in sorted(ents.glob("*.gfx")):
+        # sin comentarios: el juego trae bloques comentados (#	pdxmesh = { ... }) que si no se tragan el siguiente
+        texto = re.sub(r"#[^\n]*", "", f.read_text(encoding="utf-8-sig", errors="replace"))
+        for m in re.finditer(r'pdxmesh\s*=\s*\{(.*?)\n\s*\}', texto, re.S):
+            n = re.search(r'name\s*=\s*"([^"]+)"', m.group(1))
+            fi = re.search(r'file\s*=\s*"([^"]+)"', m.group(1))
+            esc = re.search(r'(?m)^\s*scale\s*=\s*([0-9.]+)', m.group(1))
+            if n and fi:
+                malla_de[n.group(1)] = (fi.group(1), float(esc.group(1)) if esc else 1.0)
+    out = {}
+    for nombre in nombres:
+        e = entidad_de.get(nombre)
+        if e and e[2] and not e[0]:
+            e = entidad_de.get(e[2])
+        if not e or not e[0] or e[0] not in malla_de:
+            continue
+        archivo, esc_malla = malla_de[e[0]]
+        ruta = raiz / archivo
+        if not ruta.is_file():
+            continue
+        try:
+            lado = lado_mayor(ruta)
+        except Exception:  # noqa: BLE001 - una malla que no se lee: se mide con la estimada
+            continue
+        if lado > 0:
+            out[nombre] = lado * esc_malla * e[1]
+    return out
+
+
 def entidad(nombre: str, malla: str, escala: float, animada: bool) -> str:
     estados = ESTADOS.get(nombre, ("idle", "damaged"))
     anim = ' animation = "idle" looping = yes' if animada else ""
@@ -114,6 +164,14 @@ def emit(ctx: BuildContext) -> None:
         return
     nuevas: dict[str, str] = {}
     mallas = []
+    todas = {n for reemplaza, _ in MAPA.values() for n in reemplaza}
+    juego_mide = medidas_juego(ctx.vanilla.root, todas)
+    # las que no se pudieron medir (mallas dentro de un DLC comprimido) van con la estimada, corregida en la misma
+    # proporción que la fábrica civil medida (las estimadas salieron todas chicas: captura del 2026-11-25)
+    fabrica = juego_mide.get("building_industrial_complex")
+    ajuste = fabrica / MAPA["mundo_fabrica_civil"][1] if fabrica else 1.0
+    ctx.data["ajuste_medidas"] = ajuste
+    medidas: list[str] = []
     for pieza, (reemplaza, medida) in MAPA.items():
         carpeta = base / pieza
         malla = next(carpeta.glob("gfx/models/**/*.mesh"), None)
@@ -129,7 +187,9 @@ def emit(ctx: BuildContext) -> None:
         m = re.search(r'pdxmesh\s*=\s*\{\s*name\s*=\s*"([^"]+)"', texto_gfx)
         animada = "animation" in texto_gfx
         for nombre in reemplaza:
-            nuevas[nombre] = entidad(nombre, m.group(1), medida / lado, animada)
+            objetivo = juego_mide.get(nombre, medida * ajuste)
+            medidas.append(f"{nombre} {objetivo:.2f}" + ("" if nombre in juego_mide else " (estimada)"))
+            nuevas[nombre] = entidad(nombre, m.group(1), objetivo / lado, animada)
         mallas.append(texto_gfx)
         # malla, texturas, animaciones y su .asset (las animaciones van junto a los .anim, con el nombre suelto)
         for f in sorted((carpeta / "gfx" / "models").rglob("*")):
@@ -159,7 +219,11 @@ def emit(ctx: BuildContext) -> None:
     if faltan:
         ctx.warn(f"edificios del mapa 2100: el juego no tiene estas entidades (quedan sin usar): {', '.join(faltan)}")
     ctx.note(f"edificios del mapa 2100: {len(hechas)} entidades del juego con modelo propio "
-             f"({len(mallas)} modelos)")
+             f"({len(mallas)} modelos); medida en el mapa (la del edificio del juego): {', '.join(sorted(medidas))}")
+    sin = sorted(n for n in todas if n not in juego_mide)
+    if sin:
+        ctx.warn(f"edificios del mapa 2100: no se pudo medir el modelo del juego de {', '.join(sin)}; "
+                 "van con una medida estimada")
     emit_monumentos(ctx)
 
 
@@ -241,6 +305,22 @@ def plan_monumentos(ctx: BuildContext, capitals: dict[str, int], by_state: dict)
     return plan
 
 
+def medida_monumento(ctx: BuildContext) -> float:
+    """La medida de un monumento del juego en el mapa (la mediana de los landmark_*), o la estimada."""
+    if "medida_monumento" not in ctx.data:
+        raiz = ctx.vanilla.root if ctx.vanilla else None
+        nombres = set()
+        if raiz and (raiz / "gfx/entities/landmarks.asset").is_file():
+            texto = (raiz / "gfx/entities/landmarks.asset").read_text(encoding="utf-8-sig", errors="replace")
+            nombres = {n for _i, _j, n in bloques(texto) if n and not n.endswith("_destroyed")}
+        medidas = sorted(medidas_juego(raiz, nombres).values()) if raiz and nombres else []
+        ctx.data["medida_monumento"] = (medidas[len(medidas) // 2] if medidas
+                                        else MEDIDA_MONUMENTO * ctx.data.get("ajuste_medidas", 1.0))
+        ctx.note(f"monumentos: medida en el mapa {ctx.data['medida_monumento']:.2f} "
+                 + (f"(mediana de {len(medidas)} monumentos del juego)" if medidas else "(estimada)"))
+    return ctx.data["medida_monumento"]
+
+
 def emit_monumentos(ctx: BuildContext) -> None:
     datos = ctx.data.get("monumentos") or {}
     if not datos:
@@ -275,7 +355,7 @@ def emit_monumentos(ctx: BuildContext) -> None:
 \tpdxmesh = "{nombre_malla}"
 \tdefault_state = "idle"
 \tstate = {{ name = "idle" }}
-\tscale = {MEDIDA_MONUMENTO / max(lado_mayor(malla), 1e-6):.5f}
+\tscale = {medida_monumento(ctx) / max(lado_mayor(malla), 1e-6):.5f}
 }}""")
         mallas.append(gfx)
         for f in sorted((carpeta / "gfx" / "models").rglob("*")):

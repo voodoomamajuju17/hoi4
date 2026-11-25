@@ -2945,6 +2945,24 @@ def test_modelos_3d() -> None:
               and "909;landmark_spawn;1.5;9;0.5;0.00;0" in _mapa
               and 'name = "building_landmark_mn_NRE"' in (_mod / "gfx/entities/meganations_monumentos.asset").read_text(),
               _hist[:400])
+    # 2026-11-25 ("está todo mega chiquito"): cada edificio nuestro mide en el mapa lo mismo que el del juego que
+    # reemplaza (caja de su malla x escala del .gfx x escala de la entidad), con los bloques comentados del juego
+    with tempfile.TemporaryDirectory() as _t:
+        _r = Path(_t)
+        (_r / "gfx/entities").mkdir(parents=True)
+        (_r / "gfx/models/buildings").mkdir(parents=True)
+        _sh.copy(next((REPO_ROOT / "assets/mundo_2100/edificios/mundo_fabrica_civil").rglob("*.mesh")),
+                 _r / "gfx/models/buildings/factory.mesh")
+        (_r / "gfx/entities/buildings.asset").write_text(
+            'entity = {\n\tname = "building_industrial_complex"\n\tpdxmesh = "building_industrial_complex"\n'
+            '\tstate = { name = "idle" }\n\tscale = 1.6\n}\n'
+            'entity = {\n\tclone = "building_industrial_complex"\n\tname = "building_copia"\n}\n')
+        (_r / "gfx/entities/buildings.gfx").write_text(
+            'objectTypes = {\n#\tpdxmesh = {\n#\t\tname = "viejo"\n#\t\tfile = "x.mesh"\n#\t}\n'
+            '\tpdxmesh = {\n\t\tname = "building_industrial_complex"\n\t\tfile = "gfx/models/buildings/factory.mesh"\n\t}\n}\n')
+        _m = _em.medidas_juego(_r, {"building_industrial_complex", "building_copia"})
+        check("edificios del mapa: miden lo mismo que los del juego (malla 120 m x 1.6)",
+              _m == {"building_industrial_complex": 192.0, "building_copia": 192.0}, str(_m))
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)
