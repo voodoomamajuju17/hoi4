@@ -22,7 +22,9 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 from tools.gen import pdxbin  # noqa: E402
 
-SOMBREADORES = {"PdxMeshAdvanced", "PdxMeshStandard", "PdxMeshStandard_NoFoW_NoTI", "PdxMeshAlphaBlend"}
+# los del juego 1.20 (gfx/entities/*.gfx): PdxMeshAdvanced, PdxMeshAdvancedSnow (nieve en invierno), PdxMeshAdvancedAnim
+SOMBREADORES = {"PdxMeshAdvanced", "PdxMeshAdvancedSnow", "PdxMeshAdvancedAnim", "PdxMeshStandard",
+                "PdxMeshStandard_NoFoW_NoTI", "PdxMeshAlphaBlend"}
 FOURCC_OK = {b"DXT1", b"DXT3", b"DXT5", b"\0\0\0\0"}
 
 

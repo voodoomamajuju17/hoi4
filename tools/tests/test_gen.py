@@ -2991,6 +2991,32 @@ def test_modelos_3d() -> None:
               and 'name = "EFE_train_coal_equipment_2_entity"' in _prop and "mundo_tren_vagon_2_mesh" in _prop
               and "GER_train_locomotive_equipment_1_entity" not in _prop
               and (_mod / "gfx/models/units/trains_2100/mundo_tren_motriz.mesh").is_file(), _ger[-300:])
+    # 2026-11-25 (las 32 manzanas): el map/cities.txt del juego con cada nivel cambiado por nuestras dos variantes,
+    # cada una a la medida de la casita del juego que reemplaza
+    with tempfile.TemporaryDirectory() as _t:
+        _van = Path(_t) / "vanilla"
+        _sh.copytree(FIXTURE_VANILLA, _van)
+        (_van / "gfx/models/buildings").mkdir(parents=True)
+        _m100 = next((REPO_ROOT / "assets/mundo_2100/manzanas/mundo_manzana_occidental_1_1").rglob("*.mesh"))
+        _ents, _gfx, _niv = [], [], []
+        for _d in (1, 2, 3, 4):
+            _sh.copy(_m100, _van / f"gfx/models/buildings/city_4_0{_d}.mesh")
+            _ents.append(f'entity = {{\n\tname = "westerngfx_house_1_{_d}"\n\tpdxmesh = "westerngfx_house_1_{_d}"\n\tscale = 0.02\n}}')
+            _gfx.append(f'\tpdxmesh = {{\n\t\tname = "westerngfx_house_1_{_d}"\n\t\tfile = "gfx/models/buildings/city_4_0{_d}.mesh"\n\t}}')
+            _niv.append(f'\tbuilding = {{\n\t\tdistance = {_d} # al borde\n\t\tmesh = {{\n\t\t\t"westerngfx_house_1_{_d}"\n\t\t}}\n\t}}')
+        (_van / "gfx/entities/buildings.asset").write_text(
+            (FIXTURE_VANILLA / "gfx/entities/buildings.asset").read_text(encoding="utf-8") + "\n".join(_ents) + "\n")
+        (_van / "gfx/entities/buildings.gfx").write_text("objectTypes = {\n" + "\n".join(_gfx) + "\n}\n")
+        (_van / "map/cities.txt").write_text('types_source = "map/cities.bmp"\n# Western cities\ncity_group = {\n'
+                                             '\tcolor_index = 15 # paleta\n\tdensity = 0.9\n' + "\n".join(_niv) + "\n}\n")
+        _ctx = build(Path(_t) / "out", vanilla_path=str(_van), quiet=True)
+        _ci = " ".join((_ctx.mod_root / "map/cities.txt").read_text(encoding="utf-8").split())
+        _ma = (_ctx.mod_root / "gfx/entities/meganations_manzanas_2100.asset").read_text(encoding="utf-8")
+        check("ciudades: cada nivel del juego pasa a nuestras dos variantes, a la medida de la casita original",
+              'distance = 1 # al borde mesh = { "mundo_manzana_occidental_1_1_entity" "mundo_manzana_occidental_1_2_entity" }' in _ci
+              and 'distance = 4 # al borde mesh = { "mundo_manzana_occidental_4_1_entity" "mundo_manzana_occidental_4_2_entity" }' in _ci
+              and "westerngfx_house" not in _ci and "scale = 0.02000" in _ma
+              and (_ctx.mod_root / "gfx/models/buildings/mundo_2100/mundo_manzana_occidental_4_2").is_dir(), _ci[:600])
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)

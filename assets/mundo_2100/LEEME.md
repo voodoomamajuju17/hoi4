@@ -7,7 +7,11 @@ Lo que llega de `arte/pedidos_fijos/60_modelos_3d_mundo_2100.txt` y todavía NO 
   costero, antiaérea, radar, sitio de cohetes, reactor de fusión, refinería, silo, centro de suministro, puerto flotante,
   vía maglev (con su textura plana, por si el juego dibuja las vías como textura) y las 4 instalaciones de proyectos
   especiales. Algunos traen animación (grúas, radar, antiaérea).
-- `ciudades/`: las 21 de la parte D (45 a 65): 7 regiones gráficas x pueblo, ciudad y capital.
+- `manzanas/` (ENTRAN AL JUEGO desde el 2026-11-25, tools/gen/emitters/manzanas_mapa.py): las 32 manzanas de
+  arte/pedidos_fijos/61_manzanas_ciudades.txt (4 estilos x 4 niveles x 2 variantes) reemplazan las casitas del juego en
+  map/cities.txt, a la medida de cada una. Vinieron con el sombreador PdxMeshSnow, que el juego no tiene: pasado a
+  PdxMeshAdvancedSnow (el de los edificios con nieve del juego).
+- `ciudades/` (sin usar: una ciudad entera por modelo no encaja en el sistema de manzanas del juego): las 21 de la parte D (45 a 65): 7 regiones gráficas x pueblo, ciudad y capital.
 - `monumentos/` (ENTRAN AL JUEGO desde el 2026-11-24, tools/gen/emitters/edificios_mapa.py: un edificio `landmark_mn_<TAG>` por
   capital, en la provincia de su punto de victoria; si esa provincia tenía un monumento del juego, lo reemplaza): los 10 de la
   parte E (66 a 75), uno por capital de las ocho meganaciones, Japón y Albión.
