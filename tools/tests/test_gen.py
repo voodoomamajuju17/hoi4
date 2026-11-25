@@ -2963,6 +2963,34 @@ def test_modelos_3d() -> None:
         _m = _em.medidas_juego(_r, {"building_industrial_complex", "building_copia"})
         check("edificios del mapa: miden lo mismo que los del juego (malla 120 m x 1.6)",
               _m == {"building_industrial_complex": 192.0, "building_copia": 192.0}, str(_m))
+    # 2026-11-25 ("se ve todo excepto los trenes"): el tren de carga partido en motriz y vagones reemplaza a las
+    # locomotoras y vagones del DLC No Step Back (mismo archivo en el mod) y le da los suyos a cada país
+    from tools.arte import partir_tren as _pt
+    _orig = next((REPO_ROOT / "assets/mundo_2100/trenes").rglob("mundo_tren_suministro.mesh"))
+    _partes = _pt.partir(_orig.read_bytes())
+    _tris = sum(len(next(n for n in pdxbin.leer(d).todos() if n.nombre == "mesh").get("tri")) for d in _partes.values())
+    _maxz = [max(next(n for n in pdxbin.leer(d).todos() if n.nombre == "mesh").get("p")[2::3]) for d in _partes.values()]
+    check("trenes: el tren de carga se parte en motriz y tres vagones sin perder triángulos, punta en el origen",
+          set(_partes) == {"mundo_tren_motriz", "mundo_tren_vagon_1", "mundo_tren_vagon_2", "mundo_tren_vagon_3"}
+          and _tris == len(next(n for n in pdxbin.leer(_orig.read_bytes()).todos() if n.nombre == "mesh").get("tri"))
+          and all(abs(z) < 1e-6 for z in _maxz), str(_maxz))
+    with tempfile.TemporaryDirectory() as _t:
+        _van = Path(_t) / "vanilla"
+        _sh.copytree(FIXTURE_VANILLA, _van)
+        _tr = _van / "dlc/dlc034_no_step_back/gfx/models/units/trains"
+        _tr.mkdir(parents=True)
+        (_tr / "GER_train_locomotive_equipment_1.asset").write_text(
+            'animation = {\n\tname = "x"\n\tfile = "x.anim"\n}\nentity = {\n\tname = "GER_train_locomotive_equipment_1_entity"\n'
+            '\tpdxmesh = "GER_train_locomotive_1_mesh"\n\tscale = 0.5\n}\n')
+        _ctx = build(Path(_t) / "out", vanilla_path=str(_van), quiet=True)
+        _mod = _ctx.mod_root
+        _ger = (_mod / "gfx/models/units/trains/GER_train_locomotive_equipment_1.asset").read_text(encoding="utf-8")
+        _prop = (_mod / "gfx/entities/meganations_trenes_2100.asset").read_text(encoding="utf-8")
+        check("trenes: la locomotora del DLC pasa a ser la motriz 2100 y cada país tiene la suya, sin repetir nombres",
+              'pdxmesh = "mundo_tren_motriz_mesh"' in _ger and "animation" not in _ger.split("####")[-1]
+              and 'name = "EFE_train_coal_equipment_2_entity"' in _prop and "mundo_tren_vagon_2_mesh" in _prop
+              and "GER_train_locomotive_equipment_1_entity" not in _prop
+              and (_mod / "gfx/models/units/trains_2100/mundo_tren_motriz.mesh").is_file(), _ger[-300:])
     malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
     datos = malla.read_bytes()
     check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)

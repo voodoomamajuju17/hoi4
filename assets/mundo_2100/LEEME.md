@@ -11,7 +11,9 @@ Lo que llega de `arte/pedidos_fijos/60_modelos_3d_mundo_2100.txt` y todavía NO 
 - `monumentos/` (ENTRAN AL JUEGO desde el 2026-11-24, tools/gen/emitters/edificios_mapa.py: un edificio `landmark_mn_<TAG>` por
   capital, en la provincia de su punto de victoria; si esa provincia tenía un monumento del juego, lo reemplaza): los 10 de la
   parte E (66 a 75), uno por capital de las ocho meganaciones, Japón y Albión.
-- `trenes/`: el tren de carga (26): el juego no muestra trenes de suministro como unidades.
+- `trenes/` (ENTRA AL JUEGO desde el 2026-11-25, tools/gen/emitters/trenes_mapa.py): el tren de carga (26), partido en motriz
+  y tres vagones (tools/arte/partir_tren.py), es la locomotora y el vagón de los trenes que circulan por las vías (DLC No Step
+  Back) de todos los países.
 Las vistas van achicadas a 800 px.
 
 Por qué no entran todavía: un monumento es un edificio especial del juego (landmark) que se define en
