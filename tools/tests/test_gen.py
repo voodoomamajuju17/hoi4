@@ -3315,6 +3315,19 @@ def test_politica_gui() -> None:
     check("enfoques continuos: se leen id e icono del juego (para reemplazar sus imagenes)",
           cont == [("naval_production", "GFX_goal_continuous_naval_production"),
                    ("air_production", "GFX_goal_continuous_air_production")], str(cont))
+    # 2026-11-23: los retratos de asesores pisaban los títulos de sección; las secciones se agrandan
+    secc = """guiTypes = { containerWindowType = { name = "ideas" position = { x = 9 y = 438 }
+            gridBoxType = { name = "idea_categories_grid" position = { x = 9 y = 0 } slotsize = { width = 480 height = 100 } } }
+        containerWindowType = { name = "country_politics_idea_category_entry" position = { x = 0 y = 5 } size = { width=505 height=95 }
+            iconType ={ name ="category_header" position = { x=-5 y=2 } }
+            gridboxtype = { name = "ideas_grid" position = { x = 17 y = 29 } slotsize = { width = 80 height = 64 } } } }"""
+    sa, faltan = pg.parchar_asesores(secc)
+    sa = " ".join((sa or "").split())
+    check("politica: secciones de asesores mas altas y la fila de retratos mas abajo, sin achicar casillas",
+          not faltan and f"height = {100 + pg.ESPACIO_SECCION} }}" in sa and f"height = {95 + pg.ESPACIO_SECCION} }}" in sa
+          and f"position = {{ x = 17 y = {29 + pg.BAJA_FILA} }}" in sa and "slotsize = { width = 80 height = 64 }" in sa, sa)
+    check("politica: si el juego cambio las secciones de asesores, no se tocan",
+          pg.parchar_asesores(secc.replace("ideas_grid", "otra"))[0] is None)
     roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 
